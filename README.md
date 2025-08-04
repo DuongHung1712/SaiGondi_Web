@@ -48,7 +48,7 @@ saigon-di-web/
 
 </details>
 ---
-
+```
 ## 🧱 QUẢN LÝ LAYOUT
 
 Dự án sử dụng App Router của Next.js (v13+):
