@@ -1,3 +1,6 @@
+import Button from '../components/ui/Button';
+import Input from '../components/ui/Input';
+
 export default function HomePage() {
   return (
     <section className="py-10 px-4 text-center">
@@ -7,10 +10,20 @@ export default function HomePage() {
       <p className="text-lg text-gray-700 max-w-2xl mx-auto">
         Cùng khám phá những địa điểm thú vị tại TP.HCM, check-in, chia sẻ hành trình và tạo nên cộng đồng yêu Sài Gòn!
       </p>
-      <div className="mt-6">
-        <button className="bg-accent text-white px-6 py-3 rounded hover:bg-amber-600 transition">
-          Bắt đầu hành trình
-        </button>
+
+      {/* 👇 Các Button test */}
+      <div className="flex flex-wrap gap-4 justify-center mt-8">
+        <Button variant="primary">Bắt đầu</Button>
+        <Button variant="secondary">Khám phá</Button>
+        <Button variant="outline-primary">Check-in</Button>
+        <Button variant="outline-secondary">Chia sẻ</Button>
+      </div>
+
+      {/* 👇 Input test */}
+      <div className="max-w-md mx-auto mt-10 text-left space-y-4">
+        <Input label="Email" placeholder="Nhập email của bạn" />
+        <Input label="Tên" status="success" placeholder="Tên của bạn" supportText="Đã xác nhận" />
+        <Input label="Số điện thoại" status="error" placeholder="Nhập số điện thoại" supportText="Số không hợp lệ" />
       </div>
     </section>
   );
