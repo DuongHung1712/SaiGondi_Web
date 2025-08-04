@@ -33,7 +33,7 @@
 /* =========================
    🌙 Dark Mode Support
    ========================= */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
@@ -41,7 +41,7 @@
     --primary-dark: #3b82f6;
     --primary-light: #bfdbfe;
   }
-}
+} */
 
 /* =========================
    🧠 CSS to Tailwind Mapping
