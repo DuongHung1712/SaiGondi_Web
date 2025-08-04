@@ -4,46 +4,45 @@ Dự án web ứng dụng Next.js + TypeScript dành cho nền tảng khám phá
 Cấu trúc được tổ chức rõ ràng theo module và thành phần, dễ mở rộng và bảo trì.
 
 ---
-
+<details> <summary>📁 CẤU TRÚC THƯ MỤC</summary>
 ## 🗂️ CẤU TRÚC THƯ MỤC
-
 saigon-di-web/
-├── .next/ # Thư mục build tự động của Next.js
-├── node_modules/ # Thư viện cài bằng npm
-├── public/ # Ảnh, icon, font công khai
-├── src/ # Mã nguồn chính của dự án
-│
-│ ├── app/ # Routing theo chuẩn App Router (Next.js 13+)
-│ │ ├── layout.tsx # Global layout (Header, Footer, Theme...)
-│ │ ├── page.tsx # Trang homepage (/)
-│ │ ├── admin/ # Các route và layout riêng cho admin
-│ │ ├── auth/ # Đăng nhập, đăng ký,...
-│ │ └── user/ # Trang dành cho người dùng
-│
-│ ├── components/ # Các UI components tái sử dụng
-│ │ ├── Header.tsx
-│ │ ├── Footer.tsx
-│ │ ├── MapBox.tsx
-│ │ └── PostCard.tsx
-│
-│ ├── hooks/ # Custom React Hooks
-│ │ └── useUser.ts # Lấy thông tin người dùng hiện tại
-│
-│ ├── lib/ # Thư viện / service dùng chung
-│ │ └── axios.ts # Cấu hình axios toàn cục
-│
-│ ├── styles/ # Global CSS
-│ │ └── globals.css
-│
-│ └── types/ # Định nghĩa các TypeScript types/interface
-│
-├── .env.local # Biến môi trường
-├── .gitignore # File git ignore
-├── next.config.ts # Cấu hình Next.js
-├── eslint.config.mjs # Cấu hình ESLint
-├── package.json # Khai báo dependencies
-└── tsconfig.json # Cấu hình TypeScript
+├── .next/                 # Thư mục build tự động của Next.js
+├── node_modules/          # Thư viện cài bằng npm
+├── public/                # Ảnh, icon, font công khai
 
+├── src/                   # Mã nguồn chính của dự án
+│   ├── app/               # Routing theo App Router (Next.js 13+)
+│   │   ├── layout.tsx     # Global layout (Header, Footer, Theme...)
+│   │   ├── page.tsx       # Trang homepage (/)
+│   │   ├── admin/         # Các route và layout riêng cho admin
+│   │   ├── auth/          # Đăng nhập, đăng ký,...
+│   │   └── user/          # Trang dành cho người dùng
+│
+│   ├── components/        # Các UI components tái sử dụng
+│   │   ├── Header.tsx
+│   │   ├── Footer.tsx
+│   │   ├── MapBox.tsx
+│   │   └── PostCard.tsx
+│
+│   ├── hooks/             # Custom React Hooks
+│   │   └── useUser.ts     # Lấy thông tin người dùng hiện tại
+│
+│   ├── lib/               # Thư viện / service dùng chung
+│   │   └── axios.ts       # Cấu hình axios toàn cục
+│
+│   ├── styles/            # Global CSS
+│   │   └── globals.css
+│
+│   └── types/             # Định nghĩa các TypeScript types/interface
+│
+├── .env.local             # Biến môi trường
+├── .gitignore             # File git ignore
+├── next.config.ts         # Cấu hình Next.js
+├── eslint.config.mjs      # Cấu hình ESLint
+├── package.json           # Khai báo dependencies
+└── tsconfig.json          # Cấu hình TypeScript
+</details>
 ---
 
 ## 🧱 QUẢN LÝ LAYOUT
