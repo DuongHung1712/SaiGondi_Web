@@ -33,7 +33,7 @@
 /* =========================
    🌙 Dark Mode Support
    ========================= */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
@@ -41,7 +41,7 @@
     --primary-dark: #3b82f6;
     --primary-light: #bfdbfe;
   }
-}
+} */
 
 /* =========================
    🧠 CSS to Tailwind Mapping
@@ -131,7 +131,7 @@ body {
 
   /* ====== INPUT ====== */
   .input {
-    @apply w-full px-3 py-2 rounded-md border focus:outline-none focus:ring-2 transition;
+    @apply w-full px-3 pt-4 pb-2 rounded-md border focus:outline-none focus:ring-2 transition;
   }
 
   .input-default {
@@ -144,5 +144,12 @@ body {
 
   .input-error {
     @apply border-[var(--error)] text-[var(--error)] focus:ring-[var(--error)];
+  }
+
+  .floating-label {
+    @apply absolute left-3 top-2 transition-all duration-200 pointer-events-none;
+    @apply peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400;
+    @apply peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[var(--foreground)] bg-[var(--background)] px-1;
+    @apply peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-gray-400 bg-[var(--background)] px-1;
   }
 }
