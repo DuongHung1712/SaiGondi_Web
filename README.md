@@ -4,8 +4,11 @@ Dự án web ứng dụng Next.js + TypeScript dành cho nền tảng khám phá
 Cấu trúc được tổ chức rõ ràng theo module và thành phần, dễ mở rộng và bảo trì.
 
 ---
-<details> <summary>📁 CẤU TRÚC THƯ MỤC</summary>
-## 🗂️ CẤU TRÚC THƯ MỤC
+
+<details>
+<summary>📁 CẤU TRÚC THƯ MỤC</summary>
+
+```bash
 saigon-di-web/
 ├── .next/                 # Thư mục build tự động của Next.js
 ├── node_modules/          # Thư viện cài bằng npm
@@ -42,6 +45,7 @@ saigon-di-web/
 ├── eslint.config.mjs      # Cấu hình ESLint
 ├── package.json           # Khai báo dependencies
 └── tsconfig.json          # Cấu hình TypeScript
+
 </details>
 ---
 
