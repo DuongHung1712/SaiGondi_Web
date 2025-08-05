@@ -63,7 +63,7 @@ const AuthLayout = ({
         )}
 
         <div className="flex-1 flex items-center justify-center">
-          <div className="w-full">
+          <div className="w-full max-w-md mx-auto">
             <div className="w-[400px] h-[100px] relative mb-6">
               <Image
                 src="/logo.svg"
