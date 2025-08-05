@@ -22,6 +22,7 @@ export default function HomePage() {
       {/* 👇 Input test */}
       <div className="max-w-md mx-auto mt-10 text-left space-y-4">
         <Input label="Email" />
+        <Input label="Email" />
         <Input label="Tên" status="success" supportText="Đã xác nhận" />
         <Input label="Số điện thoại" status="error" supportText="Số không hợp lệ" />
       </div>
