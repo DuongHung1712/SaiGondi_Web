@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import AuthLayout from "@/components/auth/AuthLayout";
+import AuthLayout from "@/components/ui/AuthLayout";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { FiEye, FiEyeOff, FiChevronLeft  } from "react-icons/fi";

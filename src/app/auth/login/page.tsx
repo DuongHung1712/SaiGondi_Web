@@ -1,7 +1,7 @@
+// src/app/auth/login/page.tsx
 "use client";
 
 import React, { useState } from "react";
-import AuthLayout from "@/components/auth/AuthLayout";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { FaFacebookF, FaApple } from "react-icons/fa";
@@ -15,15 +15,12 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: gọi API login sau này
     console.log("Login data:", { email, password });
   };
 
   return (
-    <AuthLayout>
-      <h2 className="heading-2 font-bold text-[var(--secondary)] mb-1">
-        ĐĂNG NHẬP
-      </h2>
+    <>
+      <h2 className="heading-2 font-bold text-[var(--secondary)] mb-1">ĐĂNG NHẬP</h2>
       <p className="text-sm text-gray-600 mb-5">Đăng nhập tài khoản của bạn</p>
 
       <form onSubmit={handleSubmit} className="space-y-5 pt-5">
@@ -54,14 +51,11 @@ export default function LoginPage() {
         <div className="flex items-center justify-between text-sm">
           <label className="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" className="sr-only peer" />
-            <div className="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--primary)]"></div>
+            <div className="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--primary)]" />
             <span className="ml-2 text-sm text-gray-900">Ghi nhớ mật khẩu</span>
           </label>
 
-          <a
-            href="/auth/forgot-password"
-            className="text-[var(--primary)] hover:underline"
-          >
+          <a href="/auth/forgot-password" className="text-[var(--primary)] hover:underline">
             Quên mật khẩu?
           </a>
         </div>
@@ -72,11 +66,9 @@ export default function LoginPage() {
       </form>
 
       <p className="text-sm mt-6 text-gray-600">
-        Bạn chưa có tài khoản?{" "}
-        <a href="/auth/register" className="text-[var(--primary)] hover:underline">
-          Đăng ký ngay
-        </a>
+        Bạn chưa có tài khoản? <a href="/auth/register" className="text-[var(--primary)] hover:underline">Đăng ký ngay</a>
       </p>
+
       <div className="flex items-center gap-2 py-2">
         <hr className="flex-1 border-gray-300" />
         <span className="text-gray-500 text-sm">Hoặc đăng nhập bằng</span>
@@ -84,16 +76,10 @@ export default function LoginPage() {
       </div>
 
       <div className="flex justify-center mt-8 space-x-4">
-        <Button variant="outline-primary">
-          <FaFacebookF className="text-[var(--primary)] text-xl" />
-        </Button>
-        <Button variant="outline-primary">
-          <FcGoogle className="text-xl" />
-        </Button>
-        <Button variant="outline-primary">
-          <FaApple className="text-black text-xl" />
-        </Button>
+        <Button variant="outline-primary"><FaFacebookF className="text-[var(--primary)] text-xl" /></Button>
+        <Button variant="outline-primary"><FcGoogle className="text-xl" /></Button>
+        <Button variant="outline-primary"><FaApple className="text-black text-xl" /></Button>
       </div>
-    </AuthLayout>
+    </>
   );
 }

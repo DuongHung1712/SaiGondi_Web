@@ -7,28 +7,28 @@
   --foreground: #171717;
 
   /* Brand */
-  --primary: #307AFD;
-  --secondary: #FFB226;
+  --primary: #307afd;
+  --secondary: #ffb226;
 
   /* State */
-  --info: #2F80ED;
-  --success: #27AE60;
-  --warning: #F2B93B;
-  --error: #EB5757;
+  --info: #2f80ed;
+  --success: #27ae60;
+  --warning: #f2b93b;
+  --error: #eb5757;
 
   /* Black */
   --black-1: #000000;
-  --black-2: #1D1D1D;
+  --black-2: #1d1d1d;
   --black-3: #282828;
   --white: #ffffff;
 
   /* Grey */
   --gray-1: #333333;
-  --gray-2: #4F4F4F;
+  --gray-2: #4f4f4f;
   --gray-3: #828282;
-  --gray-4: #BDBDBD;
-  --gray-5: #E0E0E0;
-  --gray-6: #F7F7FA;
+  --gray-4: #bdbdbd;
+  --gray-5: #e0e0e0;
+  --gray-6: #f7f7fa;
 }
 
 /* =========================
@@ -78,25 +78,47 @@ body {
   font-family: var(--font-inter, Arial), sans-serif;
 }
 
-
 /* =========================
    💼 Layer: Utilities
    ========================= */
 @layer utilities {
   /* Font weight utilities */
-  .font-light { font-weight: 300; }
-  .font-regular { font-weight: 400; }
-  .font-medium { font-weight: 500; }
-  .font-bold { font-weight: 700; }
-  .font-black { font-weight: 900; }
-  
+  .font-light {
+    font-weight: 300;
+  }
+  .font-regular {
+    font-weight: 400;
+  }
+  .font-medium {
+    font-weight: 500;
+  }
+  .font-bold {
+    font-weight: 700;
+  }
+  .font-black {
+    font-weight: 900;
+  }
+
   /* Heading sizes */
-  .heading-1 { font-size: 2.5rem; line-height: 1.2; }
-  .heading-2 { font-size: 2rem; }
-  .heading-3 { font-size: 1.5rem; }
-  .heading-4 { font-size: 1.25rem; }
-  .heading-5 { font-size: 1rem; }
-  .heading-6 { font-size: 0.875rem; }
+  .heading-1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+  .heading-2 {
+    font-size: 2rem;
+  }
+  .heading-3 {
+    font-size: 1.5rem;
+  }
+  .heading-4 {
+    font-size: 1.25rem;
+  }
+  .heading-5 {
+    font-size: 1rem;
+  }
+  .heading-6 {
+    font-size: 0.875rem;
+  }
 }
 
 /* =========================
@@ -118,7 +140,7 @@ body {
 
   .btn-primary {
     @apply bg-[var(--primary)] text-white hover:bg-blue-600;
-
+  }
 
   .btn-secondary {
     @apply bg-[var(--secondary)] text-white hover:bg-yellow-500;
@@ -133,9 +155,10 @@ body {
   }
 
   /* ====== INPUT ====== */
-  .input {
-    @apply w-full px-3 py-2 rounded-md border focus:outline-none focus:ring-2 transition;
-  }
+.input {
+  @apply w-full px-3 pt-5 pb-2 rounded-md border focus:outline-none focus:ring-2 transition;
+}
+
 
   .input-default {
     @apply border-gray-300 focus:ring-gray-400;
@@ -148,14 +171,14 @@ body {
   .input-error {
     @apply border-[var(--error)] text-[var(--error)] focus:ring-[var(--error)];
   }
-  .input-search{
+  .input-search {
     @apply border-[var(--info)] text-[var(--info)] focus:ring-[var(--info)];
   }
   .floating-label {
-    @apply absolute left-3 top-2 transition-all duration-200 pointer-events-none;
-    @apply peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400;
-    @apply peer-focus:-top-3 peer-focus:text-sm peer-focus:text-[var(--foreground)] px-1;
-    @apply peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:text-sm peer-not-placeholder-shown:text-[var(--foreground)] px-1;
+    @apply absolute left-3 px-1 rounded-md transition-all duration-200 pointer-events-none z-10;
+    @apply text-gray-600 ;
+    @apply top-3 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base;
+    @apply peer-focus:-top-2 peer-focus:text-sm peer-focus:text-[var(--foreground)];
+    @apply peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-sm peer-not-placeholder-shown:text-[var(--foreground)];
   }
-}
 }

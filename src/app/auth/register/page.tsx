@@ -1,8 +1,8 @@
+// src/app/auth/register/page.tsx
 "use client";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import AuthLayout from "@/components/auth/AuthLayout";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { FaFacebookF, FaApple } from "react-icons/fa";
@@ -10,7 +10,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function RegisterPage() {
-  const router = useRouter(); 
+  const router = useRouter();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -29,10 +29,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <AuthLayout reverse>
-      <h2 className="heading-2 font-bold text-[var(--secondary)] mb-1">
-        ĐĂNG KÝ
-      </h2>
+    <>
+      <h2 className="heading-2 font-bold text-[var(--secondary)] mb-1">ĐĂNG KÝ</h2>
       <p className="text-sm text-gray-600 mb-5">Hãy bắt đầu tạo tài khoản cho bản thân</p>
 
       <form onSubmit={handleSubmit} className="space-y-5 pt-5">
@@ -117,17 +115,16 @@ export default function RegisterPage() {
             Tôi đã đọc các điều khoản và điều kiện
           </label>
         </div>
+
         <Button type="submit" variant="primary" className="w-full mt-4">
           ĐĂNG KÝ
         </Button>
       </form>
 
       <p className="text-sm mt-6 text-gray-600 text-center">
-        Bạn đã có tài khoản?{" "}
-        <a href="/auth/login" className="text-[var(--primary)] hover:underline">
-          Đăng nhập ngay
-        </a>
+        Bạn đã có tài khoản? <a href="/auth/login" className="text-[var(--primary)] hover:underline">Đăng nhập ngay</a>
       </p>
+
       <div className="flex items-center gap-2 pt-5">
         <hr className="flex-1 border-gray-300" />
         <span className="text-gray-500 text-sm">Hoặc đăng ký bằng</span>
@@ -135,16 +132,10 @@ export default function RegisterPage() {
       </div>
 
       <div className="flex justify-center mt-8 space-x-4">
-        <Button variant="outline-primary">
-          <FaFacebookF className="text-[var(--primary)] text-xl" />
-        </Button>
-        <Button variant="outline-primary">
-          <FcGoogle className="text-xl" />
-        </Button>
-        <Button variant="outline-primary">
-          <FaApple className="text-black text-xl" />
-        </Button>
+        <Button variant="outline-primary"><FaFacebookF className="text-[var(--primary)] text-xl" /></Button>
+        <Button variant="outline-primary"><FcGoogle className="text-xl" /></Button>
+        <Button variant="outline-primary"><FaApple className="text-black text-xl" /></Button>
       </div>
-    </AuthLayout>
+    </>
   );
 }
