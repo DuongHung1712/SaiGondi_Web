@@ -10,11 +10,10 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Input = ({ status = 'default', label, supportText, className, ...props }: InputProps) => {
   return (
-    <div className="space-y-1">
-      {label && <label className="text-sm font-medium">{label}</label>}
+    <div className="relative w-full">
       <input
         className={classNames(
-          'input',
+          'input peer placeholder-transparent',
           {
             'input-default': status === 'default',
             'input-success': status === 'success',
@@ -22,8 +21,12 @@ const Input = ({ status = 'default', label, supportText, className, ...props }: 
           },
           className
         )}
+        placeholder={label}
         {...props}
       />
+
+      {label && <label className="floating-label">{label}</label>}
+
       {supportText && (
         <p
           className={classNames('text-xs', {
