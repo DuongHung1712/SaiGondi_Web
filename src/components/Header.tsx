@@ -21,7 +21,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="bg-[var(--background)] shadow-sm relative w-full z-50">
+    <header className="bg-[var(--background)]/90 shadow-sm relative w-full z-50">
       <div className="w-full max-w-screen-2xl mx-auto px-5 sm:px-6 lg:px-14 py-4 flex justify-between items-center relative">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/Logo.svg" alt="Logo" width={150} height={100} />
