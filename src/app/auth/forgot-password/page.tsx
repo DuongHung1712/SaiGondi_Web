@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import AuthLayout from "@/components/ui/AuthLayout";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { FiEye, FiEyeOff, FiChevronLeft  } from "react-icons/fi";
@@ -36,7 +35,7 @@ export default function ForgotPasswordPage() {
 
     // gộp 3 bước đổi mật khẩu vào 1 trang (multi-step)
   return (
-    <AuthLayout> 
+    <> 
       <a
         href="/auth/login"
         className="text-sm text-gray-500 hover:underline inline-flex items-center mb-4"
@@ -155,6 +154,6 @@ export default function ForgotPasswordPage() {
           {step === 3 && "ĐỔI MẬT KHẨU"}
         </Button>
       </form>
-    </AuthLayout>
+    </>
   );
 }

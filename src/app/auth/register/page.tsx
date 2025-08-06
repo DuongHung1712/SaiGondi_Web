@@ -25,7 +25,7 @@ export default function RegisterPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: gọi API register sau này
-    router.push("/auth/register/otp");
+    router.push("/auth/otp");
   };
 
   return (
