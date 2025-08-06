@@ -1,19 +1,16 @@
-import PostCard from '@/components/PostCard';
+import { dataBlogPosts } from '@/data/data';
+import FeaturedPost from './FeaturedPost';
+import SearchBox from '@/components/ui/SearchBox';
 
 export default function BlogPage() {
-  const dummyPosts = [
-    { id: 1, title: 'Hành trình cà phê Võ Văn Tần', slug: 'ca-phe-vo-van-tan' },
-    { id: 2, title: 'Ngắm hoàng hôn tại Cầu Mống', slug: 'cau-mong-hoang-hon' },
-  ];
+  const featuredPosts = dataBlogPosts.slice(0, 3);
 
   return (
-    <section className="py-10">
-      <h1 className="text-2xl font-bold mb-6">Bài viết mới</h1>
-      <div className="space-y-4">
-        {dummyPosts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
+   <main>
+      <FeaturedPost posts={featuredPosts} />
+      <div className='max-w-5xl mx-auto'>
+        <SearchBox />
       </div>
-    </section>
+    </main>
   );
 }
