@@ -177,8 +177,8 @@ body {
   .floating-label {
     @apply absolute left-3 px-1 rounded-md transition-all duration-200 pointer-events-none z-10;
     @apply text-gray-600 ;
-    @apply top-3 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base;
-    @apply peer-focus:-top-2 peer-focus:text-sm peer-focus:text-[var(--foreground)];
-    @apply peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-sm peer-not-placeholder-shown:text-[var(--foreground)];
+    @apply top-1/2 -translate-y-1/2 text-base;
+    @apply peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-sm peer-focus:text-[var(--foreground)];
+    @apply peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:text-sm peer-not-placeholder-shown:text-[var(--foreground)];
   }
 }

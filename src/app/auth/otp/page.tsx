@@ -7,7 +7,7 @@ import Button from "@/components/ui/Button";
 import { FiChevronLeft } from "react-icons/fi";
 
 export default function RegisterOtpPage() {
-  const router = useRouter();
+  // const router = useRouter();
   const [otp, setOtp] = useState("");
 
   const handleVerifyOtp = (e: React.FormEvent) => {
@@ -17,7 +17,10 @@ export default function RegisterOtpPage() {
   };
 
   return (
+    
+    <>
     <main>
+
       <a
         href="/auth/register"
         className="text-sm text-gray-500 hover:underline inline-flex items-center mb-4"
@@ -54,5 +57,8 @@ export default function RegisterOtpPage() {
         </Button>
       </form>
     </main>
+
+    </>
+
   );
 }
