@@ -34,16 +34,16 @@ const destinations = [
 
 const HotDestinations = () => {
   return (
-    <section className="py-16 px-4 bg-gradient-to-r from-[#D0E4FF] to-[var(--background)]">
+    <section className="py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h2 className="text-2xl font-bold font-inter text-[var(--black-1)] mb-1">Điểm đến hot</h2>
+            <h2 className="text-3xl font-bold font-inter text-[var(--black-1)] mb-1">Điểm đến hot</h2>
             <p className="text-sm text-[var(--gray-3)] font-inter">Kỳ nghỉ giúp bạn có trải nghiệm thú vị tại Sài Gòn!</p>
           </div>
           <Button
             variant="outline-primary"
-            className="text-sm px-4 py-1.5 h-fit"
+            className="text-sm px-4 py-1.5 h-fit rounded-none"
           >
             Xem tất cả
           </Button>
@@ -53,7 +53,7 @@ const HotDestinations = () => {
           {destinations.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col justify-between h-[300px] rounded-2xl border border-white/20 bg-white/10 backdrop-blur-[12px] shadow-lg hover:shadow-xl transition p-4"
+              className="flex flex-col justify-between h-[300px] rounded-2xl bg-white/10 backdrop-blur-[12px] shadow-lg hover:shadow-xl transition p-4"
             >
               <div className="space-y-3">
                 <div className="relative mx-[-8px] w-[calc(100%+16px)] h-[160px] rounded-2xl overflow-hidden">
@@ -78,10 +78,11 @@ const HotDestinations = () => {
               <div className="mt-4">
                 <Button
                   variant="outline-primary"
-                  className="text-xs font-medium px-3 py-1 w-full justify-center"
+                  className="bg-[var(--white)] text-[var(--primary)] text-xs font-medium px-3 py-1 w-full justify-center rounded-none border-none hover-none"
                 >
-                  Xem chi tiết
+                  XEM CHI TIẾT
                 </Button>
+                
               </div>
             </div>
           ))}

@@ -24,16 +24,6 @@ const services = [
 const ServiceSection = () => {
   return (
     <section className="relative py-20 px-4 overflow-hidden bg-transparent">
-      <div
-        className="absolute w-[500px] h-[500px] bg-[var(--secondary)] opacity-50 blur-[250px] rounded-full pointer-events-none"
-        style={{ top: '150px', left: '-180px' }}
-      />
-
-      <div
-        className="absolute w-[500px] h-[500px] bg-[var(--primary)] opacity-50 blur-[250px] rounded-full pointer-events-none"
-        style={{ top: '300px', right: '-1500px' }}
-      />
-
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center md:justify-between gap-6 relative z-10">
         <div className="md:w-[300px] flex-shrink-0">
           <p className="text-[var(--error)] font-medium font-inter text-[24px] mb-2">

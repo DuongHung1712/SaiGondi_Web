@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import AuthLayout from "@/components/ui/AuthLayout";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { FiChevronLeft } from "react-icons/fi";
@@ -18,7 +17,7 @@ export default function RegisterOtpPage() {
   };
 
   return (
-    <AuthLayout>
+    <main>
       <a
         href="/auth/register"
         className="text-sm text-gray-500 hover:underline inline-flex items-center mb-4"
@@ -54,6 +53,6 @@ export default function RegisterOtpPage() {
           XÁC THỰC
         </Button>
       </form>
-    </AuthLayout>
+    </main>
   );
 }
