@@ -6,6 +6,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   status?: 'default' | 'success' | 'error' | 'search';
   label?: string;
   supportText?: string;
+  labelClassName?: string;
 }
 
 const Input = ({
@@ -13,6 +14,7 @@ const Input = ({
   label,
   supportText,
   className,
+  labelClassName,
   id,
   ...props
 }: InputProps) => {
@@ -37,7 +39,7 @@ const Input = ({
       />
 
       {label && (
-        <label htmlFor={inputId} className="floating-label">
+        <label htmlFor={inputId} className={classNames("floating-label", labelClassName)}>
           {label}
         </label>
       )}

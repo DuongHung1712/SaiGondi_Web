@@ -17,7 +17,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className={inter.variable}>
       <Header />
-      <main className="container mx-auto py-8">{children}</main>
+      <main >{children}</main>
       <Footer />
     </div>
   );
