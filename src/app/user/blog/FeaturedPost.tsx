@@ -32,7 +32,7 @@ export default function FeaturedPost({ posts }: { posts: Post[] }) {
     .padStart(2, "0")}/${dateObj.getFullYear()}`;
 
   return (
-    <section className="w-full bg-white">
+    <section className="w-full bg-white pt-16">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 px-4">
         <div className="flex-1">
           <p className="text-sm font-semibold tracking-wider text-[var(--gray-2)] mb-2">
