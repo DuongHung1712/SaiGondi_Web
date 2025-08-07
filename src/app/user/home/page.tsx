@@ -5,6 +5,7 @@ import HotDestinations from './HotDestinations';
 import BlurBackground from '@/components/ui/BlurBackground';
 import HotSearchSection from './HotSearchSection';
 import PopularPostsSection from './PopularPostsSection';
+import HotBloggerSection from './HotBloggerSection';
 
 export default function UserHomePage() {
   return (
@@ -16,6 +17,7 @@ export default function UserHomePage() {
       <HotDestinations />
       <HotSearchSection/>
       <PopularPostsSection/>
+      <HotBloggerSection/>
     </div>
   );
 }

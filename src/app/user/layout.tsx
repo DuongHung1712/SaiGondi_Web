@@ -16,9 +16,15 @@ export const metadata = {
 export default function UserLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={inter.variable}>
-      <Header />
-      <main >{children}</main>
+      <div className="sticky top-0 z-50 shadow">
+        <Header />
+      </div>
+      <main className="flex-grow w-full overflow-x-hidden">
+        {children}
+      </main>
       <Footer />
     </div>
   );
 }
+
+
