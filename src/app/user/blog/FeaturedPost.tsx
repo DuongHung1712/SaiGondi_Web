@@ -1,0 +1,76 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import Button from "@/components/ui/Button";
+
+interface Post {
+  id: number;
+  title: string;
+  image: string;
+  author: string;
+  date: string;
+  content: string;
+}
+
+export default function FeaturedPost({ posts }: { posts: Post[] }) {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % posts.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [posts.length]);
+
+  const post = posts[current];
+
+  // chỉnh ngày theo format dd/mm/yyyy
+  const dateObj = new Date(post.date);
+  const formattedDate = `${dateObj.getDate().toString().padStart(2, "0")}/${(dateObj.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}/${dateObj.getFullYear()}`;
+
+  return (
+    <section className="w-full bg-white">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 px-4">
+        <div className="flex-1">
+          <p className="text-sm font-semibold tracking-wider text-[var(--gray-2)] mb-2">
+            BÀI ĐĂNG NỔI BẬT
+          </p>
+          <h2 className="text-3xl font-extrabold text-[var(--foreground)] leading-snug mb-4">
+            {post.title}
+          </h2>
+          <p className="text-sm text-[var(--gray-2)] mb-1">
+            Người đăng: {post.author} | {formattedDate}
+          </p>
+          <p className="text-[var(--gray-1)] mb-6">{post.content.slice(0, 70)}...</p>
+          <Button variant="primary">Đọc bài</Button>
+        </div>
+
+        <div className="flex-1 relative w-[450px] h-[360px] overflow-hidden">
+          <Image
+            src={post.image}
+            alt={post.title}
+            fill
+            className="object-cover transition-all duration-700"
+            priority
+          />
+        </div>
+      </div>
+
+      <div className="flex justify-center mt-12 space-x-2">
+        {posts.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrent(idx)}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              idx === current ? "w-6 bg-[var(--secondary)]" : "w-2 bg-[var(--gray-4)]"
+            }`}
+            aria-label={`Chuyển đến bài ${idx + 1}`}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}

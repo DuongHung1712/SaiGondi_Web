@@ -3,7 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  status?: 'default' | 'success' | 'error' | 'search';
+  status?: 'default' | 'success' | 'error';
   label?: string;
   supportText?: string;
   labelClassName?: string;
@@ -31,7 +31,6 @@ const Input = ({
             'input-default': status === 'default',
             'input-success': status === 'success',
             'input-error': status === 'error',
-            'input-search': status === 'search',
           },
           className
         )}
@@ -50,7 +49,6 @@ const Input = ({
             'text-gray-500': status === 'default',
             'text-[var(--success)]': status === 'success',
             'text-[var(--error)]': status === 'error',
-            'text-[var(--info)]': status === 'search',
           })}
         >
           {supportText}
