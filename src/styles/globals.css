@@ -171,12 +171,10 @@ body {
   .input-error {
     @apply border-[var(--error)] text-[var(--error)] focus:ring-[var(--error)];
   }
-  .input-search {
-    @apply border-[var(--info)] text-[var(--info)] focus:ring-[var(--info)];
-  }
+  
   .floating-label {
     @apply absolute left-3 px-1 rounded-md transition-all duration-200 pointer-events-none z-10;
-    @apply text-gray-600 ;
+    @apply text-[var(--gray-2)] ;
     @apply top-1/2 -translate-y-1/2 text-base;
     @apply peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-sm peer-focus:text-[var(--foreground)];
     @apply peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:text-sm peer-not-placeholder-shown:text-[var(--foreground)];
