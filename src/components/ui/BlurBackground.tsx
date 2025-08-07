@@ -5,14 +5,12 @@ import React from 'react';
 const BlurBackground = () => {
   return (
     <>
-    <div className="absolute w-[500px] h-[500px] bg-[var(--secondary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "-220px", left: "-140px" }} />
-    <div className="absolute w-[500px] h-[500px] bg-[var(--primary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "-230px", left: "1170px" }} />
-    <div className="absolute w-[500px] h-[500px] bg-[var(--primary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "700px", left: "-60px" }} />
-    <div className="absolute w-[500px] h-[500px] bg-[var(--secondary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "650px", left: "1160px" }} />
-    <div className="absolute w-[500px] h-[500px] bg-[var(--secondary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "-800px", left: "-140px" }} />
-    <div className="absolute w-[500px] h-[500px] bg-[var(--primary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "130px", left: "1170px" }} />
-    <div className="absolute w-[500px] h-[500px] bg-[var(--primary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "700px", left: "-60px" }} />
-    <div className="absolute w-[500px] h-[500px] bg-[var(--secondary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "650px", left: "1160px" }} />
+    <div className="absolute w-[500px] h-[450px] bg-[var(--secondary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "400px", left: "-420px" }} />
+    <div className="absolute w-[500] h-[550px] bg-[var(--primary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "770px", left: "1470px" }} />
+    <div className="absolute w-[400px] h-[300px] bg-[var(--primary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "1350px", left: "-300px" }} />
+    <div className="absolute w-[500px] h-[450px] bg-[var(--secondary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "2050px", left: "1470px" }} />
+    <div className="absolute w-[400px] h-[300px] bg-[var(--primary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "2980px", left: "-150px" }} />
+    <div className="absolute w-[500px] h-[550px] bg-[var(--secondary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: "4750px", left: "1470px" }} />
     </>
   );
 };
