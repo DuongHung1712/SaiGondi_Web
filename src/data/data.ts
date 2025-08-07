@@ -3,8 +3,10 @@ export const dataBlogPosts = [
   {
     id: 1,
     title: "Khám phá Sài Gòn về đêm: Những điểm đến không thể bỏ lỡ",
+    category: "travel",
     image: "/blog.svg",
     author: "Nguyễn Minh Anh",
+    authorAvatar: "/icon.svg",
     date: "2025-08-01T19:30:00Z",
     address: "123 Nguyễn Huệ, Quận 1, TP.HCM",
     content:
@@ -13,8 +15,10 @@ export const dataBlogPosts = [
   {
     id: 2,
     title: "Ẩm thực miền Tây: Top 5 món ngon phải thử một lần",
+    category: "food",
     image: "/blog.svg",
     author: "Trần Quốc Huy",
+    authorAvatar: "/icon.svg",
     date: "2025-07-25T09:15:00Z",
     address: "Chợ nổi Cái Răng, Cần Thơ",
     content:
@@ -23,8 +27,10 @@ export const dataBlogPosts = [
   {
     id: 3,
     title: "Review homestay Đà Lạt: Góc chill giữa lòng thành phố sương mù",
+    category: "spiritual",
     image: "/blog.svg",
     author: "Phạm Thảo My",
+    authorAvatar: "/icon.svg",
     date: "2025-08-03T14:00:00Z",
     address: "25 Trần Hưng Đạo, Đà Lạt",
     content:
@@ -33,8 +39,10 @@ export const dataBlogPosts = [
   {
     id: 4,
     title: "Trải nghiệm trekking Tà Năng - Phan Dũng: Hành trình thử thách",
+    category: "experience",
     image: "/blog.svg",
     author: "Lê Hoàng Nam",
+    authorAvatar: "/icon.svg",
     date: "2025-06-18T06:45:00Z",
     address: "Xuất phát từ Tà Năng, Lâm Đồng",
     content:
@@ -43,8 +51,10 @@ export const dataBlogPosts = [
   {
     id: 5,
     title: "Cà phê phong cách vintage: Top quán đẹp ở Hà Nội",
+    category: "travel 1",
     image: "/blog.svg",
     author: "Ngô Thanh Bình",
+    authorAvatar: "/icon.svg",
     date: "2025-08-02T08:20:00Z",
     address: "45 Hàng Bạc, Hoàn Kiếm, Hà Nội",
     content:
@@ -53,8 +63,10 @@ export const dataBlogPosts = [
   {
     id: 6,
     title: "Lễ hội pháo hoa Đà Nẵng 2025: Lịch trình và địa điểm xem đẹp nhất",
+    category: "travel 2", 
     image: "/blog.svg",
     author: "Đỗ Bích Ngọc",
+    authorAvatar: "/icon.svg",
     date: "2025-06-30T21:00:00Z",
     address: "Bờ sông Hàn, Đà Nẵng",
     content:
@@ -63,8 +75,10 @@ export const dataBlogPosts = [
   {
     id: 7,
     title: "Check-in đảo Phú Quốc: 7 địa điểm biển đẹp mê hồn",
+    category: "travel",
     image: "/blog.svg",
     author: "Võ Thanh Phương",
+    authorAvatar: "/icon.svg",
     date: "2025-05-20T10:00:00Z",
     address: "Bãi Sao, Phú Quốc",
     content:
@@ -73,8 +87,10 @@ export const dataBlogPosts = [
   {
     id: 8,
     title: "Hướng dẫn săn mây Tà Xùa: Thời gian và chuẩn bị cần thiết",
+    category: "travel",
     image: "/blog.svg",
     author: "Hoàng Thị Hạnh",
+    authorAvatar: "/icon.svg",
     date: "2025-07-10T05:30:00Z",
     address: "Tà Xùa, Sơn La",
     content:
@@ -83,8 +99,10 @@ export const dataBlogPosts = [
   {
     id: 9,
     title: "Tour miền Trung 4 ngày 3 đêm: Khám phá Huế - Đà Nẵng - Hội An",
+    category: "travel",
     image: "/blog.svg",
     author: "Lương Văn Tuấn",
+    authorAvatar: "/icon.svg",
     date: "2025-06-15T07:45:00Z",
     address: "Huế - Đà Nẵng - Hội An",
     content:
@@ -93,8 +111,10 @@ export const dataBlogPosts = [
   {
     id: 10,
     title: "Khám phá Mộc Châu mùa hoa mận: Vẻ đẹp trắng xóa bạt ngàn",
+    category: "travel",
     image: "/blog.svg",
     author: "Trịnh Khánh Linh",
+    authorAvatar: "/icon.svg",
     date: "2025-08-05T11:10:00Z",
     address: "Mộc Châu, Sơn La",
     content:

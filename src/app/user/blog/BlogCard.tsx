@@ -1,0 +1,76 @@
+'use client';
+
+import React from 'react';
+import Image from 'next/image';
+import { FaMapMarkerAlt } from 'react-icons/fa';
+import { FaRegCommentDots } from 'react-icons/fa6';
+
+export type BlogPost = {
+  id: number;
+  title: string;
+  category: string;
+  image: string;
+  author: string;
+  authorAvatar: string; 
+  date: string;
+  address: string;
+  content: string;
+};
+
+interface BlogCardProps {
+  post: BlogPost;
+}
+
+const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
+  return (
+    <div className="flex flex-col md:flex-row gap-6 bg-white p-4">
+      <div className="w-full md:w-[300px] h-[260px] relative overflow-hidden shrink-0">
+        <Image
+          src={post.image}
+          alt={post.title}
+          fill
+          className="object-cover"
+        />
+      </div>
+
+      <div className="flex-1 flex flex-col justify-between">
+        <div>
+          <h2 className="text-xl font-bold text-gray-900">
+            {post.title}
+          </h2>
+          <span className="inline-block text-xs bg-yellow-400 text-white font-semibold rounded px-2 py-0.5 my-2">
+            {post.category}
+          </span>
+          <p className="text-sm text-gray-700 line-clamp-3">
+            {post.content}
+          </p>
+        </div>
+
+        <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between text-sm text-gray-600 gap-2">
+          <div className="flex items-center gap-2">
+            <Image
+                src={post.authorAvatar}
+                alt={post.author}
+                width={30}
+                height={30}
+                className="object-cover rounded-full"
+            />
+            <span>{post.author}</span>
+          </div>
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="flex items-center gap-1">
+              <FaMapMarkerAlt className="text-yellow-500" />
+              <span>{post.address}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <FaRegCommentDots className="text-gray-400" />
+              <span>Bình luận (52)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BlogCard;
