@@ -90,7 +90,7 @@ const PopularPostsSection = () => {
                     <p className="text-gray-800 text-sm font-inter">{item.name}</p>
                     </div>
 
-                    <div className="flex justify-between items-center text-xs text-gray-500 mt-2">
+                    <div className="flex justify-between items-center text-[11px] text-gray-500 mt-2 whitespace-nowrap">
                     <span className="flex items-center gap-1">
                         <HiLocationMarker className="text-[var(--warning)]" />
                         {item.location}

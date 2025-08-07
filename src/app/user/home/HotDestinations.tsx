@@ -53,7 +53,7 @@ const HotDestinations = () => {
           {destinations.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col justify-between h-[300px] rounded-2xl bg-white/10 backdrop-blur-[12px] shadow-lg hover:shadow-xl transition p-4"
+              className="flex flex-col justify-between h-[300px] rounded-2xl bg-white/10 backdrop-blur-[12px] shadow-lg hover:shadow-xl transition p-4 border-2 border-white"
             >
               <div className="space-y-3">
                 <div className="relative mx-[-8px] w-[calc(100%+16px)] h-[160px] rounded-2xl overflow-hidden">
@@ -66,7 +66,7 @@ const HotDestinations = () => {
                 </div>
 
                 <div>
-                  <p className="text-xs text-[var(--gray-3)] mb-1 flex items-center gap-1">
+                  <p className="text-xs text-[var(--gray-3)] mb-2 flex items-center gap-1">
                     <HiLocationMarker className="w-3.5 h-3.5 text-[var(--primary)]" />
                     {item.location}
                   </p>
