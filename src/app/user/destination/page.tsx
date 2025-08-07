@@ -6,6 +6,7 @@ import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css';
 import 'rc-slider/assets/index.css';
 import DestinationCard from "./DestinationCard";
+import SearchBox from '@/components/ui/SearchBox';
 import { Destination, destinations } from "../../assets/data/destinations";
 
 export default function DestinationPage() {
@@ -28,8 +29,8 @@ export default function DestinationPage() {
     return <>
     <main className="relative min-h-screen bg-white z-10 w-[90%] mx-auto">
       <BackgroundBlur />
-      
-      <div className="flex gap-12 my-12">
+      <SearchBox />
+      <div className="flex gap-12 mb-12">
         <div id='filter'className="flex hidden lg:block flex-col w-[30%]">
             <h2>BỘ LỌC</h2>
             <div className="flex justify-between">
