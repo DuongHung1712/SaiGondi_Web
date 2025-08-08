@@ -24,34 +24,51 @@ export default function QnaCard({
   const [expanded] = useState(false);
 
   return (
-    <div className="relative mx-2">
-      <div className="absolute right-0 bottom-0 w-full h-full bg-[#307AFD63] rounded-[20px] z-0 translate-x-2 translate-y-6 left-3" />
-
-      <div className="relative bg-white w-full max-w-[320px] mx-auto rounded-[20px] p-5 shadow-lg z-10 transition-all duration-300">
-        <h3 className="text-[17px] font-bold text-gray-900 mb-5 leading-snug">{title}</h3>
-
+    <div className="relative mx-1 sm:mx-2">
+      {/* Wrapper chung để nền bám sát kích thước card */}
+      <div className="relative w-full max-w-[320px] mx-auto">
+        {/* Nền xanh auto-fit theo card */}
         <div
-          className={`text-xs text-gray-600 mb-5 leading-snug ${
-            expanded ? '' : 'line-clamp-2'
-          }`}
-        >
-          {description}
-        </div>
-        <div className="flex flex-col gap-1 mb-4">
-          <span className="text-sm font-semibold font-inter">{author}</span>
-          <div className="flex items-center gap-2">
-            {sourceIcon}
-            <span className="text-xs text-gray-700">{sourceText}</span>
-          </div>
-        </div>
-
-        <Image
-          src={imageUrl}
-          alt={title}
-          width={400}
-          height={200}
-          className="rounded-xl w-full h-40 object-cover"
+          className="
+            absolute inset-0 -z-10 rounded-[20px] bg-[#307AFD63]
+            transform-gpu
+            scale-[1.02] translate-x-1 translate-y-2
+            sm:scale-[1.03] sm:translate-x-2 sm:translate-y-3
+          "
         />
+
+        {/* Thẻ chính */}
+        <div className="bg-white rounded-[20px] p-4 sm:p-5 shadow-lg transition-all duration-300">
+          <h3 className="text-base sm:text-[17px] md:text-[18px] font-bold text-gray-900 mb-3 sm:mb-4 leading-snug">
+            {title}
+          </h3>
+
+          <div
+            className={`text-xs sm:text-sm text-gray-600 mb-4 sm:mb-5 leading-snug ${
+              expanded ? '' : 'line-clamp-2'
+            }`}
+          >
+            {description}
+          </div>
+
+          <div className="flex flex-col gap-1 mb-3 sm:mb-4">
+            <span className="text-sm sm:text-base font-semibold font-inter">
+              {author}
+            </span>
+            <div className="flex items-center gap-2">
+              {sourceIcon}
+              <span className="text-xs sm:text-sm text-gray-700">{sourceText}</span>
+            </div>
+          </div>
+
+          <Image
+            src={imageUrl}
+            alt={title}
+            width={800}
+            height={450}
+            className="rounded-xl w-full h-36 sm:h-40 md:h-44 object-cover"
+          />
+        </div>
       </div>
     </div>
   );
