@@ -2,7 +2,6 @@ import { Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import '@/styles/globals.css';
-import BlurBackground from '@/components/ui/BlurBackground';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -25,7 +24,6 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
-        <BlurBackground/>
       </div>
     </div>
   );
