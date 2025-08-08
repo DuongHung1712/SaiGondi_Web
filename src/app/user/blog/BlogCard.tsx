@@ -2,11 +2,13 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { FaRegCommentDots } from 'react-icons/fa6';
 
 export type BlogPost = {
   id: number;
+  slug: string;
   title: string;
   category: string;
   image: string;
@@ -24,20 +26,22 @@ interface BlogCardProps {
 const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
   return (
     <div className="flex flex-col md:flex-row gap-6 bg-white p-4">
-      <div className="w-full md:w-[300px] h-[260px] relative overflow-hidden shrink-0">
+      <Link href={`/user/blog/${post.slug}`} className="w-full md:w-[300px] h-[260px] relative overflow-hidden shrink-0">
         <Image
           src={post.image}
           alt={post.title}
           fill
           className="object-cover"
         />
-      </div>
+      </Link>
 
       <div className="flex-1 flex flex-col justify-between">
         <div>
+          <Link href={`/user/blog/${post.slug}`}>
           <h2 className="text-xl font-bold text-gray-900">
             {post.title}
-          </h2>
+            </h2>
+            </Link>
           <span className="inline-block text-xs bg-yellow-400 text-white font-semibold rounded px-2 py-0.5 my-2">
             {post.category}
           </span>

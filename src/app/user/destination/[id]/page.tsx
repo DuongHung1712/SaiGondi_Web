@@ -154,8 +154,5 @@ export default async function DestinationDetail({params}:Props) {
         ))}
       </div>
     </div>
-
-
-
   </>
 }
