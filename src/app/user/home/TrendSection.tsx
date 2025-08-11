@@ -31,7 +31,7 @@ export default function TrendSection() {
 
           <div>
             <div className="max-w-lg md:ml-auto px-0 md:px-10 mb-3 sm:mb-5 text-center md:text-right">
-              <p className="text-gray-600 font-inter">
+              <p className="text-gray-600 font-inter mx-6">
                 {'5 xu hướng du lịch đang "gây bão"'}
               </p>
             </div>

@@ -15,11 +15,10 @@ const features = [
 
 const PopularPostsSection = () => {
   return (
-    <section className="relative px-4 pt-20 pb-60">
-      <div className="max-w-7xl mx-auto relative z-10">
-
-        <div className="flex items-start justify-between flex-wrap gap-3 mb-6">
-          <h1 className="text-3xl font-bold font-inter text-gray-800 leading-tight">
+    <section className="relative pt-20 pb-60">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="flex items-start justify-between flex-wrap gap-3 sm:gap-4 mb-4 sm:mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold font-inter text-gray-800 leading-tight">
             CÁC BÀI VIẾT ĐƯỢC XEM NHIỀU NHẤT
           </h1>
 
@@ -31,23 +30,30 @@ const PopularPostsSection = () => {
           </Button>
         </div>
 
-        <p className="text-gray-600 mb-6 font-inter text-sm sm:text-base">
+        <p
+          className="
+            text-gray-600 font-inter
+            text-sm sm:text-base lg:text-[17px]
+            leading-relaxed sm:leading-relaxed lg:leading-8
+            mb-6 sm:mb-8
+            max-w-[540px] sm:max-w-[620px] lg:max-w-[700px]
+            pr-3 sm:pr-6 lg:pr-12
+          "
+        >
           Cùng xem các bài viết được xem nhiều nhất hôm nay
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-45 sm:gap-y-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4
+          gap-x-6 lg:gap-x-8 xl:gap-x-10
+          gap-y-45 sm:gap-y-20 md:gap-y-40 lg:gap-y-20">
+
           {features.map((item, index) => (
             <div key={index} className="relative py-6">
               <div className="absolute bottom-0 left-0 w-full h-70 z-0">
-                <Image
-                  src="/city-2.svg"
-                  alt="Cityscape"
-                  layout="fill"
-                  objectFit="cover"
-                />
+                <Image src="/city-2.svg" alt="Cityscape" fill className="object-cover" />
               </div>
 
-              <div className="bg-white left-3 shadow-lg overflow-hidden relative z-10 translate-y-45 w-[85%] ml-0 mt-8 mb-6">
+              <div className="bg-white left-3 shadow-lg overflow-hidden relative z-10 translate-y-45 w-[88%] sm:w-[85%] ml-0 mt-8 mb-6">
                 <div className="absolute top-6 left-0 w-1 h-10 bg-[var(--warning)] z-20" />
                 <div className="p-4 sm:p-6">
                   <div className="flex items-center justify-between text-xs sm:text-sm text-[var(--warning)] mb-3 sm:mb-4">
@@ -90,13 +96,8 @@ const PopularPostsSection = () => {
         </div>
       </div>
 
-      <div className="hidden md:block absolute top-42 right-9 w-[200px] h-[200px] pointer-events-none -z-10">
-        <Image
-          src="/Graphic_Elements.svg"
-          alt="Background"
-          layout="fill"
-          objectFit="contain"
-        />
+      <div className="hidden md:block absolute top-42 right-3 sm:right-6 lg:right-9 w-[140px] h-[140px] sm:w-[180px] sm:h-[180px] lg:w-[220px] lg:h-[220px] pointer-events-none -z-10">
+        <Image src="/Graphic_Elements.svg" alt="Background" fill className="object-contain" />
       </div>
     </section>
   );

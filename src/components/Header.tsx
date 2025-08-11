@@ -55,7 +55,7 @@ export default function Header() {
               key={item.href}
               href={item.href}
               className={`transition text-[var(--primary)] ${
-                isActive(item.href) ? 'font-black' : 'font-light'
+                isActive(item.href) ? 'font-black' : 'font-medium'
               }`}
             >
               {item.label}
