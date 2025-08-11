@@ -16,7 +16,7 @@ export const metadata = {
 export default function UserLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={inter.variable}>
-      <div className="relative ">   
+      <div className="relative">   
         <div className="sticky top-0 z-50 shadow">
           <Header />
         </div>

@@ -17,9 +17,9 @@ const LocationCard = ({
   height,
 }: LocationCardProps) => {
   const widthClass = {
-    small: 'w-[160px]',
-    medium: 'w-[200px]',
-    large: 'w-[240px]',
+    small:  'w-[140px] md:w-[160px]',
+    medium: 'w-[180px] md:w-[200px]',
+    large:  'w-[200px] md:w-[240px]',
   }[size];
 
   const defaultHeights = {

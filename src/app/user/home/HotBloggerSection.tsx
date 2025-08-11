@@ -27,7 +27,7 @@ export default function HotBloggerSection() {
   return (
     <section className="relative px-4 pt-10 pb-[450px]">
       <div className="relative z-20 mx-auto max-w-7xl">
-        <h2 className="text-4xl font-bold font-inter text-gray-800 mb-6">Hot Blogger</h2>
+        <h2 className="text-3xl font-bold font-inter text-gray-800 mb-6">Hot Blogger</h2>
       </div>
 
       <div className="absolute top-40 left-0 w-full h-[350px] z-0 pointer-events-none select-none">
