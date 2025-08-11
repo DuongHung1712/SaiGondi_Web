@@ -33,12 +33,15 @@ const CategoryChart: React.FC = () => {
         backgroundColor: colors,
         borderWidth: 1,
         borderColor: "#fff",
+        borderRadius: 3,
+        hoverOffset: 10, 
       },
     ],
   };
 
   const options = {
     responsive: true,
+    cutout: "50%",
     plugins: {
       legend: {
         display: false, 
