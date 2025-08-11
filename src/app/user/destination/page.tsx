@@ -14,6 +14,8 @@ export default function DestinationPage() {
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(10000000);
 
+    const [isOpen, setIsOpen] = useState(false);
+
     const [selectedOptions, setSelectedOptions] = useState<string[]>([])
     
     const checkboxChangeHandle = (option:string) => {
@@ -24,14 +26,28 @@ export default function DestinationPage() {
         ))
     }
 
-
-
     return <>
-    <main className="relative min-h-screen bg-white z-10 w-[90%] mx-auto">
-      <BackgroundBlur />
-      <SearchBox />
-      <div className="flex gap-12 mb-12">
-        <div id='filter'className="flex hidden lg:block flex-col w-[30%]">
+    <div className="relative bg-white z-10 w-full mx-auto">
+    <BackgroundBlur />
+    <SearchBox />
+    <div className="flex w-[20px] justify-start lg:hidden mb-4 ml-4">
+         
+         <button
+         onClick={() => setIsOpen(!isOpen)}
+         className="p-2 rounded-md border border-gray-300 hover:bg-gray-100"
+         >
+         <i className="ri-filter-3-line text-xl"></i>
+         </button>
+     </div>
+      <div className="md:flex mb-12 ">
+        {/* Header filter cho mobile */}
+
+
+        {/* <div id='filter'className="flex hidden lg:block flex-col w-0 lg:w-[30%]"> */}
+            <div
+            id="filter"
+            className={`px-8 md:w-[30%] flex-col gap-6 ${isOpen ? "flex w-full sm:w-[70vh] ml-auto" : "hidden w-0"} lg:flex`}
+        >
             <h2>BỘ LỌC</h2>
             <div className="flex justify-between">
                 <h6>Giá</h6>
@@ -80,17 +96,17 @@ export default function DestinationPage() {
                   )}
             />
 
-            <span className="block h-px overflow-hidden bg-gray-400 origin-top scale-y-20 my-8"/>
+            <span className="block h-px overflow-hidden bg-gray-400 origin-top scale-y-20 lg:my-8"/>
 
             <h4>Xếp hạng</h4>
-            <div className="flex gap-4 mt-4">
+            <div className="flex gap-2 lg:gap-4 lg:mt-4">
                 <div className="border h-6 w-6 p-4 flex items-center justify-center rounded-[4px] border-[#8DD3BB]">0+</div>
                 <div className="border h-6 w-6 p-4 flex items-center justify-center rounded-[4px] border-[#8DD3BB]">1+</div>
                 <div className="border h-6 w-6 p-4 flex items-center justify-center rounded-[4px] border-[#8DD3BB]">2+</div>
                 <div className="border h-6 w-6 p-4 flex items-center justify-center rounded-[4px] border-[#8DD3BB]">3+</div>
                 <div className="border h-6 w-6 p-4 flex items-center justify-center rounded-[4px] border-[#8DD3BB]">4+</div>
             </div>
-            <span className="block h-px overflow-hidden bg-gray-400 my-8 origin-top scale-y-20"/>
+            <span className="block h-px overflow-hidden bg-gray-400 lg:my-8 origin-top scale-y-20"/>
 
 
             <h4>Dịch vụ nổi bật</h4>
@@ -105,7 +121,7 @@ export default function DestinationPage() {
                 ))}
             </div>
             
-            <span className="block h-px overflow-hidden bg-gray-400 my-8 origin-top scale-y-20"/>
+            <span className="block h-px overflow-hidden bg-gray-400 lg:my-8 origin-top scale-y-20"/>
             <h4>Tiện ích</h4>
             <div className="flex flex-col">
                 {['Free breakfast',  'Free parking',  'Wi-Fi',  'Swimming Pool',  'Gym',].map((option)=> (
@@ -116,12 +132,14 @@ export default function DestinationPage() {
                         {option}
                     </label>
                 ))}
-                <button className="text-red-500 text-left">+24 more</button>
+                <button className="text-red-500 text-left mb-8">+24 more</button>
             </div>     
 
         </div>
 
-        <div className="flex flex-col w-full lg:w-[70%]">
+        {/* <div className="flex flex-col w-full md:w-[70%] px-4"> */}
+        <div className={`flex flex-col w-full  px-4  ${isOpen? "md:w-[70%]":"md: w-full"}`}>
+
             <div className="grid grid-cols-3 w-[90%] mx-auto md:w-full border rounded-2xl border-white shadow-[0_4px_16px_0_rgba(17,34,17,0.05) bg-white">
                 <div className="flex flex-col border-r pl-4 !bg-white rounded-tl-2xl rounded-bl-2xl py-3">
                     <h4>Tất cả</h4>
@@ -141,7 +159,7 @@ export default function DestinationPage() {
                 <div className="flex justify-between mt-8">
                     <h4>Hiện thị 4/257 điểm đến</h4>
                     <div className="flex">
-                        <h4>Sắp xếp theo:</h4>
+                        <h4 className="hidden lg:block">Sắp xếp theo:</h4>
                         <select
                             className="rounded-md focus:outline-none text-sm lg:text-base"
                             defaultValue="">                    
@@ -163,12 +181,7 @@ export default function DestinationPage() {
           
         </div>
       </div>
-
-
-    </main>
-    
-
-
+    </div>  
     </>
   }
   
