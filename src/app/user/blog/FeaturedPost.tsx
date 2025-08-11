@@ -34,7 +34,7 @@ export default function FeaturedPost({ posts }: { posts: Post[] }) {
   return (
     <section className="w-full bg-white pt-16">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 px-4">
-        <div className="flex-1">
+        <div className="flex-1 order-2 md:order-1 text-center md:text-left">
           <p className="text-sm font-semibold tracking-wider text-[var(--gray-2)] mb-2">
             BÀI ĐĂNG NỔI BẬT
           </p>
@@ -44,18 +44,22 @@ export default function FeaturedPost({ posts }: { posts: Post[] }) {
           <p className="text-sm text-[var(--gray-2)] mb-1">
             Người đăng: {post.author} | {formattedDate}
           </p>
-          <p className="text-[var(--gray-1)] mb-6">{post.content.slice(0, 70)}...</p>
+          <p className="text-[var(--gray-1)] mb-6">
+            {post.content.slice(0, 70)}...
+          </p>
           <Button variant="primary">Đọc bài</Button>
         </div>
 
-        <div className="flex-1 relative w-[450px] h-[360px] overflow-hidden">
-          <Image
-            src={post.image}
-            alt={post.title}
-            fill
-            className="object-cover transition-all duration-700"
-            priority
-          />
+        <div className="w-full md:flex-1 order-1 md:order-2">
+          <div className="relative w-full h-[300px] md:w-[400px] md:h-[310px] lg:w-[450px] lg:h-[360px] overflow-hidden">
+            <Image
+              src={post.image}
+              alt={post.title}
+              fill
+              className="object-cover transition-all duration-700"
+              priority
+            />
+          </div>
         </div>
       </div>
 
@@ -65,7 +69,9 @@ export default function FeaturedPost({ posts }: { posts: Post[] }) {
             key={idx}
             onClick={() => setCurrent(idx)}
             className={`h-2 rounded-full transition-all duration-300 ${
-              idx === current ? "w-6 bg-[var(--secondary)]" : "w-2 bg-[var(--gray-4)]"
+              idx === current
+                ? "w-6 bg-[var(--secondary)]"
+                : "w-2 bg-[var(--gray-4)]"
             }`}
             aria-label={`Chuyển đến bài ${idx + 1}`}
           />

@@ -88,7 +88,7 @@ export default function BlogDetail({ post }: BlogDetailProps) {
                         <div className="flex justify-center my-6">
                         <img
                             {...props}
-                            className="rounded-md max-w-[864px] max-h-[533px] w-auto h-auto"
+                            className="rounded-md max-w-full h-auto max-h-[533px] object-contain"
                             alt={props.alt || ''}
                         />
                         </div>
