@@ -19,7 +19,7 @@ const DesnitationCard = ({destination}: Props) => {
 
   return (
     
-    <div className="grid grid-cols-[30%_70%] mb-6 shadow-[0px_4px_16px_0px_#1122110D]" >
+    <div className="grid grid-cols-[30%_70%] mb-6 shadow-[0px_4px_16px_0px_#1122110D] pr-2" >
         <img src="https://cms.intowild.travel/storage/2024-03-13/library-media/aCi8H6Q1xK6JqNwpB2Fn0EpD3wUVyhHgyIdaMNmC.jpg" alt=""
         
          className='rounded-tl-xl rounded-bl-xl w-full h-full object-cover' />

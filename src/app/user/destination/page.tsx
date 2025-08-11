@@ -27,7 +27,7 @@ export default function DestinationPage() {
     }
 
     return <>
-    <div className="relative bg-white z-10 w-full mx-auto">
+    <div className="relative bg-white z-10 w-[90%] mx-auto">
     <BackgroundBlur />
     <SearchBox />
     <div className="flex w-[20px] justify-start lg:hidden mb-4 ml-4">
@@ -133,7 +133,9 @@ export default function DestinationPage() {
                     </label>
                 ))}
                 <button className="text-red-500 text-left mb-8">+24 more</button>
-            </div>     
+            </div>   
+
+              <img src="/BACKGROUND.png" className="ml-[-100px]"/>  
 
         </div>
 
