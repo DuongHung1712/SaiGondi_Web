@@ -13,9 +13,9 @@ const ServiceSection = () => {
   return (
     <section className="relative bg-transparent py-14 sm:py-20 px-4">
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-          {/* Block tiêu đề */}
-          <div className="md:w-[320px] flex-shrink-0 text-center md:text-left">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+          
+          <div className="w-full lg:w-[320px] flex-shrink-0 text-center lg:text-left">
             <p className="text-[var(--error)] font-medium font-inter text-lg sm:text-xl mb-2">
               What we serve
             </p>
@@ -24,9 +24,8 @@ const ServiceSection = () => {
             </h2>
           </div>
 
-          {/* Grid cards */}
-          <div className="flex-1">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="flex-1 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-6 lg:mt-0">
               {services.map((service, idx) => (
                 <div
                   key={idx}
@@ -55,6 +54,7 @@ const ServiceSection = () => {
               ))}
             </div>
           </div>
+
         </div>
       </div>
     </section>

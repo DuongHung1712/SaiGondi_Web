@@ -11,9 +11,8 @@ const features = [
 
 const HotSearchSection = () => {
   return (
-    <section className="px-4 py-20 bg-white">
+    <section className="px-4 py-20">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 xl:gap-16 items-center relative">
-        {/* Left */}
         <div className="space-y-6 z-10">
           <div>
             <h2 className="text-2xl md:text-3xl xl:text-4xl font-bold font-inter text-[var(--black-1)] mb-1">
