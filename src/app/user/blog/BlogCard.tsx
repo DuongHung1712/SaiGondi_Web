@@ -25,7 +25,7 @@ interface BlogCardProps {
 
 const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
   return (
-    <div className="flex flex-col md:flex-row gap-6 bg-white p-4">
+    <div className="flex flex-col md:flex-row gap-6 bg-[var(--background)] p-4">
       <Link href={`/user/blog/${post.slug}`} className="w-full md:w-[300px] h-[260px] relative overflow-hidden shrink-0">
         <Image
           src={post.image}
@@ -35,22 +35,22 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
         />
       </Link>
 
-      <div className="flex-1 flex flex-col justify-between">
-        <div>
+      <div className="flex-1 flex flex-col justify-between min-w-0">
+        <div className="max-w-full md:max-w-[calc(100%-20px)]">
           <Link href={`/user/blog/${post.slug}`}>
-          <h2 className="text-xl font-bold text-gray-900">
+          <h2 className="text-xl font-bold text-[var(--black-2)] line-clamp-3 break-words">
             {post.title}
             </h2>
             </Link>
-          <span className="inline-block text-xs bg-yellow-400 text-white font-semibold rounded px-2 py-0.5 my-2">
+          <span className="inline-block text-xs bg-[var(--secondary)] text-white font-semibold rounded px-2 py-0.5 my-2">
             {post.category}
           </span>
-          <p className="text-sm text-gray-700 line-clamp-3">
+          <p className="text-sm text-[var(--black-3)] line-clamp-3 break-words">
             {post.content}
           </p>
         </div>
 
-        <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between text-sm text-gray-600 gap-2">
+        <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between text-sm text-[var(--gray-2)] gap-2">
           <div className="flex items-center gap-2">
             <Image
                 src={post.authorAvatar}
@@ -63,11 +63,11 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
           </div>
           <div className="flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-1">
-              <FaMapMarkerAlt className="text-yellow-500" />
+              <FaMapMarkerAlt className="text-[var(--secondary)]" />
               <span>{post.address}</span>
             </div>
             <div className="flex items-center gap-1">
-              <FaRegCommentDots className="text-gray-400" />
+              <FaRegCommentDots className="text-[var(--gray-2)]" />
               <span>Bình luận (52)</span>
             </div>
           </div>
