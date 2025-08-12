@@ -20,7 +20,7 @@ const CommentBox = () => {
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Bạn đang nghĩ gì!"
-        className="w-full h-[60px] p-4 shadow-lg resize-none text-sm focus:outline-none bg-white"
+        className="w-full h-[60px] p-4 shadow-lg resize-none text-sm focus:outline-none bg-[var-white]"
       />
       <div className="flex justify-end mt-2">
         <Button
