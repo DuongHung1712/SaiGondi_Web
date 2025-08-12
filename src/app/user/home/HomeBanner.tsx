@@ -10,7 +10,7 @@ type Loc = {
   image: string;
   size: 'small' | 'medium' | 'large';
   height?: number;
-  position: string;        
+  position: string;       
   positionMobile: string;  
 };
 
@@ -30,8 +30,8 @@ const locations: Loc[] = [
     image: '/pdb.svg',
     size: 'medium',
     height: 90,
-    position: 'top-[260px] left-[415px]',
-    positionMobile: 'top-[140px] left-[30px]',
+    position: 'top-[450px] left-[490px]',
+    positionMobile: 'top-[240px] left-[40px]',
   },
   {
     title: 'Nhà thờ Đức Bà',
@@ -47,7 +47,6 @@ const locations: Loc[] = [
 const HomeBanner = () => {
   return (
     <section className="relative bg-transparent py-9">
-      {/* lề trái/phải cố định: px-6 (24px) trên mọi kích thước */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col-reverse md:flex-row items-center md:items-start justify-between gap-10">
           <div className="flex-1 space-y-5 z-10 pt-6 md:text-left">
@@ -68,7 +67,16 @@ const HomeBanner = () => {
               className="z-0 w-[340px] sm:w-[440px] md:w-[650px]"
               priority
             />
-            <div className="absolute bg-white p-2 rounded-full shadow-md z-10 top-[28px] left-[50px] md:top-[40px] md:left-[90px]">
+            <div
+              className="
+                absolute z-10 bg-white p-2 rounded-full shadow-md
+                top-[28px] left-[32px]           
+                sm:top-[200px] sm:left-[420px] sm:w-[50px]   
+                lg:top-[150px] lg:left-[410px]    
+                xl:top-[20px] xl:left-[130px]    
+                2xl:-top-[180px] 2xl:left-[400px] 
+              "
+            >
               <Image src="/camera.svg" alt="Camera Icon" width={34} height={34} />
             </div>
 
@@ -80,7 +88,13 @@ const HomeBanner = () => {
               {locations.map((loc, index) => (
                 <div
                   key={index}
-                  className={`absolute ${loc.positionMobile} md:${loc.position}`}
+                  className={[
+                    'absolute',
+                    loc.positionMobile,          
+                    `md:${loc.position}`,      
+                    loc.title === 'Phố đi bộ' ? 'hidden md:block' : '',
+                    loc.title === 'Dinh độc lập' ? 'block md:hidden xl:block sm:block' : '',
+                  ].filter(Boolean).join(' ')}
                 >
                   <LocationCard {...loc} />
                 </div>
