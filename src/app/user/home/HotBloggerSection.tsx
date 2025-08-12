@@ -12,15 +12,14 @@ export default function HotBloggerSection() {
           Hot Blogger
         </h2>
       </div>
-      <div className="relative w-full z-10 mt-20"> 
-        <div className="w-full overflow-hidden">
-          <Image
+
+      <div className="relative w-full z-10 mt-20">
+        <div className="w-full overflow-hidden aspect-[16/5] sm:aspect-[16/4]"> 
+          <Image 
             src="/Avt_list.svg"
             alt="Hot Blogger Avatars"
-            layout="responsive"
-            width={1600}
-            height={500}
-            className="object-cover"
+            fill
+            className="object-cover scale-125 md:scale-100 transition-transform duration-300"
             priority
           />
         </div>
