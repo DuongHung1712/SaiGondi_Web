@@ -25,19 +25,16 @@ export default function QnaCard({
 
   return (
     <div className="relative mx-1 sm:mx-2">
-      {/* Wrapper chung để nền bám sát kích thước card */}
-      <div className="relative w-full max-w-[320px] mx-auto">
-        {/* Nền xanh auto-fit theo card */}
+      <div className="relative w-full max-w-[300px] mx-auto">
         <div
           className="
             absolute inset-0 -z-10 rounded-[20px] bg-[#307AFD63]
             transform-gpu
-            scale-[1.02] translate-x-1 translate-y-2
-            sm:scale-[1.03] sm:translate-x-2 sm:translate-y-3
+            scale-[1.0] translate-x-4 translate-y-4
+            sm:scale-[1.0] sm:translate-x-5 sm:translate-y-5
           "
         />
 
-        {/* Thẻ chính */}
         <div className="bg-white rounded-[20px] p-4 sm:p-5 shadow-lg transition-all duration-300">
           <h3 className="text-base sm:text-[17px] md:text-[18px] font-bold text-gray-900 mb-3 sm:mb-4 leading-snug">
             {title}
