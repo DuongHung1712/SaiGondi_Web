@@ -21,13 +21,12 @@ const PopularPostsSection = () => {
           <h1 className="text-2xl sm:text-3xl font-bold font-inter text-gray-800 leading-tight">
             CÁC BÀI VIẾT ĐƯỢC XEM NHIỀU NHẤT
           </h1>
-
-          <Button
-            variant="outline-primary"
-            className="bg-white text-black h-10 text-xs sm:text-sm font-medium px-3 py-1 rounded-none ml-auto"
-          >
-            Xem tất cả
-          </Button>
+             <Button
+                variant="outline-primary"
+                className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 h-fit rounded-none"
+              >
+                Xem tất cả
+              </Button>
         </div>
 
         <p
