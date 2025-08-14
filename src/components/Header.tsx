@@ -105,7 +105,7 @@ export default function Header() {
 
           {isLoggedIn && (
             <>            
-              <Link href="/user/create-post" className="hidden md:block">
+              <Link href="/user/post-blog" className="hidden md:block">
                 <Button
                   variant="primary"
                   className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 h-fit rounded-none"
