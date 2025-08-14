@@ -17,7 +17,7 @@ const BlogListSection = ({ activeCategoryKey }: BlogListSectionProps) => {
 
   return (
     <section className="px-4 pb-10 max-w-7xl mx-auto">
-      <div className="space-y-2 border border-gray-200 shadow-lg">
+      <div className="space-y-2 border border-[var(--gray-5)] shadow-lg">
         {filteredPosts.map((post) => (
           <BlogCard key={post.id} post={post} />
         ))}

@@ -28,21 +28,24 @@ export default function BlogPage() {
         alt="city-bg"
         width={355}
         height={216}
-        className="absolute left-[-100] top-[535px] z-0 pointer-events-none"
+        className="absolute left-[-100px] top-[535px] z-0 pointer-events-none
+             w-[200px] sm:w-[250px] md:w-[300px] lg:w-[355px] h-auto"
       />
       <Image
         src="/Graphic_Elements.svg"
         alt="Graphic_Elements"
         width={192}
         height={176}
-        className="absolute left-[1420] top-[875px] z-0 pointer-events-none"
+        className="absolute left-[1420px] top-[875px] z-0 pointer-events-none
+             w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
       />
       <Image
         src="/Graphic_Elements.svg"
         alt="Graphic_Elements"
         width={192}
         height={176}
-        className="absolute left-[1420] top-[2800px] z-0 pointer-events-none"
+        className="absolute left-[1420] top-[2800px] z-0 pointer-events-none
+        w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
       />
 
       {/* nội dung trang page */}
@@ -54,12 +57,12 @@ export default function BlogPage() {
         activeTab={activeCategoryKey}
         onChangeTab={setActiveCategoryKey}
       />
-      <div className='max-w-7xl mx-auto'>
-        <div className="flex flex-col lg:flex-row gap-6 mt-6">
-          <div className="flex-1">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row gap-4 mt-6">
+          <div className="flex-[0.7] min-w-0">
             <BlogListSection activeCategoryKey={activeCategoryKey} />
           </div>
-          <div className="w-full lg:w-80">
+          <div className="flex-[0.3] w-full lg:max-w-xs px-4 md:px-6 lg:pl-4 lg:pr-8 xl:px-0 pb-4 md:pb-6 lg:pb-8">
             <RecentPosts />
             <FeaturedBloggers />
           </div>

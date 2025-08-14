@@ -25,10 +25,10 @@ const BloggerCard = ({
       </div>
       <div>
         <h4 className="font-semibold text-base">{name}</h4>
-        <p className="text-sm text-gray-500 leading-tight">
+        <p className="text-sm text-[var(--gray-2)] leading-tight">
           {description}
         </p>
-        <div className="flex gap-3 mt-2 text-blue-600 text-xl">
+        <div className="flex gap-3 mt-2 text-[var(--primary)] text-xl">
           <a href={facebookLink} target="_blank" rel="noopener noreferrer">
             <FaFacebookSquare />
           </a>

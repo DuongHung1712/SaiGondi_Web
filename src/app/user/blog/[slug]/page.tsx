@@ -37,7 +37,7 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
 
   return (
     <main className="relative overflow-hidden">
-          {/* blur */}
+      {/* blur */}
           <div className="absolute w-[500px] h-[500px] bg-[var(--secondary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: '270px', left: '-240px' }} />
           <div className="absolute w-[500px] h-[500px] bg-[var(--primary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: '600px', left: '1200px' }} />
           <div className="absolute w-[500px] h-[500px] bg-[var(--primary)] opacity-50 blur-[250px] pointer-events-none" style={{ top: '1100px', left: '-60px' }} />
@@ -49,61 +49,62 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
             alt="city-bg"
             width={355}
             height={216}
-            className="absolute left-[-100] top-[535px] z-0 pointer-events-none"
+            className="absolute left-[-100px] top-[535px] z-0 pointer-events-none
+             w-[200px] sm:w-[250px] md:w-[300px] lg:w-[355px] h-auto"
           />
           <Image
             src="/Graphic_Elements.svg"
             alt="Graphic_Elements"
             width={192}
             height={176}
-            className="absolute left-[1420] top-[875px] z-0 pointer-events-none"
+            className="absolute left-[1420px] top-[875px] z-0 pointer-events-none
+             w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
           />
           <Image
             src="/Graphic_Elements.svg"
             alt="Graphic_Elements"
             width={192}
             height={176}
-            className="absolute left-[1420] top-[2800px] z-0 pointer-events-none"
-          />
-    <div className="max-w-7xl mx-auto px-4 mt-12">
-      
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Nội dung bài viết */}
-        <div className="w-full lg:flex-1">
-          <BlogDetail post={post} />
-
-          <div className="flex items-center gap-2 pt-5">
-            <hr className="flex-1 border-[#D1E7E5]" />
-            <div className="flex gap-4 py-6">
-              <button className="text-[var(--gray-2)] hover:text-[var(--gray-1)] transition">
-                <LuCopy size={20} />
-              </button>
-              <button className="text-[var(--gray-2)] hover:text-[var(--gray-1)] transition">
-                <FaFacebookF size={20} />
-              </button>
-              <button className="text-[var(--gray-2)] hover:text-[var(--gray-1)] transition">
-                <FaInstagram size={20} />
-              </button>
-              <button className="text-[var(--gray-2)] hover:text-[var(--gray-1)] transition">
-                <FaPinterestP size={20} />
-              </button>
+            className="absolute left-[1420] top-[2800px] z-0 pointer-events-none w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
+        />
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 mt-12">
+        <div className="flex flex-col lg:flex-row gap-4 mt-6">
+          {/* Nội dung bài viết */}
+          <div className="flex-[0.7] min-w-0">
+            <BlogDetail post={post} />
+            {/* Social share */}
+            <div className="flex items-center gap-2 pt-5">
+              <hr className="flex-1 border-[#D1E7E5]" />
+              <div className="flex gap-4 py-6">
+                <button className="text-[var(--gray-2)] hover:text-[var(--gray-1)] transition">
+                  <LuCopy size={20} />
+                </button>
+                <button className="text-[var(--gray-2)] hover:text-[var(--gray-1)] transition">
+                  <FaFacebookF size={20} />
+                </button>
+                <button className="text-[var(--gray-2)] hover:text-[var(--gray-1)] transition">
+                  <FaInstagram size={20} />
+                </button>
+                <button className="text-[var(--gray-2)] hover:text-[var(--gray-1)] transition">
+                  <FaPinterestP size={20} />
+                </button>
+              </div>
+              <hr className="flex-1 border-[#D1E7E5]" />
             </div>
-            <hr className="flex-1 border-[#D1E7E5]" />
+            <ReviewSection reviews={dataReviews} />
+            <CommentBox />
           </div>
 
-          <ReviewSection reviews={dataReviews} />
-          <CommentBox />
+          {/* Sidebar */}
+          <div className="flex-[0.3] w-full lg:max-w-xs px-4 md:px-6 lg:pl-4 lg:pr-8 xl:px-0 pb-4 md:pb-6 lg:pb-8">
+            <RecentPosts />
+            <FeaturedBloggers />
+          </div>
         </div>
 
-        {/* Bài viết mới đăng + các bloger nổi bật*/}
-        <div className="w-full lg:w-80 shrink-0 pt-55">
-          <RecentPosts />
-          <FeaturedBloggers />
-        </div>        
+        <PopularPostsSection />
       </div>
 
-      <PopularPostsSection/>
-    </div>
     </main>
   );
 }

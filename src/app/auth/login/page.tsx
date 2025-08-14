@@ -48,14 +48,17 @@ export default function LoginPage() {
           </button>
         </div>
 
-        <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center justify-between text-sm flex-wrap gap-2">
           <label className="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" className="sr-only peer" />
             <div className="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--primary)]" />
             <span className="ml-2 text-sm text-gray-900">Ghi nhớ mật khẩu</span>
           </label>
 
-          <a href="/auth/forgot-password" className="text-[var(--primary)] hover:underline">
+          <a
+            href="/auth/forgot-password"
+            className="text-[var(--primary)] hover:underline whitespace-nowrap"
+          >
             Quên mật khẩu?
           </a>
         </div>
