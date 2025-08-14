@@ -46,7 +46,7 @@ export default function Header() {
     localStorage.removeItem("user");
     setIsLoggedIn(false);
     setFirstName("");
-    setAvatarUrl("/Image.svg");
+    setAvatarUrl("/Image.svg"); 
     router.push("/auth/login");
   };
 
@@ -156,53 +156,57 @@ export default function Header() {
             </button>
 
             {mobileMenuOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`block px-4 py-2 hover:bg-gray-100 ${
-                      isActive(item.href)
-                        ? 'text-[var(--primary)] font-semibold'
-                        : 'text-[var(--primary)]'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+              <div className="fixed top-[68px] left-0 w-full bg-white border-t border-gray-200 shadow-lg z-50">
+                <div className="flex flex-col py-2">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`px-4 py-3 hover:bg-gray-100 ${
+                        isActive(item.href)
+                          ? 'text-[var(--primary)] font-semibold'
+                          : 'text-[var(--primary)]'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
 
-                {isLoggedIn && (
-                  <Link
-                    href="/user/create-post"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-4 py-2 rounded-2xl text-[var(--primary)] hover:bg-gray-100"
-                  >
-                    Đăng bài
-                  </Link>
-                )}
+                  {isLoggedIn && (
+                    <Link
+                      href="/user/create-post"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="px-4 py-3 hover:bg-gray-100 text-[var(--primary)]"
+                    >
+                      Đăng bài
+                    </Link>
+                  )}
 
-                <div className="border-t border-gray-200" />
+                  <div className="border-t border-gray-200 my-2" />
 
-                {!isLoggedIn ? (
-                  <Link
-                    href="/auth/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-1 py-2 text-sm text-[var(--primary)]hover:bg-gray-100 text-center"
-                  >
-                   <Button variant="outline-primary">Đăng nhập / Đăng ký</Button>
-                  </Link>
-                ) : (
-                  <button
-                    onClick={() => {
+                  {!isLoggedIn ? (
+                    <Link
+                      href="/auth/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="px-4 py-3"
+                    >
+                      <Button variant="outline-primary" className="w-full">
+                        Đăng nhập / Đăng ký
+                      </Button>
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => {
                         setMobileMenuOpen(false);
                         handleLogout();
-                    }}
-                    className="w-full text-left px-4 py-2 text-[var(--primary)] hover:bg-gray-100"
-                  >
-                    Đăng xuất
-                  </button>
-                )}
+                      }}
+                      className="w-full text-left px-4 py-3 text-[var(--primary)] hover:bg-gray-100"
+                    >
+                      Đăng xuất
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
