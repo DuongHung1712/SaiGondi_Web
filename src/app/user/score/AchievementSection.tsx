@@ -15,8 +15,11 @@ export default function AchievementSection() {
 
   const [selected, setSelected] = useState(badges[1]); 
 
+  const completedCount = badges.filter(b => b.status === 'Đã chinh phục').length;
+  const progressPercent = (completedCount / badges.length) * 100;
+
   return (
-    <div className="p-6 rounded-xl max-w-7xl mx-auto">
+    <div className="p-6 py-18 rounded-xl max-w-7xl mx-auto">
       <h2 className="text-lg sm:text-xl font-medium text-gray-500 uppercase">
         Danh hiệu cá nhân
       </h2>
@@ -27,7 +30,7 @@ export default function AchievementSection() {
       <div className="w-full h-1.5 bg-gray-200 rounded-full mt-4 mb-8">
         <div
           className="h-full bg-blue-500 rounded-full transition-all duration-500"
-          style={{ width: `${selected.status}%` }}
+          style={{ width: `${progressPercent}%` }}
         ></div>
       </div>
 

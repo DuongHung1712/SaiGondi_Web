@@ -121,7 +121,7 @@ export default function ScoreSection() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 items-end">
         <div className="col-span-1 lg:col-span-2 bg-[#F8F8FC] rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-            <h2 className="text-base sm:text-lg font-bold text-gray-800">HÀNH TRÌNH CỦA BẠN</h2>
+            <h2 className="text-base sm:text-xl font-bold text-gray-800">HÀNH TRÌNH CỦA BẠN</h2>
             <div className="relative">
               <button
                 onClick={() => setOpenDropdown(!openDropdown)}
