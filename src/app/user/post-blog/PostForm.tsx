@@ -30,32 +30,30 @@ export default function PostForm({
     if (!sel) return;
     const range = document.createRange();
     range.selectNodeContents(el);
-    range.collapse(!atEnd); 
+    range.collapse(atEnd);
     sel.removeAllRanges();
     sel.addRange(range);
-    (el as HTMLElement).focus();
+    el.focus();
   };
 
-  const ensureParagraphAfter = (figure: HTMLElement): HTMLParagraphElement => {
-    let p: HTMLParagraphElement | null = null;
-
-    const next = figure.nextSibling as (HTMLElement | Text | null);
-    if (next && (next as HTMLElement).nodeType === 1 && (next as HTMLElement).tagName === "P") {
-      p = next as HTMLParagraphElement;
+  const moveCaretAfterFigure = (figure: Element | HTMLElement) => {
+    const htmlElement = figure as HTMLElement;
+    
+    if (!htmlElement.nextSibling && htmlElement.parentNode) {
+      const p = document.createElement("p");
+      p.innerHTML = "<br>";
+      htmlElement.parentNode.insertBefore(p, htmlElement.nextSibling);
     }
 
-    if (!p) {
-      p = document.createElement("p");
-      p.appendChild(document.createElement("br"));
-      figure.parentNode?.insertBefore(p, figure.nextSibling);
-    }
-
-    return p;
-  };
-
-  const moveCaretToParagraphAfter = (figure: HTMLElement) => {
-    const p = ensureParagraphAfter(figure);
-    placeCaretInside(p, false);
+    const sel = window.getSelection();
+    if (!sel) return;
+    
+    const range = document.createRange();
+    range.setStartAfter(htmlElement);
+    range.collapse(true);
+    
+    sel.removeAllRanges();
+    sel.addRange(range);
     editorRef.current?.focus();
   };
 
@@ -64,8 +62,8 @@ export default function PostForm({
     execCommand(
       "insertHTML",
       `
-      <figure class="editor-figure" style="margin:8px 0; text-align:center;">
-        <img src="${url}" style="max-width:100%; border-radius:6px; display:inline-block;" contenteditable="false" />
+      <figure class="editor-figure" contenteditable="false" style="margin:8px 0; text-align:center;">
+        <img src="${url}" style="max-width:100%; border-radius:6px; display:inline-block;" />
         <figcaption 
           id="${capId}" 
           data-caption 
@@ -80,7 +78,7 @@ export default function PostForm({
     setTimeout(() => {
       const cap = editorRef.current?.querySelector<HTMLElement>(`#${capId}`);
       if (cap) placeCaretInside(cap, false);
-    }, 0);
+    }, 50);
   };
 
   const insertVideo = (url: string) => {
@@ -88,8 +86,8 @@ export default function PostForm({
     execCommand(
       "insertHTML",
       `
-      <figure class="editor-figure" style="margin:8px 0; text-align:center;">
-        <video controls src="${url}" style="max-width:100%; border-radius:6px; display:inline-block;" contenteditable="false"></video>
+      <figure class="editor-figure" contenteditable="false" style="margin:8px 0; text-align:center;">
+        <video controls src="${url}" style="max-width:100%; border-radius:6px; display:inline-block;"></video>
         <figcaption 
           id="${capId}" 
           data-caption 
@@ -104,9 +102,8 @@ export default function PostForm({
     setTimeout(() => {
       const cap = editorRef.current?.querySelector<HTMLElement>(`#${capId}`);
       if (cap) placeCaretInside(cap, false);
-    }, 0);
+    }, 50);
   };
-
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -124,36 +121,15 @@ export default function PostForm({
     e.target.value = "";
   };
 
-  const handleKeyDownCapture = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
 
     if (e.key === "Enter" && target?.hasAttribute("data-caption")) {
       e.preventDefault();
       e.stopPropagation();
 
-      const figure = target.closest(".editor-figure") as HTMLElement | null;
-      if (!figure) return;
-
-      
-      const p = document.createElement("p");
-      p.appendChild(document.createElement("br"));
-      figure.parentNode?.insertBefore(p, figure.nextSibling);
-
-      // Nếu muốn, giữ nội dung figcaption
-      const noteContent = target.innerHTML;
-      p.innerHTML = noteContent;
-
-      // Đặt con trỏ vào đoạn <p> mới
-      const sel = window.getSelection();
-      if (!sel) return;
-      const range = document.createRange();
-      range.selectNodeContents(p);
-      range.collapse(true);
-      sel.removeAllRanges();
-      sel.addRange(range);
-
-      // focus editor để con trỏ hiển thị
-      (p as HTMLElement).focus();
+      const figure = target.closest(".editor-figure");
+      if (figure) moveCaretAfterFigure(figure);
     }
   };
 
@@ -163,6 +139,7 @@ export default function PostForm({
         caption.innerHTML = "";
       }
     });
+    
     onContentChange((e.target as HTMLDivElement).innerHTML);
   };
 
@@ -175,6 +152,7 @@ export default function PostForm({
         type="text"
         value={title}
         onChange={(e) => onTitleChange(e.target.value)}
+        placeholder="Nhập tiêu đề..."
         className="w-full bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg p-3 mb-4 outline-none focus:ring-2 focus:ring-[var(--primary)]"
       />
 
@@ -206,13 +184,13 @@ export default function PostForm({
         contentEditable
         suppressContentEditableWarning
         className="w-full bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg p-3 outline-none focus:ring-2 focus:ring-[var(--primary)] h-[450px] overflow-y-auto"
-        onKeyDownCapture={handleKeyDownCapture}
+        onKeyDown={handleKeyDown}
         onInput={handleInput}
       />
 
-      {/* CSS cho placeholder của caption */}
       <style jsx global>{`
-        [data-caption]:empty::before {
+        [data-caption]:empty::before,
+        [data-caption]:has(> br:only-child)::before {
           content: attr(data-placeholder);
           color: #9ca3af;
           font-style: italic;
@@ -222,9 +200,6 @@ export default function PostForm({
         .editor-figure video {
           max-width: 100%;
           border-radius: 6px;
-        }
-        .editor-figure figcaption[data-caption] {
-          min-height: 1.2em;
         }
       `}</style>
     </div>
