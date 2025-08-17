@@ -11,7 +11,7 @@ import { HiOutlineGlobeAlt, HiOutlineDotsHorizontal } from 'react-icons/hi';
 export default function Header() {
   const pathname = usePathname();
 
-  const isLoggedIn = false; // 
+  const isLoggedIn = true; // 
   const userName = 'Quốc Hưng';
 
   const [avatarOpen, setAvatarOpen] = useState(false);
@@ -55,7 +55,7 @@ export default function Header() {
               key={item.href}
               href={item.href}
               className={`transition text-[var(--primary)] ${
-                isActive(item.href) ? 'font-black' : 'font-medium'
+                isActive(item.href) ? 'font-bold' : 'font-medium'
               }`}
             >
               {item.label}
