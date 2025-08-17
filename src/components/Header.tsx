@@ -11,14 +11,11 @@ import { HiOutlineDotsHorizontal } from 'react-icons/hi';
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
-
-  const isLoggedIn = true; // 
   const userName = 'Quốc Hưng';
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [firstName, setFirstName] = useState(""); 
   const [avatarUrl, setAvatarUrl] = useState("/Image.svg");
-
 
   const [avatarOpen, setAvatarOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
