@@ -2,6 +2,11 @@ import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
+// Kiểu cho payload verify OTP
+type VerifyOtpPayload =
+  | { otp: string; email: string }
+  | { otp: string; phone: string };
+
 export const authApi = {
   // Đăng nhập
   login: async (email: string, password: string) => {
@@ -61,17 +66,17 @@ export const authApi = {
   verifyOTP: async (emailOrPhone: string, otp: string) => {
     // Xác định là email hay phone
     const isEmail = emailOrPhone.includes("@");
-    
-    const payload: any = { otp };
+
+    let payload: VerifyOtpPayload;
     if (isEmail) {
-      payload.email = emailOrPhone;
+      payload = { otp, email: emailOrPhone };
     } else {
-      payload.phone = emailOrPhone;
+      payload = { otp, phone: emailOrPhone };
     }
 
-    console.log("verifyOTP payload:", payload); // Log để debug
+    console.log("verifyOTP payload:", payload); // Debug
 
     const res = await axios.post(`${API_URL}/users/verify-otp`, payload);
     return res.data;
-  }
+  },
 };

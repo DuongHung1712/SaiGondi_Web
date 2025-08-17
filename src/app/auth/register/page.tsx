@@ -9,7 +9,7 @@ import { FaFacebookF, FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { authApi } from "@/lib/auth/authApi";
-
+import { AxiosError } from "axios";
 export default function RegisterPage() {
   const router = useRouter();
 
@@ -53,10 +53,10 @@ export default function RegisterPage() {
 
       // router.push("/auth/otp");
       router.push(`/auth/otp?email=${encodeURIComponent(email)}`);
-    } catch (error: any) {
-      console.error(error);
-      setApiError(error.response?.data?.message || "Đăng ký thất bại");
-    } finally {
+    } catch (error: unknown) {
+  const err = error as AxiosError<{ message?: string }>;
+  setApiError(err.response?.data?.message || "Đăng ký thất bại");
+} finally {
       setLoading(false);
     }
   };

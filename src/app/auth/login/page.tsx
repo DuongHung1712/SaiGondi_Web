@@ -8,13 +8,13 @@ import { FaFacebookF, FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { authApi } from "@/lib/auth/authApi";
-
+import { AxiosError } from "axios";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
+const [apiError, setApiError] = useState("");
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -27,9 +27,9 @@ export default function LoginPage() {
       localStorage.setItem("user", JSON.stringify(res.user));
 
       window.location.href = "/";
-    } catch (err: any) {
-      console.error("Lỗi đăng nhập:", err);
-      alert(err?.message || "Đăng nhập thất bại");
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message?: string }>;
+      setApiError(err.response?.data?.message || "Đăng nhập thất bại");
     } finally {
       setLoading(false);
     }
