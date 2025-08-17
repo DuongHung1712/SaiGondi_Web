@@ -15,8 +15,10 @@
 
     "axios": "^1.11.0",
 
+
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
+    "dynamic": "^4.2.2",
     "next": "^15.4.5",
     "rc-slider": "^11.1.8",
     "rc-tooltip": "^6.4.0",
@@ -28,7 +30,10 @@
     "react-markdown": "^10.1.0",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
+
+    "react-slick": "^0.31.0",
     "remixicon": "^4.6.0",
+    "slick-carousel": "^1.8.1",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
@@ -37,6 +42,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-slick": "^0.23.13",
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.4.5",
