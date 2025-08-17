@@ -8,6 +8,7 @@ import Button from "@/components/ui/Button";
 import { FaFacebookF, FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { authApi } from "@/lib/auth/authApi";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -18,14 +19,46 @@ export default function RegisterPage() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agree, setAgree] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [apiError, setApiError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: gọi API register sau này
-    router.push("/auth/otp");
+    const newErrors: { [key: string]: string } = {};
+
+    if (!firstName.trim()) newErrors.firstName = "Vui lòng nhập họ và tên lót";
+    if (!lastName.trim()) newErrors.lastName = "Vui lòng nhập tên";
+    if (!email.trim()) newErrors.email = "Vui lòng nhập email";
+    if (!phone.trim()) newErrors.phone = "Vui lòng nhập số điện thoại";
+    if (!password.trim()) newErrors.password = "Vui lòng nhập mật khẩu";
+    if (password !== confirmPassword) newErrors.confirmPassword = "Mật khẩu xác nhận không khớp";
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
+
+    setLoading(true);
+    setApiError("");
+
+    try {
+      await authApi.register(lastName, firstName, email, phone, password);
+
+      await authApi.sendEmailOTP(email, "register");
+
+      // router.push("/auth/otp");
+      router.push(`/auth/otp?email=${encodeURIComponent(email)}`);
+    } catch (error: any) {
+      console.error(error);
+      setApiError(error.response?.data?.message || "Đăng ký thất bại");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,39 +66,67 @@ export default function RegisterPage() {
       <h2 className="heading-2 font-bold text-[var(--secondary)] mb-1">ĐĂNG KÝ</h2>
       <p className="text-sm text-gray-600 mb-5">Hãy bắt đầu tạo tài khoản cho bản thân</p>
 
+      {apiError && (
+        <p className="text-red-500 text-sm mb-3">{apiError}</p>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-5 pt-5">
         <div className="grid grid-cols-2 gap-4">
-          <Input
-            type="text"
-            label="Họ và tên lót"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-          <Input
-            type="text"
-            label="Tên"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
+          <div>
+            <Input
+              type="text"
+              label="Họ và tên lót"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+              className={errors.lastName ? "input-error" : ""}
+            />
+              {errors.lastName && (
+                <p className="text-red-500 text-sm">{errors.lastName}</p>
+              )}
+          </div>
+          <div>
+            <Input
+              type="text"
+              label="Tên"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+                required
+                className={errors.firstName ? "input-error" : ""}
+            />
+            {errors.firstName && (
+              <p className="text-red-500 text-sm">{errors.firstName}</p>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <Input
-            type="email"
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <Input
-            type="text"
-            label="Số điện thoại"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          />
+          <div>
+            <Input
+              type="email"
+              label="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+                required
+                className={errors.email ? "input-error" : ""}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
+          </div>
+          <div>
+            <Input
+              type="text"
+              label="Số điện thoại"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+                required
+              className={errors.phone ? "input-error" : ""}
+            />
+            {errors.phone && (
+              <p className="text-red-500 text-sm">{errors.phone}</p>
+            )}
+          </div>
         </div>
 
         <div className="relative">
@@ -75,6 +136,7 @@ export default function RegisterPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className={errors.password ? "input-error" : ""}
           />
           <button
             type="button"
@@ -83,6 +145,9 @@ export default function RegisterPage() {
           >
             {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
           </button>
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password}</p>
+          )}
         </div>
 
         <div className="relative">
@@ -92,6 +157,7 @@ export default function RegisterPage() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
+            className={errors.confirmPassword ? "input-error" : ""}
           />
           <button
             type="button"
@@ -100,6 +166,9 @@ export default function RegisterPage() {
           >
             {showConfirmPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
           </button>
+          {errors.confirmPassword && (
+            <p className="text-[var(--error)] text-sm">{errors.confirmPassword}</p>
+          )}
         </div>
 
         <div className="flex items-center space-x-2">
@@ -116,8 +185,8 @@ export default function RegisterPage() {
           </label>
         </div>
 
-        <Button type="submit" variant="primary" className="w-full mt-4">
-          ĐĂNG KÝ
+        <Button type="submit" variant="primary" className="w-full mt-4" disabled={loading}>
+          {loading ? "Đang đăng ký..." : "ĐĂNG KÝ"}
         </Button>
       </form>
 

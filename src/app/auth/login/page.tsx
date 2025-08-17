@@ -7,15 +7,32 @@ import Button from "@/components/ui/Button";
 import { FaFacebookF, FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { authApi } from "@/lib/auth/authApi";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login data:", { email, password });
+    setLoading(true);
+
+    try {
+      const res = await authApi.login(email, password);
+      console.log("Đăng nhập thành công:", res);
+
+      localStorage.setItem("token", res.token);
+      localStorage.setItem("user", JSON.stringify(res.user));
+
+      window.location.href = "/";
+    } catch (err: any) {
+      console.error("Lỗi đăng nhập:", err);
+      alert(err?.message || "Đăng nhập thất bại");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -63,8 +80,8 @@ export default function LoginPage() {
           </a>
         </div>
 
-        <Button type="submit" variant="primary" className="w-full mt-4">
-          ĐĂNG NHẬP
+        <Button type="submit" variant="primary" className="w-full mt-4" disabled={loading}>
+          {loading ? "Đang đăng nhập..." : "ĐĂNG NHẬP"}
         </Button>
       </form>
 
