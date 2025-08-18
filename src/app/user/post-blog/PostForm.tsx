@@ -152,7 +152,6 @@ export default function PostForm({
         type="text"
         value={title}
         onChange={(e) => onTitleChange(e.target.value)}
-        placeholder="Nhập tiêu đề..."
         className="w-full bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg p-3 mb-4 outline-none focus:ring-2 focus:ring-[var(--primary)]"
       />
 

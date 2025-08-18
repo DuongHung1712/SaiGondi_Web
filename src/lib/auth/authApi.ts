@@ -35,6 +35,26 @@ export const authApi = {
     return res.data;
   },
 
+  // Đăng xuất
+  logout: async (token: string) => {
+    const res = await axios.post(
+      `${API_URL}/users/logout`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return res.data;
+  },
+
+  // Refresh token
+  requestToken: async (refreshToken: string) => {
+    const res = await axios.post(`${API_URL}/users/request-token`, {
+      refreshToken,
+    });
+    return res.data;
+  },
+
   // Đổi mật khẩu
   changePassword: async (
     oldPassword: string,
@@ -77,6 +97,16 @@ export const authApi = {
     console.log("verifyOTP payload:", payload); // Debug
 
     const res = await axios.post(`${API_URL}/users/verify-otp`, payload);
+    return res.data;
+  },
+
+  // Lấy thông tin profile theo token
+  getProfile: async (token: string) => {
+    const res = await axios.get(`${API_URL}/users/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return res.data;
   },
 };

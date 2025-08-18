@@ -7,11 +7,11 @@ import { FaChevronDown } from 'react-icons/fa6';
 import Button from '@/components/ui/Button';
 import { useEffect, useRef, useState } from 'react';
 import { HiOutlineDotsHorizontal } from 'react-icons/hi';
+import { authApi } from '@/lib/auth/authApi';
 
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
-  const userName = 'Quốc Hưng';
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [firstName, setFirstName] = useState(""); 
@@ -23,28 +23,38 @@ export default function Header() {
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
+    const token = localStorage.getItem("accessToken");
 
-    if (token && userData) {
-      setIsLoggedIn(true);
-      const user = JSON.parse(userData);
-      
-      // Backend chỉ trả về fullName -> tách firstName
-      if (user.fullName) {
-        const nameParts = user.fullName.trim().split(" ");
-        setFirstName(nameParts[0] || ""); //lấy từ đầu tiên
-      }
+    if (!token) return;
+    authApi
+      .getProfile(token)
+      .then((res) => {
+        if (res?.user) {
+          setIsLoggedIn(true);
 
-      if (user.avatar) {
-        setAvatarUrl(user.avatar);
-      }
-    }
+          // lấy firstName từ fullName
+          if (res.user.fullName) {
+            const nameParts = res.user.fullName.trim().split(" ");
+            setFirstName(nameParts[0] || "");
+          }
+
+          if (res.user.avatar) {
+            setAvatarUrl(res.user.avatar);
+          }
+        }
+      })
+      .catch(() => {
+        setIsLoggedIn(false);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("userId");
+      });
   }, []);
   
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userId");
     setIsLoggedIn(false);
     setFirstName("");
     setAvatarUrl("/Image.svg"); 

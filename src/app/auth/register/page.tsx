@@ -67,7 +67,7 @@ export default function RegisterPage() {
       <p className="text-sm text-gray-600 mb-5">Hãy bắt đầu tạo tài khoản cho bản thân</p>
 
       {apiError && (
-        <p className="text-red-500 text-sm mb-3">{apiError}</p>
+        <p className="text-[var(--warning)] text-sm mb-3">{apiError}</p>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5 pt-5">
@@ -82,7 +82,7 @@ export default function RegisterPage() {
               className={errors.lastName ? "input-error" : ""}
             />
               {errors.lastName && (
-                <p className="text-red-500 text-sm">{errors.lastName}</p>
+                <p className="text-[var(--warning)] text-sm">{errors.lastName}</p>
               )}
           </div>
           <div>
@@ -95,7 +95,7 @@ export default function RegisterPage() {
                 className={errors.firstName ? "input-error" : ""}
             />
             {errors.firstName && (
-              <p className="text-red-500 text-sm">{errors.firstName}</p>
+              <p className="text-[var(--warning)] text-sm">{errors.firstName}</p>
             )}
           </div>
         </div>
@@ -111,7 +111,7 @@ export default function RegisterPage() {
                 className={errors.email ? "input-error" : ""}
             />
             {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
+              <p className="text-[var(--warning)] text-sm">{errors.email}</p>
             )}
           </div>
           <div>
@@ -124,7 +124,7 @@ export default function RegisterPage() {
               className={errors.phone ? "input-error" : ""}
             />
             {errors.phone && (
-              <p className="text-red-500 text-sm">{errors.phone}</p>
+              <p className="text-[var(--warning)] text-sm">{errors.phone}</p>
             )}
           </div>
         </div>
@@ -146,7 +146,7 @@ export default function RegisterPage() {
             {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
           </button>
           {errors.password && (
-            <p className="text-red-500 text-sm">{errors.password}</p>
+            <p className="text-[var(--warning)] text-sm">{errors.password}</p>
           )}
         </div>
 
