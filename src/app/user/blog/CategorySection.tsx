@@ -70,7 +70,7 @@ const CategorySection: React.FC<CategorySectionProps> = ({
               key={category.key}
               onClick={() => onChangeTab(category.key)}
               className={classNames(
-                'w-[220px] h-[163px] border p-4 text-left transition-all flex-shrink-0',
+                'cursor-pointer w-[220px] h-[163px] border p-4 text-left transition-all flex-shrink-0',
                 {
                   'bg-[var(--secondary)] text-[var(--foreground)] border-transparent':
                     isActive,

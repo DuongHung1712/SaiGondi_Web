@@ -35,7 +35,7 @@ export default function PostPrivacySettings({
           <h2 className="text-lg font-semibold">Cài đặt Bài viết</h2>
           <button
             onClick={onClose}
-            className="text-[var(--gray-1)] hover:text-[var(--foreground)]"
+            className="text-[var(--gray-1)] hover:text-[var(--foreground)] cursor-pointer"
           >
             <FiX />
           </button>
@@ -50,7 +50,7 @@ export default function PostPrivacySettings({
             <button
               key={opt.key}
               onClick={() => setTempValue(opt.key)}
-              className={`flex items-center justify-between w-full border rounded-lg px-3 py-2 text-left bg-[#EFF2FC] hover:bg-[#e0e4f3] ${
+              className={`cursor-pointer flex items-center justify-between w-full border rounded-lg px-3 py-2 text-left bg-[#EFF2FC] hover:bg-[#e0e4f3] ${
                 tempValue === opt.key ? "border-[var(--primary)] " : "border-none"
               }`}
             >

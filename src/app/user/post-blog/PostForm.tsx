@@ -180,7 +180,7 @@ export default function PostForm({
         <button
           type="button"
           onClick={onPrivacyClick}
-          className="px-3 py-1 bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg text-[var(--gray-2)] hover:bg-gray-100 flex items-center gap-1"
+          className="cursor-pointer px-3 py-1 bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg text-[var(--gray-2)] hover:bg-gray-100 flex items-center gap-1"
         >
           {renderPrivacyLabel()}
         </button>
@@ -195,21 +195,21 @@ export default function PostForm({
 
       <div className="flex justify-between items-center mb-2 pt-2">
         <span className="font-medium text-[var(--gray-2)]">Nội dung</span>
-        <div className="flex gap-2">
-          <button type="button" title="In đậm" className="p-2 hover:bg-[var(--gray-6)] rounded" onClick={() => execCommand("bold")}>
+        <div className="flex gap-2 ">
+          <button type="button" title="In đậm" className="cursor-pointer p-2 hover:bg-[var(--gray-6)] rounded" onClick={() => execCommand("bold")}>
             <FiBold />
           </button>
-          <button type="button" title="In nghiêng" className="p-2 hover:bg-[var(--gray-6)] rounded" onClick={() => execCommand("italic")}>
+          <button type="button" title="In nghiêng" className="cursor-pointer p-2 hover:bg-[var(--gray-6)] rounded" onClick={() => execCommand("italic")}>
             <FiItalic />
           </button>
-          <button type="button" title="Gạch chân" className="p-2 hover:bg-[var(--gray-6)] rounded" onClick={() => execCommand("underline")}>
+          <button type="button" title="Gạch chân" className="cursor-pointer p-2 hover:bg-[var(--gray-6)] rounded" onClick={() => execCommand("underline")}>
             <FiUnderline />
           </button>
-          <button type="button" title="Thêm hình" className="p-2 hover:bg-[var(--gray-6)] rounded" onClick={() => imageInputRef.current?.click()}>
+          <button type="button" title="Thêm hình" className="cursor-pointer p-2 hover:bg-[var(--gray-6)] rounded" onClick={() => imageInputRef.current?.click()}>
             <FiImage />
           </button>
           <input ref={imageInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-          <button type="button" title="Thêm video" className="p-2 hover:bg-[var(--gray-6)] rounded" onClick={() => videoInputRef.current?.click()}>
+          <button type="button" title="Thêm video" className="cursor-pointer p-2 hover:bg-[var(--gray-6)] rounded" onClick={() => videoInputRef.current?.click()}>
             <FiVideo />
           </button>
           <input ref={videoInputRef} type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} />

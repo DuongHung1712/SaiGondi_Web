@@ -4,11 +4,10 @@ import Image from 'next/image';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import { FaRegHeart, FaRegComment, FaShareAlt } from 'react-icons/fa';
-import { SlCalender } from 'react-icons/sl';
+import { FaRegHeart, FaRegComment, FaShareAlt, FaHeart } from 'react-icons/fa';
 import { LuShare2 } from 'react-icons/lu';
 import { RiCalendar2Line } from 'react-icons/ri';
-
+import { useRef, useState } from 'react';
 
 type BlogPost = {
   title: string;
@@ -26,6 +25,23 @@ type BlogDetailProps = {
 };
 
 export default function BlogDetail({ post }: BlogDetailProps) {
+    const [liked, setLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(162);
+    const commentRef = useRef<HTMLDivElement | null>(null);
+
+    const toggleLike = () => {
+        if (liked) {
+        setLikeCount((prev) => prev - 1);
+        } else {
+        setLikeCount((prev) => prev + 1);
+        }
+        setLiked(!liked);
+    };
+
+    const scrollToComments = () => {
+        commentRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+    
     return (
         <div className="max-w-4xl mx-auto px-4 py-8">
             <h1 className="text-justify text-3xl font-extrabold leading-snug text-[var(--foreground)] mb-2">{post.title}</h1>
@@ -53,15 +69,25 @@ export default function BlogDetail({ post }: BlogDetailProps) {
                 
                 {/* Bên phải: Tim - Bình luận - Chia sẻ */}
                 <div className="flex items-center gap-4 text-[var(--foreground)] text-base mt-2 sm:mt-0">
-                    <div className="flex items-center gap-1">
+                    <div
+                        className="cursor-pointer flex items-center gap-1"
+                        onClick={toggleLike}
+                    >
+                        {liked ? (
+                        <FaHeart className="text-[var(--error)]" />
+                        ) : (
                         <FaRegHeart className="text-[var(--foreground)]" />
-                        <span>162</span>
+                        )}
+                        <span>{likeCount}</span>
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div
+                        className="cursor-pointer flex items-center gap-1"
+                        onClick={scrollToComments}
+                    >
                         <FaRegComment className="text-[var(--foreground)]" />
                         <span>89</span>
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div className="cursor-pointer flex items-center gap-1">
                         <LuShare2 className="text-[var(--foreground)]" />
                         <span>50</span>
                     </div>
@@ -98,6 +124,8 @@ export default function BlogDetail({ post }: BlogDetailProps) {
                     {post.content}
                 </Markdown>
             </article>
+
+            <div ref={commentRef} ></div>
         </div>
     );
 }
