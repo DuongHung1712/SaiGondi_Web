@@ -1,20 +1,24 @@
 "use client";
 
-import { useRef } from "react";
-import { FiBold, FiItalic, FiUnderline, FiImage, FiVideo } from "react-icons/fi";
+import { useEffect, useRef } from "react";
+import { FiBold, FiItalic, FiUnderline, FiImage, FiVideo, FiGlobe, FiUser } from "react-icons/fi";
 
 interface PostFormProps {
   title: string;
   content: string;
+  privacy: string;
   onTitleChange: (value: string) => void;
   onContentChange: (value: string) => void;
+  onPrivacyClick: () => void;
 }
 
 export default function PostForm({
   title,
   content,
+  privacy,
   onTitleChange,
   onContentChange,
+  onPrivacyClick,
 }: PostFormProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -142,12 +146,46 @@ export default function PostForm({
     
     onContentChange((e.target as HTMLDivElement).innerHTML);
   };
+  useEffect(() => {
+    if (editorRef.current && content !== editorRef.current.innerHTML) {
+      editorRef.current.innerHTML = content || "";
+    }
+  }, [content]);
+
+  const renderPrivacyLabel = () => {
+    switch (privacy) {
+      case "public":
+        return (
+          <span className="flex items-center gap-1 font-medium">
+            <FiGlobe /> Tất cả mọi người
+          </span>
+        );
+      case "private":
+        return (
+          <span className="flex items-center gap-1 font-medium">
+            <FiUser /> Chỉ mình bạn
+          </span>
+        );
+      default:
+        return "Không rõ";
+    }
+  };
 
   return (
     <div className="bg-[var(--background)] rounded-lg border border-[var(--gray-5)] p-5">
-      <h3 className="font-bold mb-3 text-[var(--foreground)]">THÔNG TIN BÀI ĐĂNG</h3>
+      <h3 className="font-bold mb-3 text-[var(--foreground)] pt-2">THÔNG TIN BÀI ĐĂNG</h3>
 
-      <label className="font-medium text-[var(--gray-2)] mb-1 pt-2">Tiêu đề</label>
+      <div className="flex items-center justify-between mb-2 pt-2">
+        <label className="font-medium text-[var(--gray-2)]">Tiêu đề</label>
+        <button
+          type="button"
+          onClick={onPrivacyClick}
+          className="px-3 py-1 bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg text-[var(--gray-2)] hover:bg-gray-100 flex items-center gap-1"
+        >
+          {renderPrivacyLabel()}
+        </button>
+      </div>
+
       <input
         type="text"
         value={title}
@@ -155,7 +193,7 @@ export default function PostForm({
         className="w-full bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg p-3 mb-4 outline-none focus:ring-2 focus:ring-[var(--primary)]"
       />
 
-      <div className="flex justify-between items-center mb-2 pt-6">
+      <div className="flex justify-between items-center mb-2 pt-2">
         <span className="font-medium text-[var(--gray-2)]">Nội dung</span>
         <div className="flex gap-2">
           <button type="button" title="In đậm" className="p-2 hover:bg-[var(--gray-6)] rounded" onClick={() => execCommand("bold")}>
