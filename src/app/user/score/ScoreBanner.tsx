@@ -7,7 +7,7 @@ const milestones = [
     points: 0,
     icon: '/icon4.svg',
     color: '#5161EB',
-    className: "absolute top-[118%] left-[28%] ml:top-[100%] ml:left-[30%] md:top-[102%] md:left-[26%] lg:top-[98%] lg:left-[28%] xl:top-[92%] xl:left-[28%] 1.5xl:top-[152%] 1.5xl:left-[28%]"
+    className: "absolute top-[117%] left-[28%] ml:top-[100%] ml:left-[30%] md:top-[102%] md:left-[26%] lg:top-[98%] lg:left-[28%] xl:top-[92%] xl:left-[28%] 1.5xl:top-[152%] 1.5xl:left-[28%]"
   },
   {
     title: 'KHÁM PHÁ VIÊN',
@@ -28,7 +28,7 @@ const milestones = [
     points: 600,
     icon: '/icon7.svg',
     color: '#7829EC',
-    className: "absolute top-[49%] right-[3%] ml:top-[45%] ml:right-[5%] md:top-[16%] md:right-[8%] lg:top-[19%] lg:left-[89%] xl:top-[-25%] xl:right-[8.9%]"
+    className: "absolute top-[52%] right-[3%] ml:top-[45%] ml:right-[5%] md:top-[16%] md:right-[8%] lg:top-[19%] lg:left-[89%] xl:top-[-26%] xl:right-[6%]"
   },
 ];
 
