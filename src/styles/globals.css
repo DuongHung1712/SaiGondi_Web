@@ -1,5 +1,8 @@
 @import "tailwindcss";
 @import 'remixicon/fonts/remixicon.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* =========================
    ⚙️ CSS Variables (Light)
@@ -180,5 +183,17 @@ body {
     @apply top-1/2 -translate-y-1/2 text-base;
     @apply peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:text-sm peer-focus:text-[var(--foreground)];
     @apply peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:text-sm peer-not-placeholder-shown:text-[var(--foreground)];
+  }
+  /*  */
+  .clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;  
+  }
+
+  .slick-prev, .slick-next {
+    display: none !important;
   }
 }
