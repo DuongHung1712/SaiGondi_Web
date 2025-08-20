@@ -10,6 +10,17 @@ export default function HCMMap() {
   const [popupPos, setPopupPos] = useState<{ x: number; y: number } | null>(null);
   const [selectedPath, setSelectedPath] = useState<SVGPathElement | null>(null);
 
+    // Hàm tạo màu ngẫu nhiên
+  const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
+
   useEffect(() => {
     const paths = document.querySelectorAll<SVGPathElement>("svg path");
 
@@ -19,12 +30,12 @@ export default function HCMMap() {
       path.style.fill = "#D8D8D8";
       path.style.stroke = "#333";
       path.style.strokeWidth = "0.5";
+      path.style.transition = "fill 0.3s ease";
 
       path.addEventListener("mouseenter", () => {
         if (path !== selectedPath) {
           path.style.fill = "#B0B0B0";
         }
-        setHoveredName(title);
       });
 
       path.addEventListener("mouseleave", () => {
@@ -47,20 +58,23 @@ export default function HCMMap() {
     });
   }, [selectedPath]);
 
+  
 
-  const handleVisited = () => {
+ const handleVisited = () => {
     if (selectedPath) {
-      selectedPath.style.fill = "#007bff"; 
+      selectedPath.style.fill = getRandomColor();
+      setSelectedName(null);
+      setPopupPos(null);
     }
   };
-
 
   const handleExplore = () => {
     if (selectedPath) {
-      selectedPath.style.fill = "#28a745"; 
+      // Xử lý khám phá ở đây nếu cần
+      setSelectedName(null);
+      setPopupPos(null);
     }
   };
-
   return (
     <div
       style={{
@@ -281,32 +295,35 @@ export default function HCMMap() {
         </div>
       )}
 
-      {/* Popup khi click */}
-      {selectedName && popupPos && (
+      {popupPos && selectedName && (
         <div
           style={{
             position: "fixed",
-            top: popupPos.y,
-            left: popupPos.x,
+            left: `${popupPos.x}px`,
+            top: `${popupPos.y}px`,
+            backgroundColor: "white",
+            padding: "12px",
+            borderRadius: "8px",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+            zIndex: 1000,
             transform: "translate(-50%, -100%)",
-            background: "white",
-            padding: "16px 20px",
-            border: "1px solid #ccc",
-            borderRadius: "12px",
-            fontSize: "14px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-            zIndex: 1100,
-            minWidth: "220px",
-            textAlign: "center",
+            minWidth: "150px",
           }}
+          onClick={(e) => e.stopPropagation()}
         >
-          <h3 style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "6px" }}>
+          <h3 style={{ 
+            fontWeight: "bold", 
+            fontSize: "16px", 
+            marginBottom: "6px",
+            textAlign: "center"
+          }}>
             {selectedName}
           </h3>
-          <p style={{ fontSize: "13px", color: "#555", marginBottom: "12px" }}>
-            Thành phố Hồ Chí Minh
-          </p>
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
+          <div style={{ 
+            display: "flex", 
+            justifyContent: "space-around",
+            gap: "16px"
+          }}>
             <button
               onClick={handleVisited}
               style={{
@@ -317,9 +334,12 @@ export default function HCMMap() {
                 border: "none",
                 cursor: "pointer",
                 color: "#007bff",
+                padding: "8px",
+                borderRadius: "4px",
+                fontSize: "12px"
               }}
             >
-              <FaWalking size={28} />
+              <FaWalking size={24} />
               <span>ĐÃ ĐI</span>
             </button>
             <button
@@ -332,9 +352,12 @@ export default function HCMMap() {
                 border: "none",
                 cursor: "pointer",
                 color: "#28a745",
+                padding: "8px",
+                borderRadius: "4px",
+                fontSize: "12px"
               }}
             >
-              <FaMapMarkerAlt size={28} />
+              <FaMapMarkerAlt size={24} />
               <span>KHÁM PHÁ</span>
             </button>
           </div>
