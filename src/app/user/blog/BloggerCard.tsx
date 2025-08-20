@@ -1,4 +1,7 @@
+'use client';
+
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { FaFacebookSquare } from 'react-icons/fa';
 import { SiZalo } from 'react-icons/si';
@@ -20,11 +23,11 @@ const BloggerCard = ({
 }: BloggerCardProps) => {
   return (
     <div className="flex items-start gap-4">
-      <div className="w-16 h-16 relative rounded-full overflow-hidden flex-shrink-0">
+      <Link href={`/user/profile`} className="w-16 h-16 relative rounded-full overflow-hidden flex-shrink-0">
         <Image src={avatar} alt={name} fill className="object-cover" />
-      </div>
+      </Link>
       <div>
-        <h4 className="font-semibold text-base">{name}</h4>
+        <Link href={`/user/profile`} className="font-semibold text-base">{name}</Link>
         <p className="text-sm text-[var(--gray-2)] leading-tight">
           {description}
         </p>

@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { FiX, FiSave } from "react-icons/fi";
 import Image from "next/image";
 import { LuSend } from "react-icons/lu";
+import CoverUpload from "./CoverUpload";
 
 
 export default function PostBlogPage() {
@@ -25,6 +26,7 @@ export default function PostBlogPage() {
   const [tags, setTags] = useState<string[]>([]);
   const [ward, setWard] = useState("");
   const [address, setAddress] = useState("");
+  const [cover, setCover] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -46,6 +48,7 @@ export default function PostBlogPage() {
       setCategories(data.categories || []);
       setTags(data.tags || []);
       setAddress(data.address || "");
+      setCover(data.cover || null);
     }
   }, []);
 
@@ -69,6 +72,7 @@ export default function PostBlogPage() {
       tags,
       ward,
       address,
+      cover,
     };
     localStorage.setItem("blogDraft", JSON.stringify(draft));
     console.log("Draft saved locally ✅");
@@ -103,6 +107,7 @@ export default function PostBlogPage() {
       tags,
       ward,
       address,
+      cover,
     };
     console.log("📌 Post data:", postData);
     alert("Giả lập đăng bài (chưa gọi API)");localStorage.removeItem("blogDraft");
@@ -112,16 +117,27 @@ export default function PostBlogPage() {
     setContent("");
     setImages([]);
     setVideos([]);
-    setCategories([""]); 
+    setCategories([]); 
     setTags([]);
     setAddress("");
     setWard("");
+    setCover(null);
     
   };
 
   if (!authChecked) {
     return <p className="text-center mt-10">Đang kiểm tra đăng nhập...</p>;
   }
+
+  const handleCoverChange = (file: File) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (reader.result) {
+        setCover(reader.result.toString());
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   return (
     <main className="relative overflow-hidden">
@@ -158,6 +174,11 @@ export default function PostBlogPage() {
       />
 
       <div className="relative z-10 max-w-4xl mx-auto mt-6 space-y-6 px-4 md:px-6">
+        <CoverUpload
+          cover={cover}
+          onCoverChange={handleCoverChange}
+          onRemove={() => setCover(null)}
+        />
         <div>
           <PostForm
             title={title}

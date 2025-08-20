@@ -5,12 +5,11 @@ import BlogDetail from '../BlogDetail';
 import FeaturedBloggers from '../FeaturedBloggers';
 import RecentPosts from '../RecentPosts';
 import PopularPostsSection from '../../home/PopularPostsSection';
-import { LuCopy } from 'react-icons/lu';
-import { FaFacebookF, FaInstagram, FaPinterestP } from 'react-icons/fa';
 import ReviewSection from '../ReviewSection';
 import { dataReviews } from '@/data/dataReviews';
 import CommentBox from '../CommentBox';
 import Image from 'next/image';
+import SocialShare from '../SocialShare';
 
 interface BlogDetailPageProps {
   params: { slug: string };
@@ -65,7 +64,7 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
             alt="Graphic_Elements"
             width={192}
             height={176}
-            className="absolute left-[1420] top-[2800px] z-0 pointer-events-none w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
+            className="absolute left-[1420px] top-[2800px] z-0 pointer-events-none w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
         />
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 mt-12">
         <div className="flex flex-col lg:flex-row gap-4 mt-6">
@@ -73,24 +72,7 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
           <div className="flex-[0.7] min-w-0">
             <BlogDetail post={post} />
             {/* Social share */}
-            <div className="flex items-center gap-2 pt-5">
-              <hr className="flex-1 border-[#D1E7E5]" />
-              <div className="flex gap-4 py-6">
-                <button className="text-[var(--gray-2)] hover:text-[var(--gray-1)] transition">
-                  <LuCopy size={20} />
-                </button>
-                <button className="text-[var(--gray-2)] hover:text-[var(--gray-1)] transition">
-                  <FaFacebookF size={20} />
-                </button>
-                <button className="text-[var(--gray-2)] hover:text-[var(--gray-1)] transition">
-                  <FaInstagram size={20} />
-                </button>
-                <button className="text-[var(--gray-2)] hover:text-[var(--gray-1)] transition">
-                  <FaPinterestP size={20} />
-                </button>
-              </div>
-              <hr className="flex-1 border-[#D1E7E5]" />
-            </div>
+            <SocialShare />
             <ReviewSection reviews={dataReviews} />
             <CommentBox />
           </div>

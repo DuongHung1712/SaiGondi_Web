@@ -51,7 +51,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
         </div>
 
         <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between text-sm text-[var(--gray-2)] gap-2">
-          <div className="flex items-center gap-2">
+          <Link href={`/user/profile`} className="flex items-center gap-2">
             <Image
                 src={post.authorAvatar}
                 alt={post.author}
@@ -60,7 +60,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
                 className="object-cover rounded-full"
             />
             <span>{post.author}</span>
-          </div>
+          </Link>
           <div className="flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-1">
               <FaMapMarkerAlt className="text-[var(--secondary)]" />
