@@ -109,21 +109,36 @@ export default function PostForm({
     }, 50);
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const readFileAsDataURL = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result) {
+          resolve(reader.result.toString());
+        } else {
+          reject("Failed to read file");
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const imageUrl = URL.createObjectURL(file);
+    const imageUrl = await readFileAsDataURL(file); 
     insertImage(imageUrl);
     e.target.value = "";
   };
 
-  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const videoUrl = URL.createObjectURL(file);
+    const videoUrl = await readFileAsDataURL(file); 
     insertVideo(videoUrl);
     e.target.value = "";
   };
+
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
@@ -147,8 +162,13 @@ export default function PostForm({
     onContentChange((e.target as HTMLDivElement).innerHTML);
   };
   useEffect(() => {
-    if (editorRef.current && content !== editorRef.current.innerHTML) {
-      editorRef.current.innerHTML = content || "";
+    if (editorRef.current) {
+      const isFocused = document.activeElement === editorRef.current 
+        || editorRef.current.contains(document.activeElement);
+
+      if (!isFocused && content !== editorRef.current.innerHTML) {
+        editorRef.current.innerHTML = content || "";
+      }
     }
   }, [content]);
 
@@ -220,7 +240,7 @@ export default function PostForm({
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
-        className="w-full bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg p-3 outline-none focus:ring-2 focus:ring-[var(--primary)] h-[450px] overflow-y-auto"
+        className="w-full bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg p-3 outline-none focus:ring-2 focus:ring-[var(--primary)] h-[600px] overflow-y-auto"
         onKeyDown={handleKeyDown}
         onInput={handleInput}
       />

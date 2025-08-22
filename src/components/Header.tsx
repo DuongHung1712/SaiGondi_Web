@@ -186,7 +186,7 @@ export default function Header() {
 
                   {isLoggedIn && (
                     <Link
-                      href="/user/create-post"
+                      href="/user/post-blog"
                       onClick={() => setMobileMenuOpen(false)}
                       className="px-4 py-3 hover:bg-gray-100 text-[var(--primary)]"
                     >

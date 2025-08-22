@@ -76,7 +76,7 @@ export default function MediaUpload({
             {images.map((src, idx) => (
               <div
                 key={idx}
-                className="w-38.5 h-38.5 rounded-lg overflow-hidden border border-[var(--gray-5)] relative group"
+                className="w-38 h-38 md:w-38.5 md:h-38.5 max-[424px]:w-full max-[424px]:h-auto aspect-square rounded-lg overflow-hidden border border-[var(--gray-5)] relative group"
               >
                 <img
                   src={src}
@@ -93,7 +93,7 @@ export default function MediaUpload({
             ))}
 
             <div
-              className="w-38.5 h-38.5 flex items-center justify-center border-2 border-dashed border-[var(--gray-5)] rounded-lg cursor-pointer hover:bg-gray-100"
+              className="w-38 h-38 md:w-38.5 md:h-38.5 max-[424px]:w-full max-[424px]:h-auto aspect-square flex items-center justify-center border-2 border-dashed border-[var(--gray-5)] rounded-lg cursor-pointer hover:bg-gray-100"
               onClick={() => imageInputRef.current?.click()}
             >
               <FiPlus size={24} className="text-[var(--gray-3)]" />
@@ -159,7 +159,7 @@ export default function MediaUpload({
             {videos.map((src, idx) => (
               <div
                 key={idx}
-                className="w-38.5 h-38.5 rounded-lg overflow-hidden border border-[var(--gray-5)] relative group"
+                className="w-38 h-38 md:w-38.5 md:h-38.5 max-[424px]:w-full max-[424px]:h-auto aspect-square rounded-lg overflow-hidden border border-[var(--gray-5)] relative group"
               >
                 <video
                   src={src}
@@ -176,7 +176,7 @@ export default function MediaUpload({
             ))}
 
             <div
-              className="w-38.5 h-38.5 flex items-center justify-center border-2 border-dashed border-[var(--gray-5)] rounded-lg cursor-pointer hover:bg-gray-100"
+              className="w-38 h-38 md:w-38.5 md:h-38.5 max-[424px]:w-full max-[424px]:h-auto aspect-square flex items-center justify-center border-2 border-dashed border-[var(--gray-5)] rounded-lg cursor-pointer hover:bg-gray-100"
               onClick={() => videoInputRef.current?.click()}
             >
               <FiPlus size={24} className="text-[var(--gray-3)]" />

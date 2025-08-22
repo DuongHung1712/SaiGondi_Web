@@ -5,17 +5,16 @@ import CategoryTagsForm from "./CategoryTagsForm";
 import PostPrivacySettings from "./PostPrivacySettings";
 import Button from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FiX, FiSave } from "react-icons/fi";
 import Image from "next/image";
 import { LuSend } from "react-icons/lu";
 import CoverUpload from "./CoverUpload";
 
-
 export default function PostBlogPage() {
   const router = useRouter();
   const [authChecked, setAuthChecked] = useState(false);
-  
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [privacy, setPrivacy] = useState("public");
@@ -28,12 +27,14 @@ export default function PostBlogPage() {
   const [address, setAddress] = useState("");
   const [cover, setCover] = useState<string | null>(null);
 
+  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
-      router.push("/auth/login"); // chưa đăng nhập → về login
+      router.push("/auth/login");
     } else {
-      setAuthChecked(true); // có token → cho phép render
+      setAuthChecked(true);
     }
   }, [router]);
 
@@ -48,21 +49,22 @@ export default function PostBlogPage() {
       setCategories(data.categories || []);
       setTags(data.tags || []);
       setAddress(data.address || "");
+      setWard(data.ward || "");
       setCover(data.cover || null);
     }
   }, []);
 
+  //Auto-save mỗi khi có thay đổi
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      saveDraft();
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  });
+    if (!authChecked) return;
 
-  const saveDraft = () => {
+    if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    saveTimeout.current = setTimeout(() => {
+      saveDraft(false);
+    }, 500); // chờ 0.5s sau khi ngừng gõ/đổi state mới lưu
+  }, [title, content, images, videos, categories, tags, ward, address, cover, authChecked]);
+
+  const saveDraft = (showAlert = true) => {
     const draft = {
       title,
       content,
@@ -75,17 +77,31 @@ export default function PostBlogPage() {
       cover,
     };
     localStorage.setItem("blogDraft", JSON.stringify(draft));
-    console.log("Draft saved locally ✅");
-    alert("Đã lưu nháp");
+    console.log("Draft autosaved ✅");
+    if (showAlert) alert("Đã lưu nháp");
   };
 
-  const handleImageFiles = (files: File[]) => {
-    const urls = files.map((file) => URL.createObjectURL(file));
+  const readFileAsDataURL = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result) {
+          resolve(reader.result.toString());
+        } else {
+          reject("Failed to read file");
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleImageFiles = async (files: File[]) => {
+    const urls = await Promise.all(files.map((file) => readFileAsDataURL(file)));
     setImages((prev) => [...prev, ...urls]);
   };
 
-  const handleVideoFiles = (files: File[]) => {
-    const urls = files.map((file) => URL.createObjectURL(file));
+  const handleVideoFiles = async (files: File[]) => {
+    const urls = await Promise.all(files.map((file) => readFileAsDataURL(file)));
     setVideos((prev) => [...prev, ...urls]);
   };
 
@@ -110,19 +126,19 @@ export default function PostBlogPage() {
       cover,
     };
     console.log("📌 Post data:", postData);
-    alert("Giả lập đăng bài (chưa gọi API)");localStorage.removeItem("blogDraft");
+    alert("Giả lập đăng bài (chưa gọi API)");
+    localStorage.removeItem("blogDraft");
 
     // Reset form
     setTitle("");
     setContent("");
     setImages([]);
     setVideos([]);
-    setCategories([]); 
+    setCategories([]);
     setTags([]);
     setAddress("");
     setWard("");
     setCover(null);
-    
   };
 
   if (!authChecked) {
@@ -172,8 +188,8 @@ export default function PostBlogPage() {
         className="absolute left-[1420] top-[2800px] z-0 pointer-events-none
         w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
       />
-
-      <div className="relative z-10 max-w-4xl mx-auto mt-6 space-y-6 px-4 md:px-6">
+      
+      <div className="relative z-10 max-w-4xl mx-auto mt-6 space-y-6 px-4 lg:px-0">
         <CoverUpload
           cover={cover}
           onCoverChange={handleCoverChange}
@@ -228,7 +244,7 @@ export default function PostBlogPage() {
           </Button>
           <Button
             variant="outline-secondary"
-            onClick={saveDraft}
+            onClick={() => saveDraft(true)}
             className="flex items-center gap-2 rounded-xl border border-[var(--gray-3)] text-[var(--gray-1)] hover:bg-[var(--gray-5)]"
           >
             <FiSave /> Lưu nháp
