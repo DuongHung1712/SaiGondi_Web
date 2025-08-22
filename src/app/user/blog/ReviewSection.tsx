@@ -35,7 +35,7 @@ const ReviewSection = ({ reviews }: ReviewSectionProps) => {
 
       <div className="flex items-center justify-center gap-4 mt-4">
         <button
-          className="text-xl disabled:opacity-30"
+          className="cursor-pointer text-xl disabled:opacity-30"
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
         >
@@ -45,7 +45,7 @@ const ReviewSection = ({ reviews }: ReviewSectionProps) => {
           {currentPage} of {totalPages}
         </span>
         <button
-          className="text-xl disabled:opacity-30"
+          className="cursor-pointer text-xl disabled:opacity-30"
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
         >

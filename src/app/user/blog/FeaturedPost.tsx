@@ -68,7 +68,7 @@ export default function FeaturedPost({ posts }: { posts: Post[] }) {
           <button
             key={idx}
             onClick={() => setCurrent(idx)}
-            className={`h-2 rounded-full transition-all duration-300 ${
+            className={`cursor-pointer h-2 rounded-full transition-all duration-300 ${
               idx === current
                 ? "w-6 bg-[var(--secondary)]"
                 : "w-2 bg-[var(--gray-4)]"

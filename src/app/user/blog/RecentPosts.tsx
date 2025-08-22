@@ -23,6 +23,7 @@ const RecentPosts = () => {
             author={post.author}
             authorAvatar={post.authorAvatar}
             date={post.date}
+            slug={post.slug}
           />
         ))}
       </div>
