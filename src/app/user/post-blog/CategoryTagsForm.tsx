@@ -169,7 +169,7 @@ export default function CategoryTagsForm({
               }
             }}
             onKeyDown={handleAddTag}
-            placeholder="Nhập tag, bắt đầu với #"
+            placeholder="Nhập tag, bắt đầu với #, cách ra để hoàn thành"
             className="flex-1 min-w-[120px] p-1 bg-transparent outline-none"
           />
         </div>
