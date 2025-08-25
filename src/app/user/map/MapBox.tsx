@@ -109,7 +109,7 @@ export default function HCMMap() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-2 mt-5 sm:px-4 relative">
+   <div className="w-full max-w-5xl mx-auto px-0 sm:px-4 mt-5 relative">
       <div className="w-full aspect-[4/3] min-h-[300px] sm:min-h-[800px] relative">
         <svg
           xmlns="http://www.w3.org/2000/svg"

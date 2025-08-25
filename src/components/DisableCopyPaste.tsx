@@ -3,23 +3,20 @@ import { useEffect } from "react";
 
 export default function DisableCopyPaste() {
   useEffect(() => {
-    const preventAction = (e: ClipboardEvent | DragEvent) => {
-      e.preventDefault();
-    };
+    const preventAction = (e: Event) => e.preventDefault();
 
-    document.addEventListener("copy", preventAction);
-    document.addEventListener("cut", preventAction);
-    document.addEventListener("paste", preventAction);
-
-    document.addEventListener("dragstart", preventAction);
-    document.addEventListener("drop", preventAction);
+    document.addEventListener('copy', preventAction);
+    document.addEventListener('cut', preventAction);
+    document.addEventListener('paste', preventAction);
+    document.addEventListener('dragstart', preventAction);
+    document.addEventListener('drop', preventAction);
 
     return () => {
-      document.removeEventListener("copy", preventAction);
-      document.removeEventListener("cut", preventAction);
-      document.removeEventListener("paste", preventAction);
-      document.removeEventListener("dragstart", preventAction);
-      document.removeEventListener("drop", preventAction);
+      document.removeEventListener('copy', preventAction);
+      document.removeEventListener('cut', preventAction);
+      document.removeEventListener('paste', preventAction);
+      document.removeEventListener('dragstart', preventAction);
+      document.removeEventListener('drop', preventAction);
     };
   }, []);
 
