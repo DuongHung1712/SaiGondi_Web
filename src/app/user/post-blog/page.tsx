@@ -10,6 +10,7 @@ import { FiX, FiSave } from "react-icons/fi";
 import Image from "next/image";
 import { LuSend } from "react-icons/lu";
 import CoverUpload from "./CoverUpload";
+import { blogApi } from "@/lib/blog/blogApi";
 
 export default function PostBlogPage() {
   const router = useRouter();
@@ -19,13 +20,23 @@ export default function PostBlogPage() {
   const [content, setContent] = useState("");
   const [privacy, setPrivacy] = useState("public");
   const [showSettings, setShowSettings] = useState(false);
+
+  // preview
   const [images, setImages] = useState<string[]>([]);
   const [videos, setVideos] = useState<string[]>([]);
+  const [cover, setCover] = useState<string | null>(null);
+
+  // files thật để upload
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [videoFiles, setVideoFiles] = useState<File[]>([]);
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+
   const [categories, setCategories] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
-  const [ward, setWard] = useState("");
+  const [wardId, setWardId] = useState("");
+  const [wardName, setWardName] = useState("");
+
   const [address, setAddress] = useState("");
-  const [cover, setCover] = useState<string | null>(null);
 
   const saveTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -49,7 +60,8 @@ export default function PostBlogPage() {
       setCategories(data.categories || []);
       setTags(data.tags || []);
       setAddress(data.address || "");
-      setWard(data.ward || "");
+      setWardId(data.wardId || "");
+      setWardName(data.wardName || "");
       setCover(data.cover || null);
     }
   }, []);
@@ -62,7 +74,7 @@ export default function PostBlogPage() {
     saveTimeout.current = setTimeout(() => {
       saveDraft(false);
     }, 500); // chờ 0.5s sau khi ngừng gõ/đổi state mới lưu
-  }, [title, content, images, videos, categories, tags, ward, address, cover, authChecked]);
+  }, [title, content, images, videos, categories, tags, wardId, wardName, address, cover, authChecked]);
 
   const saveDraft = (showAlert = true) => {
     const draft = {
@@ -72,7 +84,8 @@ export default function PostBlogPage() {
       videos,
       categories,
       tags,
-      ward,
+      wardId,
+      wardName,
       address,
       cover,
     };
@@ -96,64 +109,90 @@ export default function PostBlogPage() {
   };
 
   const handleImageFiles = async (files: File[]) => {
+    setImageFiles((prev) => [...prev, ...files]);
     const urls = await Promise.all(files.map((file) => readFileAsDataURL(file)));
     setImages((prev) => [...prev, ...urls]);
   };
 
   const handleVideoFiles = async (files: File[]) => {
+    setVideoFiles((prev) => [...prev, ...files]);
     const urls = await Promise.all(files.map((file) => readFileAsDataURL(file)));
     setVideos((prev) => [...prev, ...urls]);
   };
 
   const removeImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
+    setImageFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const removeVideo = (index: number) => {
     setVideos((prev) => prev.filter((_, i) => i !== index));
+    setVideoFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = () => {
-    const postData = {
-      title,
-      content,
-      images,
-      videos,
-      categories,
-      tags,
-      ward,
-      address,
-      cover,
+  const handleCoverChange = (file: File) => {
+    setCoverFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (reader.result) setCover(reader.result.toString());
     };
-    console.log("📌 Post data:", postData);
-    alert("Giả lập đăng bài (chưa gọi API)");
-    localStorage.removeItem("blogDraft");
+    reader.readAsDataURL(file);
+  };
 
-    // Reset form
-    setTitle("");
-    setContent("");
-    setImages([]);
-    setVideos([]);
-    setCategories([]);
-    setTags([]);
-    setAddress("");
-    setWard("");
-    setCover(null);
+  const handleSubmit = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        router.push("/auth/login");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("privacy", privacy);
+      formData.append("ward", wardId);
+
+      // ✅ đổi address -> locationDetail
+      if (address.trim()) {
+        formData.append("locationDetail", address);
+      }
+
+      // ✅ gửi mảng categories
+      categories.forEach((c, i) => {
+        formData.append(`categories[${i}]`, c);
+      });
+
+      // ✅ gửi mảng tags
+      tags.forEach((t, i) => {
+        formData.append(`tags[${i}]`, t);
+      });
+
+      // ✅ gửi content là array object
+      if (content.trim()) {
+        formData.append("content[0][type]", "text");
+        formData.append("content[0][value]", content);
+      }
+
+      // ✅ files
+      if (coverFile) formData.append("files", coverFile);
+      imageFiles.forEach((file) => formData.append("files", file));
+      videoFiles.forEach((file) => formData.append("files", file));
+
+      const res = await blogApi.createBlog(formData, token);
+      console.log("✅ Blog created:", res);
+
+      alert("Đăng bài thành công!");
+      localStorage.removeItem("blogDraft");
+      router.push("/user/blog");
+    } catch (error: any) {
+      console.error("❌ Error create blog:", error.response?.data || error);
+      alert("Đăng bài thất bại!");
+    }
   };
 
   if (!authChecked) {
     return <p className="text-center mt-10">Đang kiểm tra đăng nhập...</p>;
   }
-
-  const handleCoverChange = (file: File) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      if (reader.result) {
-        setCover(reader.result.toString());
-      }
-    };
-    reader.readAsDataURL(file);
-  };
 
   return (
     <main className="relative overflow-hidden">
@@ -169,31 +208,31 @@ export default function PostBlogPage() {
         alt="city-bg"
         width={355}
         height={216}
-        className="absolute left-[-100px] top-[100px] z-0 pointer-events-none
-              w-[200px] sm:w-[250px] md:w-[300px] lg:w-[355px] h-auto"
+        className="absolute left-[-100px] top-[100px] z-0 pointer-events-none w-[200px] sm:w-[250px] md:w-[300px] lg:w-[355px] h-auto"
       />
       <Image
         src="/Graphic_Elements.svg"
         alt="Graphic_Elements"
         width={192}
         height={176}
-        className="absolute left-[1420px] top-[875px] z-0 pointer-events-none
-              w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
+        className="absolute left-[1420px] top-[875px] z-0 pointer-events-none w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
       />
       <Image
         src="/Graphic_Elements.svg"
         alt="Graphic_Elements"
         width={192}
         height={176}
-        className="absolute left-[1420] top-[2800px] z-0 pointer-events-none
-        w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
+        className="absolute left-[1420] top-[2800px] z-0 pointer-events-none w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
       />
       
       <div className="relative z-10 max-w-4xl mx-auto mt-6 space-y-6 px-4 lg:px-0">
         <CoverUpload
           cover={cover}
           onCoverChange={handleCoverChange}
-          onRemove={() => setCover(null)}
+          onRemove={() => {
+            setCover(null);
+            setCoverFile(null);
+          }}
         />
         <div>
           <PostForm
@@ -227,11 +266,15 @@ export default function PostBlogPage() {
           categories={categories}
           tags={tags}
           address={address}
-          ward={ward}
+          wardId={wardId}
+          wardName={wardName}
           onCategoriesChange={setCategories}
           onTagsChange={setTags}
           onAddressChange={setAddress}
-          onWardChange={setWard}
+          onWardChange={(id, name) => {
+            setWardId(id);
+            setWardName(name);
+          }}
         />
 
         <div className="flex justify-center space-x-4 mt-8 mb-12">

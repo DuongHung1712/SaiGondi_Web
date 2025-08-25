@@ -1,4 +1,5 @@
 "use client";
+import { wardApi } from "@/lib/ward/wardApi";
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import { FiX } from "react-icons/fi";
 
@@ -6,11 +7,12 @@ interface CategoryTagsFormProps {
   categories: string[];
   tags: string[];
   address: string;
-  ward: string;
+  wardId: string;
+  wardName: string; 
   onCategoriesChange: (values: string[]) => void;
   onTagsChange: (values: string[]) => void;
   onAddressChange: (value: string) => void;
-  onWardChange: (value: string) => void;
+  onWardChange: (id: string, name: string) => void;
 }
 
 const CATEGORY_OPTIONS = [
@@ -23,13 +25,13 @@ const CATEGORY_OPTIONS = [
   "2",
   "3",
 ];
-const WARD_OPTIONS = ["Phường 1", "Phường 2", "Phường 3", "Phường 4"];
 
 export default function CategoryTagsForm({
   categories,
   tags,
   address,
-  ward,
+  wardId,
+  wardName,
   onCategoriesChange,
   onTagsChange,
   onAddressChange,
@@ -38,9 +40,22 @@ export default function CategoryTagsForm({
   const [openCategory, setOpenCategory] = useState(false);
   const [openWard, setOpenWard] = useState(false);
   const [tagInput, setTagInput] = useState("");
+  const [wards, setWards] = useState<{ _id: string; name: string }[]>([]); 
 
   const categoryRef = useRef<HTMLDivElement>(null);
   const wardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchWards = async () => {
+      try {
+        const data = await wardApi.getAll();
+        setWards(data);
+      } catch (err) {
+        console.error("❌ Lỗi lấy wards:", err);
+      }
+    };
+    fetchWards();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -95,9 +110,10 @@ export default function CategoryTagsForm({
           Danh mục
         </span>
         <div
-          className="bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg p-3 cursor-pointer select-none flex justify-between items-center focus-within:ring-2 focus-within:ring-[var(--primary)]"
-          onClick={() => setOpenCategory(!openCategory)}
           tabIndex={0}
+          className={`bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg p-3 cursor-pointer select-none flex justify-between items-center
+            focus:outline-none focus:ring-2 focus:ring-[var(--primary)]`}
+          onClick={() => setOpenCategory(!openCategory)}
         >
           <span>
             {categories.length > 0 ? categories.join(", ") : "Chọn danh mục"}
@@ -185,6 +201,7 @@ export default function CategoryTagsForm({
           onChange={(e) => onAddressChange(e.target.value)}
           placeholder="Nhập số nhà, tên đường..."
           className="w-full bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg p-3 outline-none focus:ring-2 focus:ring-[var(--primary)]"
+          name="locationDetail" 
         />
       </label>
 
@@ -193,11 +210,12 @@ export default function CategoryTagsForm({
           Phường
         </span>
         <div
-          className="bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg p-3 cursor-pointer select-none flex justify-between items-center focus-within:ring-2 focus-within:ring-[var(--primary)]"
+          tabIndex={0} 
+          className={`bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg p-3 cursor-pointer select-none flex justify-between items-center
+            focus:outline-none focus:ring-2 focus:ring-[var(--primary)]`}
           onClick={() => setOpenWard(!openWard)}
-          tabIndex={0}
         >
-          <span>{ward ? ward : "Chọn phường"}</span>
+          <span>{wardName || "Chọn phường"}</span>
           <svg
             className={`w-4 h-4 transition-transform ${
               openWard ? "rotate-180" : "rotate-0"
@@ -217,16 +235,16 @@ export default function CategoryTagsForm({
 
         {openWard && (
           <div className="absolute left-0 mt-1 w-full bg-[#F9F9FC] border border-[var(--gray-5)] rounded-lg shadow-lg p-3 max-h-32 overflow-y-auto z-10">
-            {WARD_OPTIONS.map((option) => (
+            {wards.map((w) => (
               <div
-                key={option}
+                key={w._id}
                 className="p-2 cursor-pointer hover:bg-gray-100 rounded"
                 onClick={() => {
-                  onWardChange(option);
+                  onWardChange(w._id, w.name);
                   setOpenWard(false);
                 }}
               >
-                {option}
+                {w.name}
               </div>
             ))}
           </div>
