@@ -77,7 +77,7 @@ export default function Header() {
   const navItems = [
     { label: 'Trang chủ', href: '/' },
     { label: 'Bài viết', href: '/user/blog' },
-    { label: 'Hành trình', href: '/hanh-trinh' },
+    { label: 'Hành trình', href: '/user/map' },
   ];
 
   const isActive = (href: string) =>
