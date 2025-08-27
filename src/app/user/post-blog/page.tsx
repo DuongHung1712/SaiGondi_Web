@@ -222,7 +222,7 @@ export default function PostBlogPage() {
         alt="Graphic_Elements"
         width={192}
         height={176}
-        className="absolute left-[1420] top-[2800px] z-0 pointer-events-none w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
+        className="absolute left-[1420px] top-[2800px] z-0 pointer-events-none w-[100px] sm:w-[140px] md:w-[160px] lg:w-[192px] h-auto"
       />
       
       <div className="relative z-10 max-w-4xl mx-auto mt-6 space-y-6 px-4 lg:px-0">
