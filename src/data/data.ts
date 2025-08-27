@@ -18,7 +18,7 @@ export const dataBlogPosts = [
     title: "Ẩm thực miền Tây: Top 5 món ngon phải thử một lần",
     slug: "am-thuc-mien-tay-top-5-mon-ngon-phai-thu-mot-lan",
     category: "food",
-    image: "/blog.svg",
+    image: "/image23.svg",
     author: "Trần Quốc Huy",
     authorAvatar: "/icon.svg",
     date: "2025-07-25T09:15:00Z",

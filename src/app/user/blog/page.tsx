@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { dataBlogPosts } from '@/data/data';
 import FeaturedPost from './FeaturedPost';
 import SearchBox from '@/components/ui/SearchBox';
@@ -9,10 +9,24 @@ import BlogListSection from './BlogListSection';
 import RecentPosts from './RecentPosts';
 import FeaturedBloggers from './FeaturedBloggers';
 import Image from 'next/image';
+import { blogApi } from '@/lib/blog/blogApi';
+import { mapBlogToPost } from '@/lib/blog/mapBlogToPost';
 
 export default function BlogPage() {
-  const featuredPosts = dataBlogPosts.slice(0, 3);
-  const [activeCategoryKey, setActiveCategoryKey] = useState('all');
+  const [featuredPosts, setFeaturedPosts] = useState<any[]>([]);
+  const [activeCategoryKey, setActiveCategoryKey] = useState("all");
+
+  useEffect(() => {
+    async function fetchBlogs() {
+      try {
+        const res = await blogApi.getBlogs({ limit: 3, sort: "-createdAt" });
+        setFeaturedPosts(res.data.map(mapBlogToPost));
+      } catch (err) {
+        console.error("Lỗi khi lấy featured posts:", err);
+      }
+    }
+    fetchBlogs();
+  }, []);
   
   return (
     <main className="relative overflow-hidden">
@@ -49,14 +63,17 @@ export default function BlogPage() {
       />
 
       {/* nội dung trang page */}
-      <FeaturedPost posts={featuredPosts} />
-      <div className='max-w-5xl mx-auto'>
+      {featuredPosts.length > 0 && <FeaturedPost posts={featuredPosts} />}
+
+      <div className="max-w-5xl mx-auto">
         <SearchBox />
       </div>
+
       <CategorySection
         activeTab={activeCategoryKey}
         onChangeTab={setActiveCategoryKey}
       />
+
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-4 mt-6">
           <div className="flex-[0.7] min-w-0">
