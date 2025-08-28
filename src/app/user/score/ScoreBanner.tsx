@@ -1,38 +1,64 @@
 'use client';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { badgeApi } from '@/lib/badge/badgeApi';
+import { BadgeType, Milestone } from '@/types/badge';
 
-const milestones = [
+const staticMilestones: Milestone[] = [
   {
     title: 'TÂN KHÁM PHÁ',
     points: 0,
-    icon: '/icon4.svg',
     color: '#5161EB',
-    className: "absolute top-[117%] left-[28%] ml:top-[100%] ml:left-[30%] md:top-[102%] md:left-[26%] lg:top-[98%] lg:left-[28%] xl:top-[92%] xl:left-[28%] 1.5xl:top-[152%] 1.5xl:left-[28%]"
+    className: "absolute top-[117%] left-[28%] ml:top-[100%] ml:left-[30%] md:top-[102%] md:left-[26%] lg:top-[98%] lg:left-[28%] xl:top-[92%] xl:left-[28%] 1.5xl:top-[152%] 1.5xl:left-[28%]",
   },
   {
     title: 'KHÁM PHÁ VIÊN',
     points: 100,
-    icon: '/icon5.svg',
     color: '#F96651',
-    className: "absolute top-[95%] left-[44%] ml:top-[80%] ml:left-[40%] md:top-[70%] md:left-[44%] lg:top-[68%] lg:left-[46%] xl:top-[46%] xl:left-[45.5%] 1.5xl:top-[89%] 1.5xl:left-[30%]"
+    className: "absolute top-[95%] left-[44%] ml:top-[80%] ml:left-[40%] md:top-[70%] md:left-[44%] lg:top-[68%] lg:left-[46%] xl:top-[46%] xl:left-[45.5%] 1.5xl:top-[89%] 1.5xl:left-[30%]",
   },
   {
     title: 'THỔ ĐỊA',
     points: 300,
-    icon: '/icon6.svg',
     color: '#02714D',
-    className: "absolute top-[84%] left-[71.5%] ml:top-[80%] ml:left-[60%] md:top-[61%] md:left-[70%] lg:top-[59%] lg:left-[72%] xl:top-[32%] xl:left-[71.5%] 1.5xl:top-[92%] 1.5xl:left-[55%]"
+    className: "absolute top-[84%] left-[71.5%] ml:top-[80%] ml:left-[60%] md:top-[61%] md:left-[70%] lg:top-[59%] lg:left-[72%] xl:top-[32%] xl:left-[71.5%] 1.5xl:top-[92%] 1.5xl:left-[55%]",
   },
   {
     title: 'NHÀ THÁM HIỂM',
     points: 600,
-    icon: '/icon7.svg',
     color: '#7829EC',
-    className: "absolute top-[52%] right-[3%] ml:top-[45%] ml:right-[5%] md:top-[16%] md:right-[8%] lg:top-[19%] lg:left-[89%] xl:top-[-26%] xl:right-[6%]"
+    className: "absolute top-[52%] right-[3%] ml:top-[45%] ml:right-[5%] md:top-[16%] md:right-[8%] lg:top-[19%] lg:left-[89%] xl:top-[-26%] xl:right-[6%]",
   },
 ];
 
+const staticIcons = ['/icon4.svg', '/icon5.svg', '/icon6.svg', '/icon7.svg'];
+
 export default function ScoreBanner() {
+  const [milestones, setMilestones] = useState(staticMilestones.map((m, i) => ({ ...m, icon: staticIcons[i] })));
+
+  useEffect(() => {
+    const fetchUserBadges = async () => {
+      try {
+        const badges: BadgeType[] = await badgeApi.getUserBadges();
+        const updatedMilestones = staticMilestones.map((m, i) => {
+          const badge = badges[i];
+          return {
+            ...m,
+            title: badge?.name ?? m.title,                    
+            points: badge?.userProgress?.currentPoints ?? 0, 
+            icon: staticIcons[i],                            
+          };
+        });
+
+        setMilestones(updatedMilestones);
+      } catch (err) {
+        console.error("Error fetching badges:", err);
+      }
+    };
+
+    fetchUserBadges();
+  }, []);
+
   return (
     <div className="relative w-full pt-20 pb-10 overflow-hidden shadow-lg">
       <div className="absolute bottom-0 w-full z-0 translate-x-[5px] sm:translate-x-[40px] md:translate-x-[-1px] xl:translate-x-[5px] lg:translate-x-[10px]">
@@ -43,8 +69,7 @@ export default function ScoreBanner() {
           md:translate-x-[55px] md:translate-y-[-12px] md:w-[720px]
           lg:translate-x-[85px] lg:translate-y-[-12px] lg:w-[950px]
           xl:translate-x-[135px] xl:translate-y-[-4px] xl:w-[1555px]
-          1.5xl:translate-x-[145px] 1.5xl:translate-y-[-15px] 1.5xl:w-[1750px]
-          "
+          1.5xl:translate-x-[145px] 1.5xl:translate-y-[-15px] 1.5xl:w-[1750px]"
         >
           <Image src="/blur.svg" alt="Blur effect" width={1388} height={100} />
         </div>
