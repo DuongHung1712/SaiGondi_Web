@@ -64,8 +64,6 @@ export default function AchievementSection() {
 
     fetchData();
   }, []);
-
-  // Tính vị trí thanh màu xanh dựa trên badge cuối cùng đã earn
   const lastEarnedIndex = badges.reduce((maxIdx, b, idx) => {
     if (b.userProgress?.status === 'earned') {
       return idx;
@@ -87,7 +85,6 @@ export default function AchievementSection() {
         Xin chào, {firstName}
       </h1>
 
-      {/* Thanh màu xanh tổng quát */}
       <div className="w-full h-1.5 bg-gray-200 rounded-full mt-4 mb-8">
         <div
           className="h-full bg-blue-500 rounded-full transition-all duration-500"
@@ -95,7 +92,6 @@ export default function AchievementSection() {
         />
       </div>
 
-      {/* Danh sách badge */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10 lg:gap-20 mb-12">
         {badges.map((item, idx) => {
           const remainingPoints =
@@ -130,8 +126,6 @@ export default function AchievementSection() {
           );
         })}
       </div>
-
-      {/* Chi tiết badge đang chọn */}
       {selected && (
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
           <div className="bg-[#F8F8FC] rounded-xl shadow p-4 flex flex-col text-center items-center justify-center w-full lg:w-[250px]">
