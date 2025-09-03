@@ -25,3 +25,15 @@ export type Milestone = {
   color: string;
   className: string;
 };
+export type UserAction = {
+  _id: string;
+  userId: string;
+  badgeId: string;
+  action: string;
+  points: number;
+  currentPoints?: number;   
+  requiredPoints?: number;  
+  createdAt: string;
+};
+
+

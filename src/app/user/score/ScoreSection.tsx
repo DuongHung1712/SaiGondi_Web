@@ -27,6 +27,8 @@ interface Checkin {
   placeId: {
     _id: string;
     name: string;
+    ward?: string;      
+    district?: string; 
     address: string;
     avgRating?: number;
     totalRatings?: number;
@@ -62,13 +64,20 @@ export default function ScoreSection() {
   }, []);
   const LOCATION_DATA = useMemo(() => {
     if (!Array.isArray(places)) return [];
-    return places.map((p) => {
-      const userCheck = checkins.find(
-        (c) => String(c.placeId?._id) === String(p._id) 
-      );
-      return { name: p.name, value: userCheck ? userCheck.count : 0 };
+
+    const countMap: Record<string, number> = {};
+
+    checkins.forEach(c => {
+      const wardName = c.placeId?.ward || "Chưa rõ phường";
+      countMap[wardName] = (countMap[wardName] || 0) + 1;
     });
+
+    return Object.entries(countMap).map(([ward, value]) => ({
+      name: ward,
+      value
+    }));
   }, [places, checkins]);
+
   const maxValue = LOCATION_DATA.length > 0 ? Math.max(...LOCATION_DATA.map(l => l.value)) : 0;
   const categoryPercent = width < 640 ? 0.4 : 0.3;
   const barPercent = width < 640 ? 0.9 : 1;
@@ -106,15 +115,15 @@ export default function ScoreSection() {
           categoryPercentage: categoryPercent,
           barPercentage: barPercent,
         },
+        
         y: {
           min: 0,
-          max: 10,
+          max: maxValue < 10 ? 10 : maxValue, 
           ticks: {
-            stepSize: 1,
+            stepSize: Math.ceil((maxValue < 10 ? 10 : maxValue) / 5), // chia thành ~5 mốc
             padding: 4,
             color: '#94a3b8',
             font: { size: fontSize, weight: 500 as const },
-            callback: (value: string | number) => [0,1,2,5,10].includes(Number(value)) ? value : '',
           },
           grid: { drawTicks: false, color: 'transparent', borderColor: 'transparent' },
         }
@@ -159,12 +168,13 @@ export default function ScoreSection() {
                 </span>
               </button>
               {openDropdown && (
-                <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-lg shadow-md z-10">
+                <div className="absolute right-0 mt-1 w-42 bg-white border border-gray-200 rounded-lg shadow-md z-10">
                   {LOCATION_DATA.map(loc => (
                     <button
                       key={loc.name}
                       onClick={() => {}}
-                      className="w-full text-left px-3 py-2 hover:bg-gray-100"
+                      className="w-full px-1 py-1 hover:bg-gray-100 text-sm truncate text-center"
+                      title={loc.name}
                     >
                       {loc.name}
                     </button>
