@@ -2,61 +2,83 @@
 
 import React, { useEffect, useState } from "react";
 import BlogCard from "./BlogCard";
-import Button from "@/components/ui/Button";
 import { blogApi } from "@/lib/blog/blogApi";
 import { Post } from "@/types/blog";
-
-function mapBlogToPost(blog: any): Post {
-  return {
-    id: blog._id,
-    slug: blog.slug,
-    title: blog.title,
-    image: blog.mainImage,
-    category: blog.categories?.[0] || "Chưa phân loại",
-    author: blog.authorId ? `${blog.authorId.firstName} ${blog.authorId.lastName}` : "Ẩn danh",
-    authorAvatar: blog.authorId?.avatar || "/default-avatar.png",
-    date: blog.createdAt,
-    address: blog.locationDetail || "",
-    content: blog.content?.find((c: any) => c.type === "text")?.value || ""
-  };
-}
+import { mapBlogToPost } from "@/lib/blog/mapBlogToPost";
+import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 
 type BlogListSectionProps = {
   activeCategoryKey: string;
 };
 
+const PAGE_SIZE = 10;
+
 const BlogListSection = ({ activeCategoryKey }: BlogListSectionProps) => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  // Reset page khi đổi category
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategoryKey]);
 
   useEffect(() => {
-    async function fetchBlogs() {
+    async function fetchBlogs(page: number) {
       try {
-        const res = await blogApi.getBlogs();
-        let blogs: Post[] = res.data.map(mapBlogToPost);
+        const res = await blogApi.getBlogs({ page, limit: PAGE_SIZE, status: "approved" });
+
+        let blogs: Post[] = res.data
+          .filter((b: any) => b.status === "approved")
+          .map(mapBlogToPost);
 
         if (activeCategoryKey !== "all") {
           blogs = blogs.filter((b: Post) => b.category === activeCategoryKey);
         }
 
         setPosts(blogs);
+
+        const totalApproved = res.pagination?.totalBlogs
+          ? res.data.filter((b: any) => b.status === "approved").length
+          : blogs.length;
+
+        setTotalPages(Math.ceil(totalApproved / PAGE_SIZE));
       } catch (err) {
         console.error("Lỗi khi lấy blogs:", err);
       }
     }
 
-    fetchBlogs();
-  }, [activeCategoryKey]);
+    fetchBlogs(currentPage);
+  }, [currentPage, activeCategoryKey]);
 
   return (
     <section className="px-4 pb-10 max-w-7xl mx-auto">
-      <div className="space-y-2 border border-[var(--gray-5)] shadow-lg">
-        {posts.map((post) => (
-          <BlogCard key={post.id} post={post} />
-        ))}
+      <div className="space-y-2 shadow-lg">
+        {posts.length > 0 ? (
+          posts.map((post) => <BlogCard key={post.id} post={post} />)
+        ) : (
+          <p className="text-center py-10 text-gray-500">Không có bài viết</p>
+        )}
       </div>
 
-      <div className="mt-10 text-center">
-        <Button variant="primary">Show more results</Button>
+      <div className="flex items-center justify-center gap-4 mt-10">
+        <button
+          className="cursor-pointer text-xl disabled:opacity-30"
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          <MdNavigateBefore size={24} />
+        </button>
+        <span className="text-sm text-[var(--gray-2)]">
+          {currentPage} / {totalPages}
+        </span>
+        <button
+          className="cursor-pointer text-xl disabled:opacity-30"
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          <MdNavigateNext size={24} />
+        </button>
       </div>
     </section>
   );

@@ -11,10 +11,11 @@ interface RecentPostCardProps {
 }
 
 const RecentPostCard: React.FC<RecentPostCardProps> = ({ post }) => {
+  const defaultImage = '/Logo.svg';
   return (
     <div className="flex gap-3">
       <Link href={`/user/blog/${post.slug}`} className="w-22 h-22 relative rounded overflow-hidden flex-shrink-0">
-        <Image src={post.image} alt={post.title} fill className="object-cover" />
+        <Image src={post.image || defaultImage} alt={post.title} fill className="object-cover" />
       </Link>
       <div className="flex flex-col justify-center">
         <span className="text-xs text-green-700 bg-green-100 px-2 py-0.5 rounded w-fit mb-1">{post.category}</span>
@@ -23,7 +24,7 @@ const RecentPostCard: React.FC<RecentPostCardProps> = ({ post }) => {
         </Link>
         <div className="flex items-center gap-2 text-xs text-gray-600 mt-1">
           <Link href={`/user/profile`}>
-            <Image src={post.authorAvatar} alt={post.author} width={16} height={16} className="object-cover rounded-full" />
+            <Image src={post.authorAvatar || defaultImage} alt={post.author} width={16} height={16} className="object-cover rounded-full" />
           </Link>
           <Link href={`/user/profile`}>
             <span>{post.author}</span>

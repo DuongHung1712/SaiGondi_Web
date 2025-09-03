@@ -4,21 +4,7 @@ import React, { useEffect, useState } from "react";
 import RecentPostCard from "./RecentPostCard";
 import { blogApi } from "@/lib/blog/blogApi";
 import { Post } from "@/types/blog";
-
-function mapBlogToPost(blog: any): Post {
-  return {
-    id: blog._id,
-    slug: blog.slug,
-    title: blog.title,
-    image: blog.mainImage,
-    category: blog.categories?.[0] || "Chưa phân loại",
-    author: blog.authorId ? `${blog.authorId.firstName} ${blog.authorId.lastName}` : "Ẩn danh",
-    authorAvatar: blog.authorId?.avatar || "/default-avatar.png",
-    date: blog.createdAt,
-    address: blog.locationDetail || "",
-    content: blog.content?.find((c: any) => c.type === "text")?.value || ""
-  };
-}
+import { mapBlogToPost } from "@/lib/blog/mapBlogToPost";
 
 const RecentPosts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -26,8 +12,12 @@ const RecentPosts = () => {
   useEffect(() => {
     async function fetchBlogs() {
       try {
-        const res = await blogApi.getBlogs({ limit: 5, sort: "-createdAt" });
-        setPosts(res.data.map(mapBlogToPost));
+        const res = await blogApi.getBlogs({ limit: 5, sort: "-createdAt", status: "approved" });
+        const approvedPosts = res.data
+          .filter((b: any) => b.status === "approved")
+          .map(mapBlogToPost);
+
+        setPosts(approvedPosts);
       } catch (err) {
         console.error("Lỗi khi lấy recent posts:", err);
       }

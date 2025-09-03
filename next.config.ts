@@ -1,9 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
-    domains: ["res.cloudinary.com"], // cho phép load ảnh từ Cloudinary
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com", // cho phép load ảnh từ Cloudinary
+        pathname: "/**", // cho phép tất cả đường dẫn
+      },
+    ],
   },
 };
 

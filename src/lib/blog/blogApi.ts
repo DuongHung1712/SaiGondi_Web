@@ -20,10 +20,14 @@ export const blogApi = {
   },
 
   // Lấy chi tiết blog theo id
-  getBlogById: async (id: string, token: string) => {
-    const res = await axios.get(`${API_URL}/blogs/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+  getBlogById: async (id: string) => {
+    const res = await axios.get(`${API_URL}/blogs/${id}`);
+    return res.data;
+  },
+
+  // Lấy chi tiết blog theo slug
+  getBlogBySlug: async (slug: string) => {
+    const res = await axios.get(`${API_URL}/blogs/slug/${slug}`);
     return res.data;
   },
 

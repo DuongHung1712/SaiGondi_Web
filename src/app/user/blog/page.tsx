@@ -19,8 +19,12 @@ export default function BlogPage() {
   useEffect(() => {
     async function fetchBlogs() {
       try {
-        const res = await blogApi.getBlogs({ limit: 3, sort: "-createdAt" });
-        setFeaturedPosts(res.data.map(mapBlogToPost));
+        const res = await blogApi.getBlogs({ limit: 3, sort: "-createdAt", status: "approved" });
+        const approvedBlogs = res.data
+          .filter((blog: any) => blog.status === "approved")
+          .map(mapBlogToPost);
+        
+        setFeaturedPosts(approvedBlogs);
       } catch (err) {
         console.error("Lỗi khi lấy featured posts:", err);
       }
