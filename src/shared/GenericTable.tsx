@@ -1,12 +1,12 @@
 'use client'
-
+import * as React from 'react'
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-
 import {
   Table,
   TableHeader,
@@ -15,17 +15,30 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table"
+import {TablePagination } from "@/shared/TablePagination"
+
 
 interface GenericTableProps<T> {
   data: T[]
   columns: ColumnDef<T>[]
+  initialPageSize?: number
 }
 
-export function GenericTable<T>({ data, columns }: GenericTableProps<T>) {
+export function GenericTable<T>({ data, columns, initialPageSize = 5 }: GenericTableProps<T>) {
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: initialPageSize
+  })
+
   const table = useReactTable({
     data,
     columns,
+    state: {
+      pagination
+    },
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(), 
   })
 
   return (
@@ -53,7 +66,10 @@ export function GenericTable<T>({ data, columns }: GenericTableProps<T>) {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </Table>      
+
+      <TablePagination table={table} />
+
     </div>
   )
 }

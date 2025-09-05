@@ -34,43 +34,34 @@ const previousMonthData = monthlyUserData.map((item) => item.previousMonth);
 
 const importantDays = [1, 5, 10, 15, 20, 25, 30];
 
-
-
 const data = {
   labels,
   datasets: [
     {
       label: "Tháng này",
       data: currentMonthData,
-      borderColor: "#307AFD",
-      // backgroundColor: "rgba(75, 192, 192, 0.2)",
+      borderColor: "#307AFD",     
       backgroundColor: (context: ScriptableContext<'line'>) => {
         const chart = context.chart;
         const {ctx, chartArea} = chart;
 
         if (!chartArea) {
-          // Trường hợp chart chưa render xong
+         
           return undefined;
         }
 
         const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-        gradient.addColorStop(0, '#F6F7FA'); // màu dưới cùng (có alpha)
-        gradient.addColorStop(0.5, '#EEF2FA');   // màu trên cùng
+        gradient.addColorStop(0, '#F6F7FA'); 
+        gradient.addColorStop(0.5, '#EEF2FA'); 
 
         return gradient;
       },
 
-
-
-
-
-
-
       fill: true,
-
       tension: 0.5,
       pointRadius: 0,
       borderWidth: 1,
+      order:2,
 
     },
     {
@@ -83,6 +74,7 @@ const data = {
       pointRadius: 0,
       borderWidth: 1,
       borderDash: [3,3],
+      order: 1,
     },
   ],
 };
@@ -98,7 +90,7 @@ const options: ChartOptions<"line"> = {
       callbacks: {
         label: (context) => {
           const value = Number(context.raw);
-          return value >= 1000 ? (value / 1000).toFixed(1) + "k" : value.toString();
+          return value >= 1000 ? (value / 1000).toFixed(0) + "K" : value.toString();
         },
       },
     },
@@ -126,7 +118,7 @@ const options: ChartOptions<"line"> = {
         stepSize: 5000,  
         callback: (val) => {
           const num = Number(val);
-          return num >= 1000 ? (num / 1000).toFixed(1) + "k" : num.toString();
+          return num >= 1000 ? (num / 1000).toFixed(0) + "K" : num.toString();
         },
       },
       grid: {
@@ -135,7 +127,6 @@ const options: ChartOptions<"line"> = {
     },
   },
 };
-
 
   return (
     <div className="w-full mb-6 overflow-hidden">
@@ -147,14 +138,13 @@ const options: ChartOptions<"line"> = {
             </div>
             <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full mr-1 bg-(--secondary)"></div>
-                <h4>Tháng trước</h4>       
+                <h4>Tháng trước</h4>      
             
-            </div>        
-                        
+            </div>                            
 
 
         </div>
-      <Line options={options} data={data} />
+      <Line options={options} data={data} className='max-h-[300px]'/>
     </div>
   );
 }

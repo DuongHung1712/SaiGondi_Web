@@ -13,7 +13,7 @@ import {
   ChartOptions,
 } from "chart.js";
 
-import { top6Places, type Place } from  "../../assets/data/topPlace";;
+import { top6Places} from  "../../assets/data/topPlace";;
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -78,10 +78,12 @@ const TopPlacesBarChart: React.FC = () => {
         ticks: {
           maxTicksLimit: 5,
           autoSkip: false,
+          maxRotation: 30,  
+          minRotation: 0,  
           font: {
             family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-            size: 14,
-            weight: "bold",
+            size: 11,
+            weight: "normal",
           },              
           color:"#00000066",   
         },
