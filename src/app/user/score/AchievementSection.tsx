@@ -31,8 +31,8 @@ export default function AchievementSection() {
     const fetchData = async () => {
       try {
         const badgesData: BadgeType[] = await badgeApi.getUserBadges();
-        console.log('badgesData:', badgesData);
 
+        // Map dữ liệu frontend
         const badgesFrontend: BadgeFrontend[] = badgesData.map((b) => {
           const current = b.userProgress?.currentPoints || 0;
           const required = b.pointsRequired || 0;
@@ -41,7 +41,7 @@ export default function AchievementSection() {
           const progress = required ? Math.min((current / required) * 100, 100) : 0;
           const statusText = isEarned
             ? 'Đã chinh phục'
-            : `Còn thiếu ${required - current} điểm`;
+            : `Còn thiếu ${Math.max(required - current, 0)} điểm`;
 
           return {
             ...b,
@@ -50,13 +50,18 @@ export default function AchievementSection() {
             statusText,
             userProgress: {
               ...b.userProgress,
-              status: isEarned ? 'earned' : 'in_progress'
-            }
+              status: isEarned ? 'earned' : 'in_progress',
+            },
           };
         });
 
-        setBadges(badgesFrontend);
-        if (badgesFrontend.length > 0) setSelected(badgesFrontend[0]);
+        // 👉 Sort theo `pointsRequired` tăng dần (mốc thấp hơn hiển thị trước)
+        const sortedBadges = [...badgesFrontend].sort(
+          (a, b) => (a.pointsRequired || 0) - (b.pointsRequired || 0)
+        );
+
+        setBadges(sortedBadges);
+        if (sortedBadges.length > 0) setSelected(sortedBadges[0]);
       } catch (err) {
         console.error('API error:', err);
       }
@@ -64,6 +69,7 @@ export default function AchievementSection() {
 
     fetchData();
   }, []);
+
   const lastEarnedIndex = badges.reduce((maxIdx, b, idx) => {
     if (b.userProgress?.status === 'earned') {
       return idx;
@@ -85,6 +91,7 @@ export default function AchievementSection() {
         Xin chào, {firstName}
       </h1>
 
+      {/* Thanh tiến trình tổng */}
       <div className="w-full h-1.5 bg-gray-200 rounded-full mt-4 mb-8">
         <div
           className="h-full bg-blue-500 rounded-full transition-all duration-500"
@@ -92,6 +99,7 @@ export default function AchievementSection() {
         />
       </div>
 
+      {/* Danh sách badges */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10 lg:gap-20 mb-12">
         {badges.map((item, idx) => {
           const remainingPoints =
@@ -120,12 +128,16 @@ export default function AchievementSection() {
                   isEarned ? 'text-green-500' : 'text-gray-400'
                 }`}
               >
-                {isEarned ? 'Đã chinh phục' : `Còn thiếu ${remainingPoints} điểm`}
+                {isEarned
+                  ? 'Đã chinh phục'
+                  : `Còn thiếu ${Math.max(remainingPoints, 0)} điểm`}
               </p>
             </div>
           );
         })}
       </div>
+
+      {/* Badge chi tiết */}
       {selected && (
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
           <div className="bg-[#F8F8FC] rounded-xl shadow p-4 flex flex-col text-center items-center justify-center w-full lg:w-[250px]">
@@ -140,7 +152,7 @@ export default function AchievementSection() {
                   textColor: '#000',
                   pathColor: '#2563EB',
                   trailColor: '#E5E7EB',
-                  textSize: '18px'
+                  textSize: '18px',
                 })}
               />
             </div>
@@ -151,6 +163,7 @@ export default function AchievementSection() {
             </p>
           </div>
 
+          {/* Chi tiết điểm */}
           <div className="bg-[#F8F8FC] rounded-xl shadow p-6 lg:flex-[2]">
             <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
               ĐIỂM TỪ HOẠT ĐỘNG
@@ -159,7 +172,7 @@ export default function AchievementSection() {
               {[
                 { img: '/checkin.svg', label: 'Check-in' },
                 { img: '/review.svg', label: 'Viết đánh giá' },
-                { img: '/blog.svg', label: 'Viết Blog' }
+                { img: '/blog.svg', label: 'Viết Blog' },
               ].map((act, i) => (
                 <div key={i} className="flex items-center">
                   <Image
@@ -182,11 +195,12 @@ export default function AchievementSection() {
               ))}
             </div>
 
+            {/* Thanh tiến trình cho từng hoạt động */}
             <div className="space-y-4 sm:space-y-6">
               {[
                 { name: 'Check-in', color: '#76A7FE' },
                 { name: 'Viết đánh giá', color: '#FEECBA' },
-                { name: 'Viết Blog', color: '#8ACA90' }
+                { name: 'Viết Blog', color: '#8ACA90' },
               ].map((act, idx) => {
                 const points = selected.userProgress?.currentPoints || 0;
                 const maxPoints = selected.pointsRequired || 0;
@@ -210,7 +224,7 @@ export default function AchievementSection() {
                         className="h-full rounded-full"
                         style={{
                           width: `${scorePercent}%`,
-                          backgroundColor: act.color
+                          backgroundColor: act.color,
                         }}
                       />
                     </div>
