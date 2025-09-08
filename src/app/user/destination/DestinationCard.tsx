@@ -1,73 +1,104 @@
 import { useRouter } from 'next/navigation';
-import React from 'react'
-
-import { Destination, destinations } from "../../assets/data/destinations";
-
+import { Destination } from "@/app/assets/data/destinations";
+import Image from "next/image";
 
 interface Props {
-    destination: Destination
+  destination: Destination;
 }
 
-const DesnitationCard = ({destination}: Props) => {
+const DestinationCard = ({ destination }: Props) => {
+  console.log("Destination object:", destination);
+  const router = useRouter();
 
-    const router = useRouter()
-    
-    const handleClick = () => {
-        router.push(`/user/destination/${destination.id}`)
-    }
+  const handleClick = () => {
+    router.push(`/user/destination/${destination._id}`);
+  };
 
+  const imageUrl = destination.images?.[0] || "/image.svg";
 
   return (
-    
-    <div className="grid grid-cols-[30%_70%] mb-6 shadow-[0px_4px_16px_0px_#1122110D] pr-2" >
-        <img src="https://cms.intowild.travel/storage/2024-03-13/library-media/aCi8H6Q1xK6JqNwpB2Fn0EpD3wUVyhHgyIdaMNmC.jpg" alt=""
-        
-         className='rounded-tl-xl rounded-bl-xl w-full h-full object-cover' />
-        <div className="flex flex-col ml-4">
-            <div className="flex justify-between grid-cols-[70%_30%]">
-                <div className="flex flex-col space-y-2">
-                    <h2>{destination.name}</h2>
-                    <span className='text-[var(--primary)]'><i className="ri-map-pin-fill"></i>{destination.location}</span>
-                    <div className="lg:flex justify-between">
-                        <span className="flex items-center gap-1 text-yellow-500">
-                        {Array.from({ length: 5 }).map((_, index) => (
-                            <i
-                            key={index}
-                            className={
-                                index + 1 <= Math.floor(destination.rating)
-                                ? 'ri-star-fill'
-                                : index + 0.5 <= destination.rating
-                                ? 'ri-star-half-line'
-                                : 'ri-star-line'
-                            }
-                            />
-                            ))}
-                        </span>    
-                        <span className='text-[var(--primary)]'><i className="ri-cup-fill"></i>{destination.serviceCount} SERVICE</span>               
-                       
-                            
-                    </div>
-                    <div className="flex justify-between gap-6">
-                        <div className="border flex justify-center items-center p-4 rounded-md h-4 w-6 text-[var(--primary)]">{destination.rating}</div>
-                        <div className='text-[var(--primary)] font-bold'>{destination.status}</div>
-                        <div className="text-[var(--primary)] hidden md:blokc">{destination.reviewCount} Đánh giá</div>
-                    </div>
-                </div>
-                <div className="flex flex-col">
-                    <div className="bg-[var(--secondary)] text-white p-2">{destination.category}</div>
-                    <p className='text-right'>{destination.distance}</p>                    
-                </div>
+    <div className="grid grid-cols-[30%_70%] rounded-xl shadow-md bg-white overflow-hidden">
+      {/* Ảnh */}
+      <Image
+        alt={destination.name}
+        src={imageUrl}
+        width={400}
+        height={300}
+        unoptimized
+        className="w-full h-48 object-cover"
+      />
+
+      {/* Nội dung */}
+      <div className="flex flex-col p-4">
+        <div className="flex justify-between">
+          <div className="flex flex-col gap-1">
+            <h2 className="font-semibold">{destination.name}</h2>
+            <span className="text-[var(--primary)] flex items-center gap-1 text-sm">
+              <i className="ri-map-pin-fill"></i> {destination.location}
+            </span>
+
+            <div className="flex items-center gap-4 text-sm">
+              {/* Rating sao */}
+              <span className="flex items-center gap-1 text-yellow-500">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <i
+                    key={index}
+                    className={
+                      index + 1 <= Math.floor(destination.avgRating)
+                        ? 'ri-star-fill'
+                        : index + 0.5 <= destination.avgRating
+                          ? 'ri-star-half-line'
+                          : 'ri-star-line'
+                    }
+                  />
+                ))}
+              </span>
+
+              {/* Số service */}
+              <span className="text-[var(--primary)]">
+                <i className="ri-cup-fill"></i> {destination.serviceCount} SERVICE
+              </span>
             </div>
-            <span className="block h-px overflow-hidden bg-black origin-top scale-y-20 my-4 lg:my-8"/>
-            <div className="flex justify-between w-full">
-                <i className=" p-4 w-6 ri-heart-fill border border-[var(--primary)] rounded-sm h-10 flex justify-center items-center text-[var(--secondary)]"></i>
-                <button onClick={handleClick} className='btn-primary w-[70%] sm:w-[80%] h-10 rounded-3xl text-white overflow-hidden text-sm'>XEM CHI TIẾT</button>
+
+            {/* Rating + status */}
+            <div className="flex gap-4 items-center mt-2">
+              <div className="border px-3 py-1 rounded-md text-[var(--primary)] font-bold">
+                {destination.avgRating}
+              </div>
+              <div className="text-[var(--primary)] font-semibold">
+                {destination.status}
+              </div>
+              <div className="hidden md:block text-gray-500 text-sm">
+                {destination.reviewCount} Đánh giá
+              </div>
             </div>
+          </div>
+
+          {/* Category + distance */}
+          <div className="flex flex-col items-end text-sm">
+            <div className="bg-[var(--secondary)] text-white px-3 py-1 rounded-md">
+              {destination.category}
+            </div>
+            <p className="mt-2">{destination.distance}</p>
+          </div>
         </div>
+
+        {/* Divider */}
+        <span className="block h-px bg-gray-300 my-4" />
+
+        {/* Actions */}
+        <div className="flex justify-between items-center">
+          <i className="ri-heart-fill border border-[var(--primary)] rounded-md p-2 text-[var(--secondary)] cursor-pointer"></i>
+          <button
+            onClick={handleClick}
+            className="btn-primary w-[70%] sm:w-[80%] h-10 rounded-3xl text-white text-sm cursor-pointer"
+          >
+            XEM CHI TIẾT
+          </button>
+        </div>
+      </div>
     </div>
+  );
+};
 
-  )
-}
-
-export default DesnitationCard
-
+export default DestinationCard;
