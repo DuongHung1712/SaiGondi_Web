@@ -15,7 +15,6 @@ export default function MapBanner() {
       }
     }
   }, []);
-
   return (
     <section className="relative w-full py-10">
       <div className="max-w-6xl mx-auto flex flex-col items-center text-center px-4">
