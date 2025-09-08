@@ -3,15 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
-
-interface Post {
-  id: number;
-  title: string;
-  image: string;
-  author: string;
-  date: string;
-  content: string;
-}
+import Link from "next/link";
+import { Post } from "@/types/blog";
 
 export default function FeaturedPost({ posts }: { posts: Post[] }) {
   const [current, setCurrent] = useState(0);
@@ -24,16 +17,22 @@ export default function FeaturedPost({ posts }: { posts: Post[] }) {
   }, [posts.length]);
 
   const post = posts[current];
-
-  // chỉnh ngày theo format dd/mm/yyyy
   const dateObj = new Date(post.date);
-  const formattedDate = `${dateObj.getDate().toString().padStart(2, "0")}/${(dateObj.getMonth() + 1)
+  const formattedDate = `${dateObj.getDate().toString().padStart(2, "0")}/${(
+    dateObj.getMonth() + 1
+  )
     .toString()
     .padStart(2, "0")}/${dateObj.getFullYear()}`;
+
+  //Lấy text content đầu tiên từ mảng content
+  const previewText =
+    post.content.find((c) => c.type === "text")?.value?.slice(0, 200) ||
+    "Không có nội dung";
 
   return (
     <section className="w-full bg-[var(--background)] pt-16">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 px-4">
+        {/* Nội dung */}
         <div className="flex-1 order-2 md:order-1 text-center md:text-left">
           <p className="text-sm font-semibold tracking-wider text-[var(--gray-2)] mb-2">
             BÀI ĐĂNG NỔI BẬT
@@ -44,14 +43,15 @@ export default function FeaturedPost({ posts }: { posts: Post[] }) {
           <p className="text-sm text-[var(--gray-2)] mb-1">
             Người đăng: {post.author} | {formattedDate}
           </p>
-          <p className="text-[var(--gray-1)] mb-6">
-            {post.content.slice(0, 70)}...
-          </p>
-          <Button variant="primary">Đọc bài</Button>
+          <p className="text-[var(--gray-1)] mb-6">{previewText}...</p>
+          <Link href={`/user/blog/${post.slug}`} passHref>
+            <Button variant="primary">Đọc bài</Button>
+          </Link>
         </div>
 
+        {/* Hình ảnh */}
         <div className="w-full md:flex-1 order-1 md:order-2">
-          <div className="relative w-full h-[300px] md:w-[400px] md:h-[310px] lg:w-[450px] lg:h-[360px] overflow-hidden">
+          <div className="relative w-full h-[300px] md:w-[400px] md:h-[310px] lg:w-full lg:h-[360px] overflow-hidden">
             <Image
               src={post.image}
               alt={post.title}
@@ -63,6 +63,7 @@ export default function FeaturedPost({ posts }: { posts: Post[] }) {
         </div>
       </div>
 
+      {/* Chấm điều hướng */}
       <div className="flex justify-center mt-12 space-x-2">
         {posts.map((_, idx) => (
           <button

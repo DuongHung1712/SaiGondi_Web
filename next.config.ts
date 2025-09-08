@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "res.cloudinary.com", 
+        hostname: "res.cloudinary.com",
       },
       {
         protocol: "http",
@@ -18,6 +18,8 @@ const nextConfig: NextConfig = {
       {
         protocol: "http",
         hostname: "*", // Temporarily allow all hostnames for development
+        pathname: "/**", // cho phép tất cả đường dẫn
+
       },
     ],
   },

@@ -1,22 +1,33 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { LuCopy } from "react-icons/lu";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import { SiZalo } from "react-icons/si";
 
 export default function SocialShare() {
-  const currentUrl = encodeURIComponent(window.location.href);
+  const [currentUrl, setCurrentUrl] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentUrl(encodeURIComponent(window.location.href));
+    }
+  }, []);
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Đã copy link bài viết!");
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(window.location.href);
+      alert("Đã copy link bài viết!");
+    }
   };
 
   const handleShareFacebook = () => {
-    window.open(
-      `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`,
-      "_blank"
-    );
+    if (currentUrl) {
+      window.open(
+        `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`,
+        "_blank"
+      );
+    }
   };
 
   const handleShareInstagram = () => {
@@ -27,10 +38,9 @@ export default function SocialShare() {
   };
 
   const handleShareZalo = () => {
-    window.open(
-      `https://zalo.me/share?url=${currentUrl}`,
-      "_blank"
-    );
+    if (currentUrl) {
+      window.open(`https://zalo.me/share?url=${currentUrl}`, "_blank");
+    }
   };
 
   return (
