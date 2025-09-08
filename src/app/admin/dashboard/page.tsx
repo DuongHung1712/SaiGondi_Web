@@ -1,8 +1,7 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import SideBar from '../SideBar'
+import React, {useRef } from "react";
 import BackgroundBlur01 from '@/shared/BackgroundBlur01'
-import { IoTrendingDown, IoTrendingUp } from "react-icons/io5";
+import {IoTrendingUp } from "react-icons/io5";
 import CategoryChart from './CategoryChart';
 import TopPlaceChart from './TopPlaceChart';
 import MonthlyLineChart from './MonthlyUserData';
@@ -10,7 +9,7 @@ import {users } from '@/app/assets/data/user';
 import dynamic from "next/dynamic";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import AnimatedNumber from '../AnimatedNumber'
 
 const Slider = dynamic(() => import("react-slick"), { ssr: false }) as any;
 
@@ -54,70 +53,67 @@ const page = () => {
       
     };
 
-
   return <>
   <BackgroundBlur01/>
-  <div className="grid grid-cols-[20%_80%]   ">
-    <div className="border-r border-[#0000001A] ">
-      <SideBar/>
-    </div>
+
     <div className="flex flex-col xl:w-[90%] mx-auto ">
       <div className="flex gap-2 justify-end mt-6">
-        <h4>Username</h4>
+        <h4>hhh</h4>
         <img src="https://i.pinimg.com/736x/88/fb/12/88fb12fe971a35a0ad5ed2ea1dafcad0.jpg" alt="" 
         className='rounded-lg h-5 w-5'/>
         <i className="ri-arrow-down-s-fill"></i>
 
       </div>
-      <div id="card__groud" className='flex justify-between m-8 gap-4'>
-        <div className="flex flex-col rounded-2xl p-2 md:p-6  gap-2 bg-[#EDEEFC]">
-          <h4>Số địa điểm</h4>
-          <div className="flex gap-2 items-center ">
-            <h1>7.265</h1>
-            <span>+11.01% </span>
-            <IoTrendingUp />
+      <div id="card__groud" className='grid grid-cols-4 justify-between m-8 gap-2 lg:gap-8'>
+        <div className="flex flex-col rounded-2xl py-6 px-2 lg:p-6  gap-2 bg-[#EDEEFC] ">
+          <h4 className="text-sm lg:text-base font-bold text-center">Số địa điểm</h4>
+          <div className="flex flex-col lg:flex-row gap-2 items-center ">
+            <AnimatedNumber value={7265} />
+            <span className="text-xs flex">+11.01%  <IoTrendingUp /></span>
+
           </div>
         </div>
 
-        <div className="flex flex-col rounded-2xl p-2 md:p-6 gap-2 bg-[#E6F1FD]">
-          <h4>Số địa điểm</h4>
-          <div className="flex gap-2 items-center ">
-            <h1>7.265</h1>
-            <span>-11.01% </span>
-            <IoTrendingDown />
+        <div className="flex flex-col rounded-2xl py-6 px-2 lg:p-6 gap-2 bg-[#E6F1FD]">
+          <h4 className="text-sm lg:text-base font-bold text-center">Lượt truy cập</h4>
+          <div className="flex flex-col lg:flex-row gap-2 items-center ">
+             <AnimatedNumber value={7128} />
+             <span className="text-xs flex">+11.01%  <IoTrendingUp /></span>
+
           </div>
         </div>
 
-        <div className="flex flex-col rounded-2xl p-2 md:p-6  gap-2 bg-[#EDEEFC]">
-          <h4>Số địa điểm</h4>
-          <div className="flex gap-2 items-center ">
-            <h1>7.265</h1>
-            <span>+11.01% </span>
-            <IoTrendingUp />
+        <div className="flex flex-col rounded-2xl py-6 px-1 lg:p-6  gap-2 bg-[#EDEEFC]">
+          <h4 className="text-sm lg:text-base font-bold text-center">Số người dùng</h4>
+          <div className="flex flex-col lg:flex-row gap-2 items-center ">
+            <AnimatedNumber value={7265} />
+            <span className="text-xs flex">+11.01%  <IoTrendingUp /></span>
+    
           </div>
         </div>
 
-        <div className="flex flex-col rounded-2xl  p-2 md:p-6  gap-2 bg-[#E6F1FD]">
-          <h4>Số địa điểm</h4>
-          <div className="flex gap-2 items-center ">
-            <h1>7.265</h1>
-            <span>+11.01% </span>
-            <IoTrendingUp />
+        <div className="flex flex-col rounded-2xl py-6 px-2 lg:p-6 gap-2 bg-[#E6F1FD]">
+          <h4 className="text-sm lg:text-base font-bold text-center">Số bài viết</h4>
+          <div className="flex flex-col lg:flex-row gap-2 items-center ">
+            <AnimatedNumber value={7265} />
+            <span className="text-xs flex">+11.01%  <IoTrendingUp /></span>
+           
           </div>
         </div>
       </div>
 
-      <div id="chart__group" className='grid grid-cols-2 gap-4 px-6'>
+      <div id="chart__group" className='grid grid-cols-1 md:grid-cols-2 gap-4 px-6'>
         <div id="chart__1" className="bg-[#F9F9FA] rounded-xl px-4">
           <TopPlaceChart/>
         </div>
         <div id="chart__2" className='bg-[#F9F9FA] rounded-xl'>
           <CategoryChart/>
         </div>
-
       </div>
-      <div className="w-[96%] mx-auto bg-[#F9F9FA] mt-8 px-4">
-        <MonthlyLineChart/>
+      <div className="w-[96%] mx-auto bg-[#F9F9FA] mt-8 px-4 max-h-[400px]">
+        <div className="w-full h-full">
+          <MonthlyLineChart/>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 flex gap-8  mt-8 mx-6 ">
@@ -139,9 +135,6 @@ const page = () => {
                 <i className="ri-arrow-right-s-line text-xl lg:text-3xl xl:text-5xl text-gray-400"></i>
               </button>  
           </div>
-
-
-
         </div>
 
         <div className="flex flex-col w-full justify-center">
@@ -165,15 +158,7 @@ const page = () => {
           </div>
       </div>
     </div>
-  </div>
-
-
-  
-  
-  
   </>
-    
-
 }
 
 export default page
