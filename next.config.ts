@@ -5,21 +5,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "res.cloudinary.com",
-      },
-      {
-        protocol: "http",
-        hostname: "localhost",
-      },
-      {
-        protocol: "https",
-        hostname: "*", // Temporarily allow all hostnames for development
-      },
-      {
-        protocol: "http",
-        hostname: "*", // Temporarily allow all hostnames for development
-        pathname: "/**", // cho phép tất cả đường dẫn
-
+  hostname: "res.cloudinary.com", // cho phép load ảnh từ Cloudinary
+  pathname: "/**", // cho phép tất cả đường dẫn
+},
+{
+  protocol: "https",
+  hostname: "upload.wikimedia.org", 
+  pathname: "/**",
       },
     ],
   },

@@ -1,16 +1,30 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DestinationCard from '@/components/cards/DestinationCard';
 import Button from '@/components/ui/Button';
-
-const recommendedPlaces = [
-  { title: 'PHƯỜNG THỦ ĐỨC', location: 'Phường Bàn Cờ', distance: 'Cách bạn 90m', image: '/hot-destination.svg' },
-  { title: 'PHƯỜNG BÀN CỜ', location: 'Phường Bàn Cờ', distance: 'Cách bạn 90m', image: '/hot-destination.svg' },
-  { title: 'PHƯỜNG LINH XUÂN', location: 'Phường Bàn Cờ', distance: 'Cách bạn 90m', image: '/hot-destination.svg' },
-];
+import { placeApi } from '@/lib/place/placeApi';
+import { Place } from '@/types/place';
 
 export default function RecommendedPlaces() {
+  const [places, setPlaces] = useState<Place[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNearbyPlaces = async () => {
+      try {
+        const data = await placeApi.getNearbyPlaces();
+        setPlaces(data || []);
+      } catch (err) {
+        console.error("Lỗi khi load địa điểm gợi ý:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNearbyPlaces();
+  }, []);
+
   return (
     <section className="py-12 px-4">
       <div className="max-w-6xl mx-auto">
@@ -20,7 +34,7 @@ export default function RecommendedPlaces() {
               ĐỊA ĐIỂM GỢI Ý
             </h2>
             <p className="text-sm text-gray-500 mt-1">
-              Kỳ nghỉ giúp bạn có trải nghiệm thú vị tại Sài Gòn!
+              Gần vị trí bạn vừa checkin
             </p>
           </div>
           <Button
@@ -30,11 +44,24 @@ export default function RecommendedPlaces() {
             Xem tất cả
           </Button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {recommendedPlaces.map((place, idx) => (
-            <DestinationCard key={idx} {...place} />
-          ))}
-        </div>
+
+        {loading ? (
+          <p>Đang tải địa điểm gợi ý...</p>
+        ) : places.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {places.map((place, idx) => (
+              <DestinationCard
+                key={idx}
+                title={place.name}
+                location={place.address}
+                distance="—"
+                image={place.images?.[0] || '/hot-destination.svg'}
+              />
+            ))}
+          </div>
+        ) : (
+          <p>Không có địa điểm gợi ý nào.</p>
+        )}
       </div>
     </section>
   );

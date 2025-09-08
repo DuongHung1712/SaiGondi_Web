@@ -1,8 +1,33 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DestinationCard from '@/components/cards/DestinationCard';
 import { FiMinus, FiPlus } from 'react-icons/fi';
+import { checkinApi } from '@/lib/checkin/checkinApi';
+
+type Ward = {
+  _id: string;
+  name: string;
+  type: string;
+};
+
+type Place = {
+  _id: string;
+  name: string;
+  address: string;
+  ward: string | Ward;
+  district: string;
+  avgRating: number;
+  totalRatings: number;
+  images?: string[]; 
+};
+
+type Checkin = {
+  _id: string;
+  placeId: Place;
+  note?: string;
+  checkinTime: string;
+};
 
 type PlaceGroup = {
   group: string;
@@ -14,24 +39,45 @@ type PlaceGroup = {
   }[];
 };
 
-const data: PlaceGroup[] = [
-  {
-    group: 'Phường Vũng Tàu',
-    destinations: [
-      { title: 'PHƯỜNG LINH XUÂN', location: 'Phường Bàn Cờ', distance: 'Cách bạn 90m', image: '/hot-destination.svg' },
-      { title: 'PHƯỜNG LINH XUÂN', location: 'Phường Bàn Cờ', distance: 'Cách bạn 90m', image: '/hot-destination.svg' },
-      { title: 'PHƯỜNG LINH XUÂN', location: 'Phường Bàn Cờ', distance: 'Cách bạn 90m', image: '/hot-destination.svg' },
-      { title: 'PHƯỜNG LINH XUÂN', location: 'Phường Bàn Cờ', distance: 'Cách bạn 90m', image: '/hot-destination.svg' },
-    ],
-  },
-  { group: 'Phường Chợ Lớn', destinations: [] },
-  { group: 'Phường Tân Đông Hoà', destinations: [] },
-  { group: 'Phường Thủ Đức', destinations: [] },
-  { group: 'Phường Cầu Kiệu', destinations: [] },
-];
-
 const CheckinAccordion = () => {
-  const [openGroup, setOpenGroup] = useState<string | null>(data[0].group);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [groups, setGroups] = useState<PlaceGroup[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const checkins = await checkinApi.getUserCheckins();
+
+        const groupMap: Record<string, PlaceGroup> = {};
+        checkins.forEach((c: Checkin) => {
+        const wardName =
+          typeof c.placeId.ward === "object"
+            ? c.placeId.ward.name
+            : c.placeId.ward || "Khác";
+
+        if (!groupMap[wardName]) {
+          groupMap[wardName] = { group: wardName, destinations: [] };
+        }
+
+        groupMap[wardName].destinations.push({
+          title: c.placeId.name,
+          location: c.placeId.address || '',
+          distance: '—', 
+          image: c.placeId.images?.[0] || '/hot-destination.svg',
+        });
+      });
+
+
+        const groupArr = Object.values(groupMap);
+        setGroups(groupArr);
+        if (groupArr.length > 0) setOpenGroup(groupArr[0].group);
+      } catch (err) {
+        console.error('Lỗi khi load checkins:', err);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const toggleGroup = (group: string) => {
     setOpenGroup(openGroup === group ? null : group);
@@ -41,28 +87,31 @@ const CheckinAccordion = () => {
     <section className="py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold">CÁC ĐỊA ĐIỂM BẠN ĐÃ CHECKIN</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold">
+            CÁC ĐỊA ĐIỂM BẠN ĐÃ CHECKIN
+          </h2>
           <p className="text-sm text-gray-500 mt-5">
             Kỳ nghỉ giúp bạn có trải nghiệm thú vị tại Sài Gòn!
           </p>
         </div>
+
         <div className="space-y-6">
-          {data.map((item) => {
+          {groups.map((item) => {
             const isOpen = openGroup === item.group;
 
             return (
               <div
                 key={item.group}
                 className={`overflow-hidden rounded-lg transition-all duration-300 ${
-                  isOpen ? "mb-6" : "mb-3"
+                  isOpen ? 'mb-6' : 'mb-3'
                 }`}
               >
                 <button
                   onClick={() => toggleGroup(item.group)}
                   className={`w-full flex items-center justify-between px-4 py-3 font-medium text-left transition-all duration-300 ${
                     isOpen
-                      ? "bg-[#91B9FF] rounded-lg text-2xl"
-                      : "bg-[#F2F7FF]"
+                      ? 'bg-[#91B9FF] rounded-lg text-2xl'
+                      : 'bg-[#F2F7FF]'
                   }`}
                 >
                   <span>{item.group}</span>
@@ -85,7 +134,6 @@ const CheckinAccordion = () => {
             );
           })}
         </div>
-
       </div>
     </section>
   );
