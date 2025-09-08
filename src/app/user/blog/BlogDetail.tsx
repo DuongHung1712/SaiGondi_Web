@@ -1,30 +1,45 @@
 'use client';
 
 import Image from 'next/image';
-import { FaRegHeart, FaRegComment, FaShareAlt, FaHeart } from 'react-icons/fa';
+import { FaRegHeart, FaRegComment, FaHeart } from 'react-icons/fa';
 import { LuCopy, LuShare2 } from 'react-icons/lu';
 import { RiCalendar2Line } from 'react-icons/ri';
 import { useEffect, useRef, useState } from 'react';
 import { PiShareFat } from 'react-icons/pi';
 import Link from 'next/link';
 import { Post } from '@/types/blog';
+import { mapBlogToPost } from '@/lib/blog/mapBlogToPost';
+import Button from '@/components/ui/Button';
+import { blogApi } from '@/lib/blog/blogApi';
 
 type BlogDetailProps = {
-  post: Post;
+  post: any;
 };
 
 export default function BlogDetail({ post }: BlogDetailProps) {
-  const [liked, setLiked] = useState(false);
+  post = mapBlogToPost(post);
+  const currentUserId = typeof window !== "undefined" ? localStorage.getItem("userId") : null; //đang lấy userId từ localStorage
+
+  const [liked, setLiked] = useState(
+    currentUserId ? post.likeBy.includes(currentUserId) : false
+  );
   const [likeCount, setLikeCount] = useState(post.totalLikes);
   const [showShareMenu, setShowShareMenu] = useState(false);
 
+  const [visibleCount, setVisibleCount] = useState(3);
   const commentRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleLike = () => {
-    if (liked) setLikeCount((prev) => prev - 1);
-    else setLikeCount((prev) => prev + 1);
-    setLiked(!liked);
+  const toggleLike = async () => {
+    try {
+      const updatedBlog = await blogApi.likeBlog(post.id);
+      setLikeCount(updatedBlog.totalLikes);
+      if (currentUserId) {
+        setLiked(updatedBlog.likeBy.includes(currentUserId));
+      }
+    } catch (err) {
+      console.error("Lỗi khi like blog:", err);
+    }
   };
 
   const scrollToComments = () => {
@@ -61,17 +76,21 @@ export default function BlogDetail({ post }: BlogDetailProps) {
 
       {/* Categories + Tags */}
       <div className="flex flex-wrap gap-2 mb-4">
-        <span className="inline-block bg-[#F2F8F7] text-sm text-[var(--gray-1)] font-medium px-3 py-1 rounded-md">
-          {post.category}
-        </span>
-        {post.tags?.map((tag, idx) => (
-          <span
-            key={idx}
-            className="inline-block bg-gray-100 text-sm text-gray-600 px-3 py-1 rounded-md"
-          >
-            #{tag}
+        {post.categories?.length > 0 ? (
+          post.categories.map((cat: string, idx: number) => (
+            <span
+              key={idx}
+              className="inline-block bg-[#F2F8F7] text-sm text-[var(--gray-1)] font-medium px-3 py-1 rounded-md"
+            >
+              {cat}
+            </span>
+          ))
+        ) : (
+          <span className="inline-block bg-[#F2F8F7] text-sm text-[var(--gray-1)] font-medium px-3 py-1 rounded-md">
+            Chưa phân loại
           </span>
-        ))}
+        )}
+        
       </div>
 
       {/* Thông tin tác giả + like/share */}
@@ -79,19 +98,21 @@ export default function BlogDetail({ post }: BlogDetailProps) {
         <div className="flex items-center gap-2">
           <Link href={`/user/profile`} className="flex items-center gap-2">
             <Image
-              src={post.authorAvatar}
-              alt={post.author}
-              width={32}
-              height={32}
-              className="rounded-full object-cover"
+              src={post.authorAvatar || '/Logo.svg'}
+              alt={post.author || 'Ẩn danh'}
+              width={20}
+              height={20}
+              className="object-cover rounded-full"
             />
-            <span>{post.author}</span>
+            <span>{post.author || 'Ẩn danh'}</span>
           </Link>
           <span className="mx-1 text-[var(--gray-2)]">|</span>
-          <div className="flex items-center gap-1">
+          <span className="flex items-center gap-1">
             <RiCalendar2Line className="text-[var(--gray-2)]" />
-            <span>{new Date(post.date).toLocaleDateString('vi-VN')}</span>
-          </div>
+            {post.date
+              ? new Date(post.date).toLocaleDateString('vi-VN')
+              : 'Không rõ ngày'}
+          </span>
         </div>
 
         <div className="flex items-center gap-4 text-[var(--foreground)] text-base mt-2 sm:mt-0">
@@ -149,7 +170,7 @@ export default function BlogDetail({ post }: BlogDetailProps) {
 
       {/* Nội dung */}
       <article className="prose prose-lg max-w-none text-justify text-[var(--foreground)] space-y-6">
-        {post.content.map((block, idx) => {
+        {post.content?.map((block: Post['content'][0], idx: number) => {
           if (block.type === 'text') {
             return <p key={idx}>{block.value}</p>;
           }
@@ -157,7 +178,7 @@ export default function BlogDetail({ post }: BlogDetailProps) {
             return (
               <div key={idx} className="flex justify-center my-6">
                 <Image
-                  src={block.url}
+                  src={block.url || '/Logo.svg'}
                   alt={block.value || `image-${idx}`}
                   width={800}
                   height={600}
@@ -177,26 +198,54 @@ export default function BlogDetail({ post }: BlogDetailProps) {
         })}
       </article>
 
+      <div className="flex flex-wrap gap-2 mb-4 mt-5">
+        {post.tags?.map((tag: string, idx: number) => (
+          <span
+            key={idx}
+            className="inline-block bg-gray-100 text-sm text-gray-600 px-3 py-1 rounded-md"
+          >
+            #{tag}
+          </span>
+      ))}
+      </div>
+      
       {/* Album */}
       {post.album && post.album.length > 0 && (
         <div className="mt-8">
           <h2 className="text-xl font-semibold mb-4">Album</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {post.album.map((item, idx) => (
-              <div key={idx} className="relative w-full h-56">
+
+          <div className="flex flex-col gap-6">
+            {post.album.slice(0, visibleCount).map((item: Post['album'][0], idx: number) => (
+              <div key={idx} className="w-full relative aspect-video rounded-lg overflow-hidden">
                 {item.type === 'image' ? (
                   <Image
-                    src={item.url}
-                    alt={item.caption || 'album'}
+                    src={item.url || '/Logo.svg'}
+                    alt={item.caption || `album-${idx}`}
                     fill
-                    className="object-cover rounded-lg"
+                    className="object-cover"
                   />
                 ) : (
-                  <video src={item.url} controls className="w-full h-full object-cover rounded-lg" />
+                  <video
+                    src={item.url}
+                    controls
+                    className="w-full h-full object-cover"
+                  />
                 )}
               </div>
             ))}
           </div>
+
+          {visibleCount < post.album.length && (
+            <div className="mt-4 text-center">
+              <Button
+                variant="primary"
+                className="px-6 py-2"
+                onClick={() => setVisibleCount((prev: number) => prev + 3)}
+              >
+                Xem thêm
+              </Button>
+            </div>
+          )}
         </div>
       )}
       <div ref={commentRef}></div>

@@ -11,7 +11,7 @@ export function mapBlogToPost(blog: any): Post {
 
     // categories
     category: blog.categories?.[0] || "Chưa phân loại",
-    categories: blog.categories || [],
+    categories: blog.categories || [], //lịch trình, kinh nghiệm, Sự kiện, Ảnh đẹp, Ẩm thực đặc sắc, Review chi tiết, top-list gợi ý
     tags: blog.tags || [],
 
     // author
@@ -24,15 +24,17 @@ export function mapBlogToPost(blog: any): Post {
 
     // time & location
     date: blog.createdAt,
-    address: blog.locationDetail || blog.ward?.name || blog.province || "",
+    address: blog.locationDetail || "", //address: blog.locationDetail || blog.ward?.name || blog.province || "",
+    ward: blog.ward?.name || "",
 
     // content & album
-    content: blog.content || [],
-    album: blog.album || [],
+    content: Array.isArray(blog.content) ? blog.content : [],
+    album: Array.isArray(blog.album) ? blog.album : [],
 
     // privacy & interactions
     privacy: blog.privacy || "public",
-    totalLikes: blog.totalLikes || 0,
+    likeBy: blog.likeBy || [],
+    totalLikes: blog.likeBy?.length || 0,
     totalComments: blog.totalComments || 0,
     shareCount: blog.shareCount || 0,
     viewCount: blog.viewCount || 0,

@@ -1,5 +1,6 @@
 // src/lib/blog/blogApi.ts
 import axios from "axios";
+import axiosInstance from "../axiosInstance";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
@@ -22,90 +23,64 @@ export const blogApi = {
   // Lấy chi tiết blog theo id
   getBlogById: async (id: string) => {
     const res = await axios.get(`${API_URL}/blogs/${id}`);
-    return res.data;
+    return res.data.data;
   },
 
   // Lấy chi tiết blog theo slug
   getBlogBySlug: async (slug: string) => {
     const res = await axios.get(`${API_URL}/blogs/slug/${slug}`);
-    return res.data;
+    return res.data.data;
   },
 
   // Tạo blog mới
-  createBlog: async (formData: FormData, token: string) => {
-    const res = await axios.post(`${API_URL}/blogs`, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data"
-      }
+  createBlog: async (formData: FormData) => {
+    const res = await axiosInstance.post("/blogs", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
     });
     return res.data;
   },
 
   // Cập nhật blog
-  updateBlog: async (id: string, formData: FormData, token: string) => {
-    const res = await axios.put(`${API_URL}/blogs/${id}`, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data"
-      }
+  updateBlog: async (id: string, formData: FormData) => {
+    const res = await axiosInstance.put(`/blogs/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" }
     });
     return res.data;
   },
 
   // Xóa blog
-  deleteBlog: async (id: string, token: string) => {
-    const res = await axios.delete(`${API_URL}/blogs/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+  deleteBlog: async (id: string) => {
+    const res = await axiosInstance.delete(`/blogs/${id}`);
     return res.data;
   },
 
   // Like hoặc bỏ like blog
-  likeBlog: async (id: string, token: string) => {
-    const res = await axios.patch(
-      `${API_URL}/blogs/${id}/like`,
-      {},
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    return res.data;
+  likeBlog: async (id: string) => {
+    const res = await axiosInstance.patch(`/blogs/${id}/like`);
+    return res.data.data;
   },
 
   // Chia sẻ blog
-  shareBlog: async (id: string, token: string) => {
-    const res = await axios.post(
-      `${API_URL}/blogs/${id}/share`,
-      {},
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+  shareBlog: async (id: string) => {
+    const res = await axiosInstance.post(`/blogs/${id}/share`);
     return res.data;
   },
 
   // Cập nhật quyền riêng tư blog
-  updateBlogPrivacy: async (id: string, privacy: "public" | "private", token: string) => {
-    const res = await axios.patch(
-      `${API_URL}/blogs/${id}/privacy`,
-      { privacy },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+  updateBlogPrivacy: async (id: string, privacy: "public" | "private") => {
+    const res = await axiosInstance.patch(`/blogs/${id}/privacy`, { privacy });
     return res.data;
   },
 
   // Cập nhật trạng thái blog (vd: draft/published)
-  updateBlogStatus: async (id: string, status: string, token: string) => {
-    const res = await axios.patch(
-      `${API_URL}/blogs/${id}/status`,
-      { status },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+  updateBlogStatus: async (id: string, status: string) => {
+    const res = await axiosInstance.patch(`/blogs/${id}/status`, { status });
     return res.data;
   },
 
   // Lấy danh sách blog theo tác giả
-  getBlogsByAuthor: async (authorId: string, token: string) => {
-    const res = await axios.get(`${API_URL}/blogs/author/${authorId}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+  getBlogsByAuthor: async (authorId: string) => {
+    const res = await axiosInstance.get(`/blogs/author/${authorId}`);
     return res.data;
   }
 };

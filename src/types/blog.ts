@@ -17,6 +17,7 @@ export interface Post {
   // Thông tin thời gian & địa điểm
   date: string;
   address: string;
+  ward: string;
 
   // Nội dung chính
   content: {
@@ -36,6 +37,7 @@ export interface Post {
   privacy: "public" | "private" | "friends-only" | "pending";
 
   // Tương tác
+  likeBy: string[]; // danh sách userId đã like
   totalLikes: number;
   totalComments: number; 
   shareCount: number;

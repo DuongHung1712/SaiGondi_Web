@@ -67,7 +67,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
           <div className="flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-1">
               <FaMapMarkerAlt className="text-[var(--secondary)]" />
-              <span>{post.address}</span>
+              <span>{post.ward}</span>
             </div>
             <div className="flex items-center gap-1">
               <FaRegCommentDots className="text-[var(--gray-2)]" />
