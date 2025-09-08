@@ -19,8 +19,14 @@ const useUser = () => {
         try {
           const userData = await authApi.getProfile(token);
           const userProfile = userData?.user || userData; // Handle both {user: ...} and direct user object
+
+          // Standardize user ID to _id for consistency
+          if (userProfile && userProfile.userId && !userProfile._id) {
+            userProfile._id = userProfile.userId;
+          }
+          
           if (userProfile && userProfile._id) { // Check for a valid user object
-            setUser(userProfile);
+            setUser(userProfile as User);
             setIsAuthenticated(true);
           } else {
             // Token might be invalid/expired or data is not in expected format
