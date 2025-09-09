@@ -10,6 +10,7 @@ interface PlaceResponse {
     page: number;
     totalPages: number;
     limit: number;
+    ward?: { _id: string; name: string };
   };
 }
 

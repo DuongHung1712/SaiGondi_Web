@@ -23,14 +23,14 @@ export const checkinApi = {
     return res.data.data;
   },
 
-  createCheckin: async (placeId: string, data: CheckinPayload) => {
+  createCheckin: async (placeId: string, data: CheckinPayload, placeCoords?: [number, number]) => {
     const token = localStorage.getItem("accessToken");
 
     const payload: CheckinPayload = {
       note: data.note || "",
       location: data.location || {
         type: "Point",
-        coordinates: [106.7, 10.8], 
+        coordinates: placeCoords || [106.7, 10.8],
       },
       device: data.device || "Unknown Device",
       imgList: data.imgList || [],
