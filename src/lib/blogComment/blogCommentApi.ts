@@ -1,47 +1,43 @@
 import axios from "axios";
+import axiosInstance from "../axiosInstance";
 
-const API_URL = "http://localhost:5000/api/comments";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
-// Lấy tất cả comment theo blogId
-export const fetchCommentsByBlog = async (blogId: string) => {
-  const res = await axios.get(`${API_URL}/${blogId}`);
-  return res.data.data; // BE trả {success, data}
-};
+export const blogCommentApi = {
+  // Lấy tất cả comment theo blogId
+  getCommentsByBlog: async (
+    blogId: string,
+    params?: { page?: number; limit?: number }
+  ) => {
+    const res = await axios.get(`${API_URL}/comments/${blogId}`, { params });
+    return {
+      comments: res.data.data,
+      pagination: res.data.pagination,
+      count: res.data.count,
+    };
+  },
 
-// Tạo comment mới
-export const createComment = async (blogId: string, content: string, token: string) => {
-  const res = await axios.post(
-    `${API_URL}/${blogId}`,
-    { content },
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-  return res.data.data;
-};
+  // Tạo comment mới
+  createComment: async (blogId: string, content: string) => {
+    const res = await axiosInstance.post(`/comments/${blogId}`, { content });
+    return res.data.data;
+  },
 
-// Cập nhật comment
-export const updateComment = async (id: string, content: string, token: string) => {
-  const res = await axios.patch(
-    `${API_URL}/${id}`,
-    { content },
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-  return res.data.data;
-};
+  // Cập nhật comment
+  updateComment: async (id: string, content: string) => {
+    const res = await axiosInstance.patch(`/comments/${id}`, { content });
+    return res.data.data;
+  },
 
-// Xóa comment
-export const deleteComment = async (id: string, token: string) => {
-  const res = await axios.delete(`${API_URL}/${id}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  return res.data.data;
-};
+  // Xóa comment
+  deleteComment: async (id: string) => {
+    const res = await axiosInstance.delete(`/comments/${id}`);
+    return res.data;
+  },
 
-// Like / Unlike comment
-export const likeComment = async (id: string, token: string) => {
-  const res = await axios.patch(
-    `${API_URL}/like/${id}`,
-    {},
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-  return res.data.data;
+  // Like / Unlike comment
+  likeComment: async (id: string) => {
+    const res = await axiosInstance.patch(`/comments/like/${id}`);
+    return res.data.data;
+  }
 };

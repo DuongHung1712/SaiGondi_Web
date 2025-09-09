@@ -79,8 +79,8 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <BlogDetail post={post} />
               {/* Social share */}
               <SocialShare />
-              <ReviewSection reviews={dataReviews} />
-              <CommentBox />
+              <ReviewSection blogId={post._id} />
+              {/* <CommentBox blogId={post._id} /> */}
             </div>
 
             {/* Sidebar */}
