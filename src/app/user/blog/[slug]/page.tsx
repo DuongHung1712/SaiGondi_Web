@@ -5,7 +5,7 @@ import BlogDetail from '../BlogDetail';
 import FeaturedBloggers from '../FeaturedBloggers';
 import RecentPosts from '../RecentPosts';
 import PopularPostsSection from '../../home/PopularPostsSection';
-import ReviewSection from '../ReviewSection';
+import CommentSection from '../CommentSection';
 import { dataReviews } from '@/data/dataReviews';
 import CommentBox from '../CommentBox';
 import Image from 'next/image';
@@ -79,8 +79,8 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <BlogDetail post={post} />
               {/* Social share */}
               <SocialShare />
-              <ReviewSection blogId={post._id} />
-              {/* <CommentBox blogId={post._id} /> */}
+              <CommentSection blogId={post._id} />
+              <CommentBox blogId={post._id} />
             </div>
 
             {/* Sidebar */}

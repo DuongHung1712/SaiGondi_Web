@@ -8,11 +8,11 @@ import { BlogComment } from '@/types/blogComment';
 import { blogCommentApi } from '@/lib/blogComment/blogCommentApi';
 import { FiX } from 'react-icons/fi';
 
-type ReviewCardProps = {
+type CommentCardProps = {
   comment: BlogComment;
 };
 
-const ReviewCard = ({ comment }: ReviewCardProps) => {
+const CommentCard = ({ comment }: CommentCardProps) => {
   const [likes, setLikes] = useState(comment.totalLikes || 0);
   const [liked, setLiked] = useState(false);
   const [popupImage, setPopupImage] = useState<string | null>(null);
@@ -110,4 +110,4 @@ const ReviewCard = ({ comment }: ReviewCardProps) => {
   );
 };
 
-export default ReviewCard;
+export default CommentCard;

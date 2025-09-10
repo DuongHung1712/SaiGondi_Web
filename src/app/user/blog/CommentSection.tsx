@@ -1,18 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import ReviewCard from './ReviewCard';
+import CommentCard from './CommentCard';
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
 import { blogCommentApi } from '@/lib/blogComment/blogCommentApi';
 import { BlogComment } from '@/types/blogComment';
 
-type ReviewSectionProps = {
+type CommentSectionProps = {
   blogId: string;
 };
 
 // const REVIEWS_PER_PAGE = 5;
 
-const ReviewSection = ({ blogId }: ReviewSectionProps) => {
+const CommentSection = ({ blogId }: CommentSectionProps) => {
   const [comments, setComments] = useState<BlogComment[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -37,7 +37,7 @@ const ReviewSection = ({ blogId }: ReviewSectionProps) => {
   return (
     <div className="space-y-2">
       {comments.length > 0 ? (
-        comments.map((c) => <ReviewCard key={c._id} comment={c} />)
+        comments.map((c) => <CommentCard key={c._id} comment={c} />)
       ) : (
         <p className="text-sm text-gray-500">Chưa có bình luận nào.</p>
       )}
@@ -67,4 +67,4 @@ const ReviewSection = ({ blogId }: ReviewSectionProps) => {
   );
 };
 
-export default ReviewSection;
+export default CommentSection;

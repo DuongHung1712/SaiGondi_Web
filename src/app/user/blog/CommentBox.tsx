@@ -2,20 +2,34 @@
 
 import React, { useState } from 'react';
 import Button from '@/components/ui/Button';
+import { blogCommentApi } from '@/lib/blogComment/blogCommentApi';
 
-const CommentBox = () => {
+type CommentBoxProps = {
+  blogId: string;
+  onCommentAdded?: (comment: any) => void; // callback để update list
+};
+
+const CommentBox = ({ blogId, onCommentAdded }: CommentBoxProps) => {
   const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
-    if (content.trim()) {
-      // Gửi bình luận ở đây
-      console.log('Gửi bình luận:', content);
+  const handleSubmit = async () => {
+    if (!content.trim()) return;
+
+    try {
+      setLoading(true);
+      const newComment = await blogCommentApi.createComment(blogId, content);
       setContent('');
+      if (onCommentAdded) onCommentAdded(newComment); // cập nhật list
+    } catch (err) {
+      console.error('Lỗi khi gửi bình luận:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="pt-4 ">
+    <div className="pt-4">
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
@@ -27,8 +41,9 @@ const CommentBox = () => {
           onClick={handleSubmit}
           variant="primary"
           className="rounded-full px-4 py-1 text-sm focus:outline-none"
+          disabled={loading}
         >
-          Bình luận
+          {loading ? 'Đang gửi...' : 'Bình luận'}
         </Button>
       </div>
     </div>
