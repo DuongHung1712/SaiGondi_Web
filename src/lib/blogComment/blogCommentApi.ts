@@ -18,14 +18,23 @@ export const blogCommentApi = {
   },
 
   // Tạo comment mới
-  createComment: async (blogId: string, content: string) => {
-    const res = await axiosInstance.post(`/comments/${blogId}`, { content });
+  createComment: async (blogId: string, comment: string, images?: File[]) => {
+    const formData = new FormData();
+    formData.append("comment", comment);
+    if (images && images.length > 0) {
+      images.forEach((file) => {
+        formData.append("images", file); // key "images" phải trùng với BE multer
+      });
+    }
+    const res = await axiosInstance.post(`/comments/${blogId}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     return res.data.data;
   },
 
   // Cập nhật comment
-  updateComment: async (id: string, content: string) => {
-    const res = await axiosInstance.patch(`/comments/${id}`, { content });
+  updateComment: async (id: string, comment: string) => {
+    const res = await axiosInstance.patch(`/comments/${id}`, { comment });
     return res.data.data;
   },
 

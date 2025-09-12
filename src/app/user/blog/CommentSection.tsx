@@ -5,14 +5,14 @@ import CommentCard from './CommentCard';
 import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
 import { blogCommentApi } from '@/lib/blogComment/blogCommentApi';
 import { BlogComment } from '@/types/blogComment';
+import CommentBox from './CommentBox';
 
 type CommentSectionProps = {
   blogId: string;
+  onCommentAdded?: (comment: BlogComment) => void;
 };
 
-// const REVIEWS_PER_PAGE = 5;
-
-const CommentSection = ({ blogId }: CommentSectionProps) => {
+const CommentSection = ({ blogId, onCommentAdded }: CommentSectionProps) => {
   const [comments, setComments] = useState<BlogComment[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -21,8 +21,7 @@ const CommentSection = ({ blogId }: CommentSectionProps) => {
     const fetchComments = async () => {
       try {
         const { comments, pagination } = await blogCommentApi.getCommentsByBlog(blogId, {
-          page: currentPage,
-          // limit: REVIEWS_PER_PAGE,
+          page: currentPage, 
         });
 
         setComments(comments);
@@ -33,6 +32,10 @@ const CommentSection = ({ blogId }: CommentSectionProps) => {
     };
     fetchComments();
   }, [blogId, currentPage]);
+
+  const handleNewComment = (newComment: BlogComment) => {
+    setComments(prev => [newComment, ...prev]); // Thêm comment mới vào đầu danh sách
+  };
 
   return (
     <div className="space-y-2">
@@ -63,6 +66,7 @@ const CommentSection = ({ blogId }: CommentSectionProps) => {
           </button>
         </div>
       )}
+      <CommentBox blogId={blogId} onCommentAdded={handleNewComment} />
     </div>
   );
 };

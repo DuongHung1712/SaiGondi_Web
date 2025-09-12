@@ -1,13 +1,10 @@
 import { notFound } from 'next/navigation';
-import { dataBlogPosts } from '@/data/data';
 import { Metadata } from 'next';
 import BlogDetail from '../BlogDetail';
 import FeaturedBloggers from '../FeaturedBloggers';
 import RecentPosts from '../RecentPosts';
 import PopularPostsSection from '../../home/PopularPostsSection';
 import CommentSection from '../CommentSection';
-import { dataReviews } from '@/data/dataReviews';
-import CommentBox from '../CommentBox';
 import Image from 'next/image';
 import SocialShare from '../SocialShare';
 import { blogApi } from '@/lib/blog/blogApi';
@@ -80,7 +77,6 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               {/* Social share */}
               <SocialShare />
               <CommentSection blogId={post._id} />
-              <CommentBox blogId={post._id} />
             </div>
 
             {/* Sidebar */}

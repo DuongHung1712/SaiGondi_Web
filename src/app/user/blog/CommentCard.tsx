@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { IoFlagSharp } from 'react-icons/io5';
 import { AiFillLike } from "react-icons/ai";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BlogComment } from '@/types/blogComment';
 import { blogCommentApi } from '@/lib/blogComment/blogCommentApi';
 import { FiX } from 'react-icons/fi';
@@ -17,11 +17,24 @@ const CommentCard = ({ comment }: CommentCardProps) => {
   const [liked, setLiked] = useState(false);
   const [popupImage, setPopupImage] = useState<string | null>(null);
 
+  const currentUserId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
+
+  useEffect(() => {
+    if (currentUserId && comment.likeBy.includes(currentUserId)) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+    setLikes(comment.totalLikes);
+  }, [comment, currentUserId]);
+  
   const handleLike = async () => {
     try {
       const updated = await blogCommentApi.likeComment(comment._id);
       setLikes(updated.totalLikes);
-      setLiked(!liked);
+      if (currentUserId) {
+        setLiked(updated.likeBy.includes(currentUserId));
+      }
     } catch (err) {
       console.error("Failed to like comment", err);
     }
@@ -35,7 +48,8 @@ const CommentCard = ({ comment }: CommentCardProps) => {
         title="Báo cáo đánh giá"
       >
         <IoFlagSharp size={18} />
-      </button>
+        </button> 
+        {/* HiOutlineDotsVertical  */} {/* menu để xóa, sửa comment */}
       <button
         onClick={handleLike}
         className="cursor-pointer absolute right-8 top-0 p-2 flex items-center gap-1 text-[var(--gray-2)] hover:text-[var(--gray-1)]"
@@ -57,10 +71,6 @@ const CommentCard = ({ comment }: CommentCardProps) => {
           />
         </div>
         <div>
-          {/* Chua có đánh giá sao */}
-          {/* <p className="font-semibold  pr-12"> 
-            {review.rating} <span className="text-[var(--gray-2)]">| {comment.author.firstName} {comment.author.lastName}</span>
-          </p> */}
           <p className="font-semibold pr-12">
             {comment.userId?.firstName || "Ẩn danh"} {comment.userId?.lastName || ""}
           </p>
