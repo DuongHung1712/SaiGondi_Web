@@ -114,7 +114,7 @@ const CheckinAccordion = () => {
                       : 'bg-[#F2F7FF]'
                   }`}
                 >
-                  <span>Phường {item.group}</span>
+                  <span> {item.group}</span>
                   <span className="text-2xl">
                     {isOpen ? <FiMinus /> : <FiPlus />}
                   </span>
