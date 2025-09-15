@@ -32,6 +32,7 @@ type Checkin = {
 type PlaceGroup = {
   group: string;
   destinations: {
+    id: string;   
     title: string;
     location: string;
     distance: string;
@@ -60,6 +61,7 @@ const CheckinAccordion = () => {
         }
 
         groupMap[wardName].destinations.push({
+          id: c.placeId._id,
           title: c.placeId.name,
           location: c.placeId.address || '',
           distance: '—', 
