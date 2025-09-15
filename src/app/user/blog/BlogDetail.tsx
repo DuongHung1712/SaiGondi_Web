@@ -11,6 +11,7 @@ import { Post } from '@/types/blog';
 import { mapBlogToPost } from '@/lib/blog/mapBlogToPost';
 import Button from '@/components/ui/Button';
 import { blogApi } from '@/lib/blog/blogApi';
+import { blogCommentApi } from '@/lib/blogComment/blogCommentApi';
 
 type BlogDetailProps = {
   post: any;
@@ -30,6 +31,25 @@ export default function BlogDetail({ post }: BlogDetailProps) {
   const commentRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
+  const [totalComments, setTotalComments] = useState<number>(0); //lấy tổng số comment
+
+  // Gọi API lấy tổng số bình luận
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const res = await blogCommentApi.getCommentsByBlog(post.id, {
+          page: 1,
+          limit: 1,
+        });
+        setTotalComments(res.pagination.total);
+      } catch (err) {
+        console.error('Lỗi khi lấy tổng số bình luận:', err);
+      }
+    };
+
+    if (post?.id) fetchComments();
+  }, [post?.id]);
+  
   const toggleLike = async () => {
     try {
       const updatedBlog = await blogApi.likeBlog(post.id);
@@ -126,7 +146,7 @@ export default function BlogDetail({ post }: BlogDetailProps) {
           </div>
           <div className="cursor-pointer flex items-center gap-1" onClick={scrollToComments}>
             <FaRegComment className="text-[var(--foreground)]" />
-            <span>89</span>
+            <span>{totalComments}</span>
           </div>
           <div className="relative" ref={menuRef}>
             <div
