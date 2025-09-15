@@ -14,7 +14,7 @@ export interface Place {
     coordinates: number[]; // [lng, lat]
   };
   images?: string[];
-  gallery?: string[]; // 👈 thêm nếu có nhiều ảnh khác
+  gallery?: string[]; 
   avgRating: number;
   totalRatings: number;
   totalLikes: number;
@@ -31,9 +31,10 @@ export interface Place {
   comments?: any[];
   lat: number;
   lng: number;
+  ward?: string;
 
-  // thêm field bổ sung
-  distance?: string | number; // tuỳ backend trả về dạng nào
+
+  distance?: string | number; 
   serviceCount?: number;
   reviewCount?: number;
 }
