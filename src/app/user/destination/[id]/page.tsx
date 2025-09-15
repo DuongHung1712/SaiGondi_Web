@@ -8,8 +8,17 @@ import { getDestinationById, createReview, getReviewsByPlaceId } from "@/lib/pla
 import { Place } from "@/types/place";
 import { Review } from "@/types/review";
 import ReviewCard from "../ReviewCard";
+import { wardApi } from "@/lib/ward/wardApi";
+import { Ward } from "@/types/ward";
+import { blogApi } from "@/lib/blog/blogApi";
+import { Post } from "@/types/post";
+import PostCard from "@/components/PostCard";
 
 import useUser from "@/hooks/useUser";
+import Button from '@/components/ui/Button';
+import { IoChatbubbles } from 'react-icons/io5';
+import { HiLocationMarker } from 'react-icons/hi';
+
 
 const DestinationDetail = () => {
   const params = useParams();
@@ -23,6 +32,8 @@ const DestinationDetail = () => {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [ward, setWard] = useState<Ward | null>(null);
+  const [relatedBlogs, setRelatedBlogs] = useState<Post[]>([]);
 
   useEffect(() => {
     if (id) {
@@ -32,6 +43,46 @@ const DestinationDetail = () => {
           const place = destinationRes?.data || destinationRes?.place || destinationRes;
           setDestination(place);
           setReviews(place.reviews || []);
+
+          // Fetch blogs by place ID
+          const blogsByPlaceRes = await blogApi.getBlogsByPlaceId(id);
+          const blogsByPlace = blogsByPlaceRes.data || [];
+          console.log("Blogs by place:", blogsByPlace);
+
+          // Fetch blogs by ward ID
+          let blogsByWard = [];
+          let blogWardId = place.ward;
+          if (Array.isArray(blogWardId)) {
+            blogWardId = blogWardId[0];
+          } else if (typeof blogWardId === 'string' && blogWardId.startsWith('[') && blogWardId.endsWith(']')) {
+            try {
+              const parsedId = JSON.parse(blogWardId);
+              if (Array.isArray(parsedId) && parsedId.length > 0) {
+                blogWardId = parsedId[0];
+              }
+            } catch (e) {
+              console.error("Failed to parse blogWardId:", e)
+            }
+          }
+
+          if (blogWardId) {
+            const blogRes = await blogApi.getBlogsByWard(blogWardId as string);
+            blogsByWard = blogRes.data || [];
+            console.log("Blogs by ward:", blogsByWard);
+          }
+
+          // Combine and remove duplicates
+          const allBlogs = [...blogsByPlace, ...blogsByWard];
+          const uniqueBlogs = allBlogs.reduce((acc, current) => {
+            if (!acc.find((item: Post) => item._id === current._id)) {
+              acc.push(current);
+            }
+            return acc;
+          }, [] as Post[]);
+          console.log("Unique blogs:", uniqueBlogs);
+
+          setRelatedBlogs(uniqueBlogs);
+
         } catch (error) {
           console.error("Failed to fetch data:", error);
         } finally {
@@ -41,6 +92,34 @@ const DestinationDetail = () => {
       fetchData();
     }
   }, [id]);
+
+  useEffect(() => {
+    if (destination?.ward) {
+      const fetchWard = async () => {
+        try {
+          let wardId = destination.ward;
+          if (Array.isArray(wardId)) {
+            wardId = wardId[0];
+          } else if (typeof wardId === 'string' && wardId.startsWith('[') && wardId.endsWith(']')) {
+            try {
+              const parsedId = JSON.parse(wardId);
+              if (Array.isArray(parsedId) && parsedId.length > 0) {
+                wardId = parsedId[0];
+              }
+            } catch (e) {
+              console.error("Failed to parse wardId:", e)
+            }
+          }
+          const wardRes = await wardApi.getById(wardId as string);
+          console.log("Ward response:", wardRes);
+          setWard(wardRes.ward || wardRes);
+        } catch (error) {
+          console.error("Failed to fetch ward:", error);
+        }
+      };
+      fetchWard();
+    }
+  }, [destination]);
 
   if (loading) {
     return <div className="text-center py-10">Loading...</div>;
@@ -66,7 +145,7 @@ const DestinationDetail = () => {
           <span>/</span>
           <span>Thành phố Hồ Chí Minh</span>
           <span>/</span>
-          <span className="text-gray-700 font-medium">Phường Thủ Đức</span>
+          <span className="text-gray-700 font-medium">{ward?.name || '...'}</span>
         </div>
 
         {/* Header */}
@@ -77,14 +156,14 @@ const DestinationDetail = () => {
             </h1>
             <div className="flex items-center gap-2 text-blue-600 mt-2">
               <i className="ri-map-pin-2-fill"></i>
-              <span>Phường Thủ Đức</span>
+              <span>{ward?.name || '...'}</span>
             </div>
             <div className="flex items-center gap-3 mt-2">
               <span className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm font-semibold">
                 {(destination.avgRating || 0).toFixed(1)}
               </span>
               <span className="text-sm text-gray-600">
-                Very Good {destination.totalRatings || 0} Đánh giá
+                {destination.totalRatings || 0} Đánh giá
               </span>
               <span className="text-pink-600 text-sm">Cách bạn 350m</span>
             </div>
@@ -175,30 +254,30 @@ const DestinationDetail = () => {
         </section>
 
         {/* Vị trí */}
-        
-          <section className="mt-8">
-            <h2 className="text-lg font-bold mb-3">Vị trí</h2>
-            <p className="text-gray-600 mb-3">{destination.address}</p>
-            <iframe
-              src={`https://www.google.com/maps?q=${destination.location?.coordinates?.[1] ?? destination.lat},${destination.location?.coordinates?.[0] ?? destination.lng}&hl=vi&z=16&output=embed`}
-              width="100%"
-              height="400"
-              className="rounded-lg border"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-            <div className="mt-3">
-              <a
-                href={`https://www.google.com/maps?q=${destination.location?.coordinates?.[1] ?? destination.lat},${destination.location?.coordinates?.[0] ?? destination.lng}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 font-medium"
-              >
-                Xem trên Google Map
-              </a>
-            </div>
-          </section>
-                
+
+        <section className="mt-8">
+          <h2 className="text-lg font-bold mb-3">Vị trí</h2>
+          <p className="text-gray-600 mb-3">{destination.address}</p>
+          <iframe
+            src={`https://www.google.com/maps?q=${destination.location?.coordinates?.[1] ?? destination.lat},${destination.location?.coordinates?.[0] ?? destination.lng}&hl=vi&z=16&output=embed`}
+            width="100%"
+            height="400"
+            className="rounded-lg border"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+          <div className="mt-3">
+            <a
+              href={`https://www.google.com/maps?q=${destination.location?.coordinates?.[1] ?? destination.lat},${destination.location?.coordinates?.[0] ?? destination.lng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 font-medium"
+            >
+              Xem trên Google Map
+            </a>
+          </div>
+        </section>
+
 
         {/* Đánh giá */}
         <section className="mt-8">
@@ -223,24 +302,22 @@ const DestinationDetail = () => {
             )}
           </div>
 
-          
-
-          {userLoading ? (
-            <div className="mt-6 h-10"></div> // Placeholder to prevent layout shift
-          ) : isAuthenticated ? (
-            <button
-              className="mt-6 bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold"
-              onClick={() => setShowReviewForm(true)}
-            >
-              Viết đánh giá
-            </button>
-          ) : (
-            <Link href="/auth/login">
-              <span className="mt-6 inline-block bg-gray-400 text-white px-5 py-2 rounded-lg font-semibold cursor-pointer">
-                Đăng nhập để đánh giá
-              </span>
-            </Link>
-          )}
+          {/* Nút "Viết đánh giá" -> check login */}
+          <button
+            className="mt-6 bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold disabled:bg-gray-400"
+            onClick={() => {
+              if (userLoading) return; // Chờ check user xong
+              if (!isAuthenticated) {
+                alert("Vui lòng đăng nhập để viết đánh giá.");
+                router.push('/auth/login');
+              } else {
+                setShowReviewForm(true);
+              }
+            }}
+            disabled={userLoading}
+          >
+            {userLoading ? 'Đang tải...' : 'Viết đánh giá'}
+          </button>
 
           {showReviewForm && (
             <div className="mt-8 overflow-auto max-h-[80vh]">
@@ -265,19 +342,17 @@ const DestinationDetail = () => {
                 <form
                   onSubmit={async (e) => {
                     e.preventDefault();
-                    if (!user || !user._id) {
-                      alert("Bạn phải đăng nhập để thực hiện việc này.");
+                    if (!isAuthenticated) {
+                      alert("Vui lòng đăng nhập để gửi đánh giá.");
                       router.push('/auth/login');
                       return;
                     }
                     try {
                       const reviewData = {
-                        destinationId: id,
                         rating: rating,
                         comment: comment,
-                        userId: user._id, // Pass the user ID
                       };
-                      await createReview(reviewData);
+                      await createReview(id, reviewData);
 
                       // Refetch reviews sau khi tạo mới
                       const reviewsRes = await getReviewsByPlaceId(id);
@@ -286,9 +361,10 @@ const DestinationDetail = () => {
                       setShowReviewForm(false);
                       setRating(0);
                       setComment("");
+                      alert("Gửi đánh giá thành công!");
                     } catch (error) {
                       console.error("Failed to submit review:", error);
-                      alert("Gửi đánh giá thất bại.");
+                      alert("Gửi đánh giá thất bại. Vui lòng thử lại.");
                     }
                   }}
                 >
@@ -337,7 +413,8 @@ const DestinationDetail = () => {
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                      disabled={rating === 0 || comment.trim() === ''}
                     >
                       Confirm
                     </button>
@@ -349,43 +426,104 @@ const DestinationDetail = () => {
         </section>
 
         {/* Bài viết liên quan */}
-        <section className="mt-12">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold">CÁC BÀI VIẾT LIÊN QUAN</h2>
-            <button className="text-blue-600 text-sm font-medium">
-              Xem tất cả
-            </button>
-          </div>
-          <p className="text-gray-600 mb-6">
-            Cùng xem các trải nghiệm của khách hàng
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="rounded-xl overflow-hidden border shadow hover:shadow-lg transition"
+        <section className="relative pt-20 pb-60">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="flex items-start justify-between flex-wrap gap-3 sm:gap-4 mb-4 sm:mb-6">
+              <h1 className="text-2xl sm:text-3xl font-bold font-inter text-gray-800 leading-tight">
+                CÁC BÀI VIẾT LIÊN QUAN
+              </h1>
+              <Button
+                variant="outline-primary"
+                className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 h-fit rounded-none"
               >
-                <Image
-                  src="/image.svg"
-                  alt="Post"
-                  width={400}
-                  height={250}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-4">
-                  <span className="text-sm text-gray-500 block mb-1">
-                    17/08/2024
-                  </span>
-                  <h3 className="font-semibold text-gray-800 mb-2">
-                    Khám phá Phường bạn có mới cùng mình nhé
-                  </h3>
-                  <div className="flex items-center text-sm text-gray-600 gap-1">
-                    <i className="ri-map-pin-fill"></i> Phường Bến Cơ
+                Xem tất cả
+              </Button>
+            </div>
+
+            <p
+              className="
+                text-gray-600 font-inter
+                text-sm sm:text-base lg:text-[17px]
+                leading-relaxed sm:leading-relaxed lg:leading-8
+                mb-6 sm:mb-8
+                max-w-[540px] sm:max-w-[620px] lg:max-w-[700px]
+                pr-3 sm:pr-6 lg:pr-12
+              "
+            >
+              Cùng xem các trải nghiệm của khách hàng
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4
+              gap-x-6 lg:gap-x-8 xl:gap-x-10
+              gap-y-45 sm:gap-y-20 md:gap-y-40 lg:gap-y-20">
+
+              {relatedBlogs.map((post) => {
+                if (!post || !post._id) return null;
+
+                const author = typeof post.authorId === 'object' ? post.authorId : null;
+                const authorName = author ? `${author.firstName || ''} ${author.lastName || ''}`.trim() : 'Unknown Author';
+                const authorAvatar = author ? author.avatar : '/avatar.svg';
+                const postTitle = post.title || 'Untitled Post';
+                const postWard = (typeof post.ward === 'object' && post.ward !== null) ? ward?.name : 'Unknown Location';
+
+                return (
+                  <div key={post._id} className="relative py-6">
+                    <div className="absolute bottom-0 left-0 w-full h-70 z-0">
+                      <Image
+                              src={post.mainImage || "/default.jpg"}
+                              alt={postTitle}
+                              fill
+                              style={{ objectFit: "cover" }}
+                          />
+                    </div>
+
+                    <div className="bg-white left-3 shadow-lg overflow-hidden relative z-10 translate-y-45 w-[88%] sm:w-[85%] ml-0 mt-8 mb-6">
+                      
+                      <div className="absolute top-6 left-0 w-1 h-10 bg-[var(--warning)] z-20" />
+                      <div className="p-4 sm:p-6">
+                        <div className="flex items-center justify-between text-xs sm:text-sm text-[var(--warning)] mb-3 sm:mb-4">
+                          <span>{post.createdAt ? new Date(post.createdAt).toLocaleDateString("vi-VN") : ''}</span>
+                        </div>
+
+                        <div className="border-t border-gray-200 pt-2 mt-2">
+                          <h3 className="text-sm sm:text-base font-semibold text-gray-800 mb-1 leading-snug">
+                            {postTitle}
+                          </h3>
+
+                          <div className="flex items-center space-x-2">
+                            <Image
+                              src={authorAvatar}
+                              alt={authorName}
+                              width={24}
+                              height={24}
+                              className="rounded-full"
+                            />
+                            <p className="text-gray-800 text-[12px] sm:text-sm font-inter">
+                              {authorName}
+                            </p>
+                          </div>
+
+                          <div className="flex justify-between items-center text-[10px] sm:text-[11px] text-gray-500 mt-2 whitespace-nowrap">
+                            <span className="flex items-center gap-1 min-w-0">
+                              <HiLocationMarker className="text-[var(--warning)] shrink-0" />
+                              <span className="truncate">{postWard}</span>
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <IoChatbubbles className="text-[var(--warning)]" />
+                              Bình luận({post.commentsCount || 0})
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="hidden md:block absolute top-42 right-3 sm:right-6 lg:right-9 w-[140px] h-[140px] sm:w-[180px] sm:h-[180px] lg:w-[220px] lg:h-[220px] pointer-events-none -z-10">
+            <Image src="/Graphic_Elements.svg" alt="Background" fill className="object-contain" />
           </div>
         </section>
       </div>

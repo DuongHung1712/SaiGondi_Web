@@ -12,7 +12,11 @@ export const wardApi = {
 
   // Lấy phường/xã theo id
   getById: async (id: string) => {
-    const res = await axios.get(`${API_URL}/wards/id/${id}`);
+    const res = await axios.get(`${API_URL}/wards/id/${id}`, {
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    });
     return res.data;
   },
 
