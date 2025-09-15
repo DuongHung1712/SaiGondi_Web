@@ -1,9 +1,14 @@
 
+export interface Ward {
+  _id: string;
+  name: string;
+}
 export interface Place {
   _id: string;
   name: string;
   description: string;
   address: string;
+  ward: { _id: string; name: string };
   location: {
     type: string;
     coordinates: number[]; // [lng, lat]
@@ -33,7 +38,6 @@ export interface Place {
   serviceCount?: number;
   reviewCount?: number;
 }
-
 
 export interface PlacesApiResponse {
   page: number;

@@ -25,8 +25,8 @@ const DestinationCard: React.FC<DestinationCardProps> = ({
 }) => {
   return (
     <div className="flex flex-col h-full rounded-2xl bg-white/10 backdrop-blur-[12px] shadow-lg hover:shadow-xl transition border-2 border-white overflow-hidden">
-      <div className="relative w-full aspect-[4/3]">
-        <Image src={image} alt={title} fill className="object-cover" />
+      <div className="relative w-full aspect-[4/3] top-2">
+        <Image src={image} alt={title} fill className="object-cover rounded-3xl" />
       </div>
       <div className="flex flex-col justify-between flex-1 p-4 sm:p-5">
         <div className="space-y-1.5 sm:space-y-2.5">
