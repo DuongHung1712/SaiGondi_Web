@@ -51,22 +51,30 @@ const DestinationDetail = () => {
 
           // Fetch blogs by ward ID
           let blogsByWard = [];
-          let blogWardId = place.ward;
-          if (Array.isArray(blogWardId)) {
-            blogWardId = blogWardId[0];
-          } else if (typeof blogWardId === 'string' && blogWardId.startsWith('[') && blogWardId.endsWith(']')) {
+          let blogWardIdSource: any = place.ward;
+
+          if (typeof blogWardIdSource === 'string' && blogWardIdSource.startsWith('[') && blogWardIdSource.endsWith(']')) {
             try {
-              const parsedId = JSON.parse(blogWardId);
-              if (Array.isArray(parsedId) && parsedId.length > 0) {
-                blogWardId = parsedId[0];
-              }
+              const parsed = JSON.parse(blogWardIdSource);
+              blogWardIdSource = Array.isArray(parsed) ? parsed[0] : blogWardIdSource;
             } catch (e) {
-              console.error("Failed to parse blogWardId:", e)
+              console.error("Failed to parse blogWardId:", e);
             }
           }
 
-          if (blogWardId) {
-            const blogRes = await blogApi.getBlogsByWard(blogWardId as string);
+          if (Array.isArray(blogWardIdSource)) {
+            blogWardIdSource = blogWardIdSource[0];
+          }
+
+          const finalBlogWardId =
+            typeof blogWardIdSource === 'object' && blogWardIdSource !== null
+              ? (blogWardIdSource as any)._id
+              : typeof blogWardIdSource === 'string'
+              ? blogWardIdSource
+              : null;
+
+          if (finalBlogWardId) {
+            const blogRes = await blogApi.getBlogsByWard(finalBlogWardId);
             blogsByWard = blogRes.data || [];
             console.log("Blogs by ward:", blogsByWard);
           }
@@ -97,22 +105,33 @@ const DestinationDetail = () => {
     if (destination?.ward) {
       const fetchWard = async () => {
         try {
-          let wardId = destination.ward;
-          if (Array.isArray(wardId)) {
-            wardId = wardId[0];
-          } else if (typeof wardId === 'string' && wardId.startsWith('[') && wardId.endsWith(']')) {
+          let wardIdSource: any = destination.ward;
+
+          if (typeof wardIdSource === 'string' && wardIdSource.startsWith('[') && wardIdSource.endsWith(']')) {
             try {
-              const parsedId = JSON.parse(wardId);
-              if (Array.isArray(parsedId) && parsedId.length > 0) {
-                wardId = parsedId[0];
-              }
+              const parsed = JSON.parse(wardIdSource);
+              wardIdSource = Array.isArray(parsed) ? parsed[0] : wardIdSource;
             } catch (e) {
-              console.error("Failed to parse wardId:", e)
+              console.error("Failed to parse wardId:", e);
             }
           }
-          const wardRes = await wardApi.getById(wardId as string);
-          console.log("Ward response:", wardRes);
-          setWard(wardRes.ward || wardRes);
+
+          if (Array.isArray(wardIdSource)) {
+            wardIdSource = wardIdSource[0];
+          }
+
+          const finalWardId =
+            typeof wardIdSource === 'object' && wardIdSource !== null
+              ? (wardIdSource as any)._id
+              : typeof wardIdSource === 'string'
+              ? wardIdSource
+              : null;
+
+          if (finalWardId) {
+            const wardRes = await wardApi.getById(finalWardId);
+            console.log("Ward response:", wardRes);
+            setWard(wardRes.ward || wardRes);
+          }
         } catch (error) {
           console.error("Failed to fetch ward:", error);
         }
