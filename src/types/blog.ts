@@ -69,6 +69,7 @@ export interface Post {
 
   // Nội dung chính
   content: {
+    text: string;
     type: "text" | "image" | "video";
     value?: string;
     url?: string;

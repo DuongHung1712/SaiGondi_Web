@@ -23,10 +23,10 @@ const PopularPostsSection = () => {
         const mapped = blogs.map(mapBlogToPost);
 
         const withComments = await Promise.all(
-          mapped.map(async (post: { id: string; }) => {
+          mapped.map(async (post: { id: string }) => {
             try {
               const { count } = await blogCommentApi.getCommentsByBlog(post.id);
-              return { ...post, totalComments: count }; 
+              return { ...post, totalComments: count };
             } catch (err) {
               console.error(`Lỗi khi load comments cho blog ${post.id}:`, err);
               return { ...post, totalComments: 0 };
@@ -41,9 +41,11 @@ const PopularPostsSection = () => {
     };
     fetchData();
   }, []);
+
   const handleExplore = () => {
-    router.push('/user/destination');
+    router.push('/user/blog');
   };
+
   return (
     <section className="relative pt-20 pb-60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -52,7 +54,7 @@ const PopularPostsSection = () => {
             CÁC BÀI VIẾT ĐƯỢC XEM NHIỀU NHẤT
           </h1>
           <Button
-            onClick={handleExplore} 
+            onClick={handleExplore}
             variant="outline-primary"
             className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 h-fit rounded-none"
           >
@@ -65,7 +67,11 @@ const PopularPostsSection = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 lg:gap-x-8 xl:gap-x-10 gap-y-45 sm:gap-y-20 md:gap-y-40 lg:gap-y-20">
           {posts.map((item, index) => (
-            <div key={index} className="relative py-6">
+            <div
+              key={index}
+              className="relative py-6 cursor-pointer"
+              onClick={() => router.push(`/user/blog/${item.slug || item.id}`)}
+            >
               <div className="absolute bottom-0 left-0 w-full h-70 z-0">
                 <Image
                   src={item.image || '/city-2.svg'}

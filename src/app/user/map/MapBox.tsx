@@ -17,7 +17,7 @@ interface Place {
   name: string;
   address?: string;
   district?: string;
-  ward?: { _id: string; name: string };
+  ward?: { _id: string; name: string } | string | null;
   location?: { coordinates: [number, number] };
   images?: string[];
 }
@@ -86,103 +86,120 @@ export default function HCMMap() {
       .replace(/^(xa|phuong|thi tran)\s+/i, "")
       .trim()
       .toLowerCase();
-const getWardName = (ward: string | { _id: string; name: string } | undefined): string => {
-  if (!ward) return "";
-  if (typeof ward === "string") return ward;
-  return ward.name;
-};
 
-useEffect(() => {
-  const paths = document.querySelectorAll<SVGPathElement>("svg path");
+  const getWardName = (
+    ward: string | { _id: string; name: string } | null | undefined
+  ): string => {
+    if (!ward) return "";
+    if (typeof ward === "string") return ward;
+    return ward.name;
+  };
 
-  paths.forEach((path) => {
-    const title = path.getAttribute("data-title") || "unknown";
-    const normTitle = normalize(title);
-    const statusObj = regionStatus[normTitle];
+  // setup path click events
+  useEffect(() => {
+    const paths = document.querySelectorAll<SVGPathElement>("svg path");
 
-    path.style.fill = getColorByStatus(statusObj);
-    path.style.stroke = "#0c5feeff";
-    path.style.strokeWidth = "0.5";
-    path.style.transition = "fill 0.3s ease";
+    paths.forEach((path) => {
+      const title = path.getAttribute("data-title") || "unknown";
+      const normTitle = normalize(title);
+      const statusObj = regionStatus[normTitle];
 
-    // Hover
-    path.onmouseenter = () => {
-      setHoveredName(title);
-      path.style.fill = getRandomPastelColor();
-    };
+      path.style.fill = getColorByStatus(statusObj);
+      path.style.stroke = "#0c5feeff";
+      path.style.strokeWidth = "0.5";
+      path.style.transition = "fill 0.3s ease";
 
-    path.onmouseleave = () => {
-      setHoveredName(null);
-      setMousePos(null);
-      path.style.fill = getColorByStatus(regionStatus[normTitle]);
-    };
+      // Hover
+      path.onmouseenter = () => {
+        setHoveredName(title);
+        path.style.fill = getRandomPastelColor();
+      };
 
-    path.onmousemove = (e) =>
-      setMousePos({ x: e.clientX + 15, y: e.clientY + 15 });
+      path.onmouseleave = () => {
+        setHoveredName(null);
+        setMousePos(null);
+        path.style.fill = getColorByStatus(regionStatus[normTitle]);
+      };
 
-    path.onclick = async (e) => {
-      setSelectedPath(path);
-      setSelectedName(title);
-      setPopupPos(clampPopupPosition(e.clientX, e.clientY));
+      path.onmousemove = (e) =>
+        setMousePos({ x: e.clientX + 15, y: e.clientY + 15 });
 
-      try {
-        const res = await placeApi.getAll();
-        const { places } = res;
+      // Click
+      path.onclick = async (e) => {
+        setSelectedPath(path);
+        setSelectedName(title);
+        setPopupPos(clampPopupPosition(e.clientX, e.clientY));
 
-        const matched: Place | undefined = places.find((p: any) => {
-          if (typeof p.ward === "string")
-            return normalize(p.ward).includes(normTitle);
-          if (typeof p.ward === "object" && p.ward?.name)
-            return normalize(p.ward.name).includes(normTitle);
-          return false;
-        });
+        try {
+          const res = await placeApi.getAll();
+          const places: Place[] = Array.isArray(res) ? res : res.places || [];
 
-        if (matched) {
-          setSelectedInfo(matched);
+          const matched: Place | undefined = places.find((p: any) => {
+            if (typeof p.ward === "string") {
+              return normalize(p.ward).includes(normTitle);
+            }
+            if (typeof p.ward === "object" && p.ward?.name) {
+              return normalize(p.ward.name).includes(normTitle);
+            }
+            return false;
+          });
 
-          const normWard = normalize(getWardName(matched.ward) || matched.name);
-          setIsCheckedIn(!!regionStatus[normWard]?.status);
-        } else {
+          if (matched) {
+            setSelectedInfo(matched);
+            const normWard = normalize(
+              getWardName(matched.ward) || matched.name
+            );
+            setIsCheckedIn(!!regionStatus[normWard]?.status);
+          } else {
+            setSelectedInfo(null);
+            setIsCheckedIn(false);
+          }
+        } catch (error) {
+          console.error("Lỗi khi load place info:", error);
           setSelectedInfo(null);
           setIsCheckedIn(false);
         }
-      } catch (error) {
-        console.error("Lỗi khi load place info:", error);
-        setSelectedInfo(null);
-        setIsCheckedIn(false);
-      }
-    };
-  });
-}, [regionStatus]);
-
-const handleVisited = async () => {
-  if (!selectedInfo) return;
-  try {
-    await checkinApi.createCheckin(selectedInfo._id, {
-      device: "Web App",
-      note: `Check-in ${selectedInfo.name}`,
+      };
     });
+  }, [regionStatus]);
 
-    const normWard = normalize(getWardName(selectedInfo.ward) || selectedInfo.name);
+  const handleVisited = async () => {
+    if (!selectedInfo) return;
+    try {
+      await checkinApi.createCheckin(selectedInfo._id, {
+        note: `Check-in ${selectedInfo.name}`,   // luôn có note
+        device: "Web App",                       // mặc định Web App
+        imgList: [],                             // gửi mảng rỗng nếu không có ảnh
+      });
 
-    setRegionStatus((prev) => ({
-      ...prev,
-      [normWard]: {
-        status: "visited",
-        color: prev[normWard]?.color || getRandomPastelColor(),
-      },
-    }));
+      const normWard = normalize(
+        getWardName(selectedInfo.ward) || selectedInfo.name
+      );
 
-    setIsCheckedIn(true);
-    setMessage(`Bạn đã check-in ${selectedInfo.name} thành công!`);
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      setMessage(`Lỗi khi check-in: ${error.response?.data || error.message}`);
-    } else {
-      setMessage("Đã xảy ra lỗi khi check-in.");
+      setRegionStatus((prev) => ({
+        ...prev,
+        [normWard]: {
+          status: "visited",
+          color: prev[normWard]?.color || getRandomPastelColor(),
+        },
+      }));
+
+      setIsCheckedIn(true);
+      setMessage(`Bạn đã check-in ${selectedInfo.name} thành công!`);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error("Chi tiết lỗi check-in:", error.response?.data);
+        const errMsg =
+          error.response?.data?.message ||
+          error.response?.data?.error ||
+          JSON.stringify(error.response?.data) ||
+          error.message;
+        setMessage(`Lỗi khi check-in: ${errMsg}`);
+      } else {
+        setMessage("Đã xảy ra lỗi khi check-in.");
+      }
     }
-  }
-};
+  };
 
   useEffect(() => {
     const fetchCheckins = async () => {
@@ -192,9 +209,11 @@ const handleVisited = async () => {
         const statusMap: Record<string, { status: Status; color: string }> = {};
         checkins.forEach((c: any) => {
           const wardName =
-            typeof c.placeId.ward === "object"
+            c.ward || 
+            (typeof c.placeId.ward === "object"
               ? c.placeId.ward.name
-              : c.placeId.ward || c.placeId.name;
+              : c.placeId.ward) ||
+            c.placeId.name;
 
           const normWard = normalize(wardName);
           statusMap[normWard] = {
@@ -218,6 +237,7 @@ const handleVisited = async () => {
       router.push(`/user/destination/${selectedInfo._id}`);
     }
   };
+
   const handleClosePopup = () => {
     setSelectedName(null);
     setPopupPos(null);
@@ -289,7 +309,9 @@ const handleVisited = async () => {
               <h3 className="font-bold text-base sm:text-lg">{selectedName}</h3>
               <p className="text-gray-500 text-xs sm:text-sm">
                 {selectedInfo?.district ||
-                  selectedInfo?.ward?.name ||
+                  (typeof selectedInfo?.ward === "object"
+                    ? selectedInfo?.ward?.name
+                    : selectedInfo?.ward) ||
                   "Không rõ khu vực"}
               </p>
             </div>
@@ -342,7 +364,6 @@ const handleVisited = async () => {
           {message && (
             <p className="mt-3 text-sm text-center text-gray-700">{message}</p>
           )}
-
         </div>
       )}
     </div>
