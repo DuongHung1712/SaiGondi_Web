@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Button from '@/components/ui/Button';
 import { HiLocationMarker } from 'react-icons/hi';
 import { checkinApi } from '@/lib/checkin/checkinApi';
+import { useRouter } from 'next/navigation';
 
 interface Destination {
   placeId: string;
@@ -16,11 +17,12 @@ interface Destination {
 
 const HotDestinations = () => {
   const [destinations, setDestinations] = useState<Destination[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const hotPlaces = await checkinApi.getHotPlaces(); 
+        const hotPlaces = await checkinApi.getHotPlaces();
         setDestinations(hotPlaces);
       } catch (err) {
         console.error('Error fetching hot places:', err);
@@ -29,6 +31,8 @@ const HotDestinations = () => {
 
     fetchData();
   }, []);
+
+  const limitedDestinations = destinations.slice(0, 4);
 
   return (
     <section className="py-14 sm:py-16 px-4">
@@ -45,6 +49,7 @@ const HotDestinations = () => {
 
           <Button
             variant="outline-primary"
+            onClick={() => router.push('/user/destination?type=hot')}
             className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 h-fit rounded-none sm:static absolute right-4 top-0"
           >
             Xem tất cả
@@ -52,12 +57,12 @@ const HotDestinations = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-          {destinations.map((item) => (
+          {limitedDestinations.map((item) => (
             <div
               key={item.placeId}
               className="flex flex-col h-full rounded-2xl bg-white/10 backdrop-blur-[12px] shadow-lg hover:shadow-xl transition border-2 border-white overflow-hidden"
             >
-              <div className="w-full aspect-[4/3] flex justify-center items-center ">
+              <div className="w-full aspect-[4/3] flex justify-center items-center">
                 <Image
                   src={item.image || '/hot-destination.svg'}
                   alt={item.name}
@@ -66,6 +71,7 @@ const HotDestinations = () => {
                   className="object-cover rounded-3xl"
                 />
               </div>
+
               <div className="flex flex-col justify-between flex-1 p-4 sm:p-5">
                 <div className="space-y-1.5 sm:space-y-2.5">
                   <p className="text-[11px] sm:text-xs text-[var(--gray-3)] flex items-center gap-1">
@@ -83,6 +89,7 @@ const HotDestinations = () => {
                 <div className="mt-3 sm:mt-4">
                   <Button
                     variant="outline-primary"
+                    onClick={() => router.push(`/user/destination/${item.placeId}`)}
                     className="bg-[var(--white)] text-[var(--primary)] text-xs sm:text-sm font-medium px-4 py-1.5 w-full justify-center rounded-none border-none"
                   >
                     XEM CHI TIẾT

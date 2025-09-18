@@ -16,19 +16,29 @@ import { useSearchParams } from 'next/navigation';
 export default function BlogPage() {
   const [featuredPosts, setFeaturedPosts] = useState<any[]>([]);
   const [activeCategoryKey, setActiveCategoryKey] = useState("all");
-    const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword") || "";
+  const type = searchParams.get("type") || "";
 
   const [blogs, setBlogs] = useState([]);
   const [searchValue, setSearchValue] = useState(keyword);
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      const res = await blogApi.getBlogs({ keyword });
-      setBlogs(res.data.map(mapBlogToPost));
+      try {
+        if (type === "popular") {
+          const res = await blogApi.getBlogs({ sort: "-viewCount" });
+          setBlogs(res.data.map(mapBlogToPost));
+        } else {
+          const res = await blogApi.getBlogs({ keyword });
+          setBlogs(res.data.map(mapBlogToPost));
+        }
+      } catch (err) {
+        console.error("Lỗi khi load blogs:", err);
+      }
     };
     fetchBlogs();
-  }, [keyword]);
+  }, [keyword, type]);
 
   useEffect(() => {
     async function fetchBlogs() {

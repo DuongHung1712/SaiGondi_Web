@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface Place {
   _id: string;
@@ -17,8 +18,13 @@ interface TrendCardProps {
 }
 
 export default function TrendCard({ index, data }: TrendCardProps) {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push(`/user/destination/${data._id}`);
+  };
   return (
     <div
+      onClick={handleClick}
       className="
         relative w-full 
         h-[120px] sm:h-[140px] md:h-[150px] 

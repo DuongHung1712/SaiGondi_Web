@@ -18,8 +18,10 @@ const PopularPostsSection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await blogApi.getBlogs({ sort: '-viewCount', limit: 4 });
-        const blogs = res?.blogs || res?.data || [];
+        const res = await blogApi.getPopularBlogs({ limit: 4 });
+        console.log("Popular Blogs raw:", res);
+
+        const blogs = res?.data || [];
         const mapped = blogs.map(mapBlogToPost);
 
         const withComments = await Promise.all(
@@ -36,14 +38,14 @@ const PopularPostsSection = () => {
 
         setPosts(withComments);
       } catch (err) {
-        console.error('Lỗi khi load blogs:', err);
+        console.error("Lỗi khi load popular blogs:", err);
       }
     };
     fetchData();
   }, []);
 
   const handleExplore = () => {
-    router.push('/user/blog');
+    router.push('/user/blog?type=popular');
   };
 
   return (
