@@ -5,17 +5,20 @@ import Image from 'next/image';
 import { HiLocationMarker } from 'react-icons/hi';
 import { AiFillStar } from 'react-icons/ai';
 import Button from '@/components/ui/Button';
+import { useRouter } from 'next/navigation';
 
 type DestinationCardProps = {
+  id: string;
   title: string;
   location: string;
   distance: string;
   image: string;
-  rating?: number;      
-  totalRatings?: number; 
+  rating?: number;
+  totalRatings?: number;
 };
 
 const DestinationCard: React.FC<DestinationCardProps> = ({
+  id,
   title,
   location,
   distance,
@@ -23,6 +26,12 @@ const DestinationCard: React.FC<DestinationCardProps> = ({
   rating,
   totalRatings,
 }) => {
+  const router = useRouter();
+
+  const handleDetail = () => {
+    router.push(`/user/destination/${id}`);
+  };
+
   return (
     <div className="flex flex-col h-full rounded-2xl bg-white/10 backdrop-blur-[12px] shadow-lg hover:shadow-xl transition border-2 border-white overflow-hidden">
       <div className="relative w-full aspect-[4/3] top-2">
@@ -55,6 +64,7 @@ const DestinationCard: React.FC<DestinationCardProps> = ({
         <div className="mt-3 sm:mt-4">
           <Button
             variant="outline-primary"
+            onClick={handleDetail}  
             className="bg-[var(--white)] text-[var(--primary)] text-xs sm:text-sm font-medium px-4 py-1.5 w-full justify-center rounded-none border-none"
           >
             XEM CHI TIẾT

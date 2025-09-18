@@ -6,6 +6,7 @@ import { blogApi } from "@/lib/blog/blogApi";
 import { Post } from "@/types/blog";
 import { mapBlogToPost } from "@/lib/blog/mapBlogToPost";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
+import { useSearchParams } from "next/navigation";
 
 type BlogListSectionProps = {
   activeCategoryKey: string;
@@ -18,15 +19,26 @@ const BlogListSection = ({ activeCategoryKey }: BlogListSectionProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type"); // lấy ?type=popular
+
   // Reset page khi đổi category
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeCategoryKey]);
+  }, [activeCategoryKey, type]);
 
   useEffect(() => {
     async function fetchBlogs(page: number) {
       try {
-        const res = await blogApi.getBlogs({ page, limit: PAGE_SIZE, status: "approved" });
+        let res;
+
+        if (type === "popular") {
+          // gọi API xem nhiều nhất
+          res = await blogApi.getPopularBlogs({ page, limit: PAGE_SIZE });
+        } else {
+          // gọi API mặc định (bài mới)
+          res = await blogApi.getBlogs({ page, limit: PAGE_SIZE, status: "approved" });
+        }
 
         let blogs: Post[] = res.data
           .filter((b: any) => b.status === "approved")
@@ -49,7 +61,7 @@ const BlogListSection = ({ activeCategoryKey }: BlogListSectionProps) => {
     }
 
     fetchBlogs(currentPage);
-  }, [currentPage, activeCategoryKey]);
+  }, [currentPage, activeCategoryKey, type]);
 
   return (
     <section className="px-4 pb-10 max-w-7xl mx-auto">
