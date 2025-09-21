@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { FiClock } from 'react-icons/fi';
 import Link from 'next/link';
-import { Post } from '@/types/blog';
+import { Post } from '@/types/post';
 
 interface RecentPostCardProps {
   post: Post;
@@ -18,7 +18,7 @@ const RecentPostCard: React.FC<RecentPostCardProps> = ({ post }) => {
         <Image src={post.image || defaultImage} alt={post.title} fill className="object-cover" />
       </Link>
       <div className="flex flex-col justify-center">
-        <span className="text-xs text-green-700 bg-green-100 px-2 py-0.5 rounded w-fit mb-1">{post.category}</span>
+        <span className="text-xs text-green-700 bg-green-100 px-2 py-0.5 rounded w-fit mb-1">{post.categories}</span>
         <Link href={`/user/blog/${post.slug}`}>
           <h3 className="text-sm font-semibold leading-tight line-clamp-2">{post.title}</h3>
         </Link>
