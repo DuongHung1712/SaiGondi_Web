@@ -6,6 +6,7 @@ import { blogApi } from "@/lib/blog/blogApi";
 import { mapBlogToPost } from "@/lib/blog/mapBlogToPost";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 import { Post } from "@/types/post";
+import { useSearchParams } from "next/navigation";
 
 type BlogListSectionProps = {
   activeCategoryKey: string;
