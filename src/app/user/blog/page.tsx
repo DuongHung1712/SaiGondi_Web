@@ -10,6 +10,7 @@ import FeaturedBloggers from './FeaturedBloggers';
 import Image from 'next/image';
 import { blogApi } from '@/lib/blog/blogApi';
 import { mapBlogToPost } from '@/lib/blog/mapBlogToPost';
+import { useSearchParams } from 'next/navigation';
 
 export default function BlogPage() {
   const [featuredPosts, setFeaturedPosts] = useState<any[]>([]);

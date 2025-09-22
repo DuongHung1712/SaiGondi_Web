@@ -9,8 +9,12 @@ import "rc-slider/assets/index.css";
 import DestinationCard from "./DestinationCard";
 import SearchBox from "@/components/ui/SearchBox";
 import { getDestinations } from "@/lib/place/destinationApi";
+import { useSearchParams } from "next/navigation";
+import { checkinApi } from "@/lib/checkin/checkinApi";
 
 export default function DestinationPage() {
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
   // State quản lý filter
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(10000000);
@@ -31,15 +35,21 @@ export default function DestinationPage() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await getDestinations({
-          services: selectedOptions,
-          page: currentPage,
-          limit: itemsPerPage,
-        });
-
+        if (type === "hot") {
+          const hotPlaces = await checkinApi.getHotPlaces();
+          setDestinations(hotPlaces || []);
+          setTotalDestinations(hotPlaces?.length || 0);
+          setTotalPages(1); // không cần phân trang nếu API hot chưa hỗ trợ
+        } else {
+          const res = await getDestinations({
+            services: selectedOptions,
+            page: currentPage,
+            limit: itemsPerPage,
+          });
         setDestinations(res.data.places || []);
         setTotalPages(res.data.pagination?.totalPages || 1);
         setTotalDestinations(res.data.pagination?.total || 0);
+        }
       } catch (err) {
         console.error("Fetch destinations error:", err);
       } finally {
@@ -224,7 +234,9 @@ export default function DestinationPage() {
               </select>
             </div>
           </div>
-
+            <h4 className="font-bold">
+              {type === "hot" ? "Địa điểm hot" : "Tất cả"}
+            </h4>
           {/* List */}
           <div className="flex flex-col mt-8 gap-6">
             {loading ? (
