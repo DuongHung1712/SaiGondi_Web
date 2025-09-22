@@ -3,18 +3,18 @@
 import React, { useEffect, useState } from "react";
 import BlogCard from "./BlogCard";
 import { blogApi } from "@/lib/blog/blogApi";
-import { Post } from "@/types/blog";
 import { mapBlogToPost } from "@/lib/blog/mapBlogToPost";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
-import { useSearchParams } from "next/navigation";
+import { Post } from "@/types/post";
 
 type BlogListSectionProps = {
   activeCategoryKey: string;
+  mainCategoryKeys: string[];
 };
 
 const PAGE_SIZE = 10;
 
-const BlogListSection = ({ activeCategoryKey }: BlogListSectionProps) => {
+const BlogListSection = ({ activeCategoryKey, mainCategoryKeys }: BlogListSectionProps) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -44,24 +44,27 @@ const BlogListSection = ({ activeCategoryKey }: BlogListSectionProps) => {
           .filter((b: any) => b.status === "approved")
           .map(mapBlogToPost);
 
-        if (activeCategoryKey !== "all") {
-          blogs = blogs.filter((b: Post) => b.category === activeCategoryKey);
+        if (activeCategoryKey === "all") {
+          // giữ nguyên
+        } else if (activeCategoryKey === "other") {
+          blogs = blogs.filter((b) => !mainCategoryKeys.includes(b.category));
+        } else {
+          blogs = blogs.filter((b) => b.category === activeCategoryKey);
         }
 
         setPosts(blogs);
 
-        const totalApproved = res.pagination?.totalBlogs
-          ? res.data.filter((b: any) => b.status === "approved").length
-          : blogs.length;
-
-        setTotalPages(Math.ceil(totalApproved / PAGE_SIZE));
+        const totalApproved = blogs.length;
+        setTotalPages(Math.max(1, Math.ceil(totalApproved / PAGE_SIZE)));
       } catch (err) {
         console.error("Lỗi khi lấy blogs:", err);
       }
     }
 
     fetchBlogs(currentPage);
-  }, [currentPage, activeCategoryKey, type]);
+
+  }, [currentPage, activeCategoryKey, mainCategoryKeys]);
+
 
   return (
     <section className="px-4 pb-10 max-w-7xl mx-auto">
