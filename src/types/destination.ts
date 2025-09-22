@@ -6,6 +6,7 @@ export interface Location {
   }
   
   export interface Destination {
+    placeId: Key | null | undefined;
     location: Location;
     _id: string;
     id: string; 

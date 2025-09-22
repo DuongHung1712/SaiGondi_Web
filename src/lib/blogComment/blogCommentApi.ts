@@ -4,6 +4,17 @@ import axiosInstance from "../axiosInstance";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
 export const blogCommentApi = {
+  
+  // Lấy tất cả comment (không cần blogId)
+  getAllComments: async (params?: { page?: number; limit?: number }) => {
+    const res = await axios.get(`${API_URL}/comments`, { params });
+    return {
+      comments: res.data.data,
+      pagination: res.data.pagination,
+      count: res.data.count,
+    };
+  },
+
   // Lấy tất cả comment theo blogId
   getCommentsByBlog: async (
     blogId: string,
