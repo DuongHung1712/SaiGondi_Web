@@ -7,6 +7,7 @@ export function mapBlogToPost(blog: Blog): Post {
   const author = blog.authorId;
 
   const categoryNames: string[] =
+    // blog.categories?.map(c => c?._id).filter(Boolean) as string[] || [];
     blog.categories?.map(c => c?.name).filter(Boolean) as string[] || ["Chưa phân loại"];
 
 
@@ -17,7 +18,6 @@ export function mapBlogToPost(blog: Blog): Post {
     image: blog.mainImage || "/Logo.svg",
 
     // categories
-    category: categoryNames[0],
     categories: categoryNames, //lịch trình, kinh nghiệm, Sự kiện, Ảnh đẹp, Ẩm thực đặc sắc, Review chi tiết, top-list gợi ý
     tags: blog.tags || [],
 
