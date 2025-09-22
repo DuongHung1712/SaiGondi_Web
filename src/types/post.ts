@@ -3,7 +3,6 @@ export interface Post {
   slug: string;
   title: string;
   image: string;
-  category: string;
   categories: string[];
   tags: string[];
   author: string;
@@ -21,4 +20,3 @@ export interface Post {
   viewCount: number;
   status: "pending" | "approved" | "hidden" | "deleted";
 }
-0

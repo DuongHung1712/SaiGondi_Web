@@ -6,6 +6,7 @@ import { blogApi } from "@/lib/blog/blogApi";
 import { mapBlogToPost } from "@/lib/blog/mapBlogToPost";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 import { Post } from "@/types/post";
+import { useSearchParams } from "next/navigation";
 
 type BlogListSectionProps = {
   activeCategoryKey: string;
@@ -47,10 +48,15 @@ const BlogListSection = ({ activeCategoryKey, mainCategoryKeys }: BlogListSectio
         if (activeCategoryKey === "all") {
           // giữ nguyên
         } else if (activeCategoryKey === "other") {
-          blogs = blogs.filter((b) => !mainCategoryKeys.includes(b.category));
+          // chỉ cần có 1 category không thuộc 4 tab chính thì hiện
+          blogs = blogs.filter(
+            (b) => b.categories.some((cat) => !mainCategoryKeys.includes(cat))
+          );
         } else {
-          blogs = blogs.filter((b) => b.category === activeCategoryKey);
+          // hiện nếu có category trùng với tab đang chọn
+          blogs = blogs.filter((b) => b.categories.includes(activeCategoryKey));
         }
+
 
         setPosts(blogs);
 

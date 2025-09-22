@@ -12,52 +12,6 @@ interface CategorySectionProps {
   onLoadCategories?: (keys: string[]) => void;
 }
 
-// type Category = {
-//   key: string;
-//   label: string;
-//   description: string;
-//   iconSrc: string;
-// };
-
-// const categories: Category[] = [
-//   {
-//     key: 'all',
-//     label: 'Tất cả địa điểm',
-//     description: 'Các bài viết liên quan đến các điểm đến mới tại Sài Gòn',
-//     iconSrc: '/icon.svg',
-//   },
-//   {
-//     key: 'travel',
-//     label: 'Du lịch',
-//     description: 'Các bài viết liên quan đến các điểm đến mới tại Sài Gòn',
-//     iconSrc: '/icon.svg',
-//   },
-//   {
-//     key: 'food',
-//     label: 'Ăn uống',
-//     description: 'Hãy cùng tham khảo những quán ăn tuyệt vời tại Sài Gòn!',
-//     iconSrc: '/icon1.svg',
-//   },
-//   {
-//     key: 'spiritual',
-//     label: 'Tâm linh',
-//     description: 'Khám phá những điều bí ẩn chưa được giải mã tại Sài Gòn',
-//     iconSrc: '/icon2.svg',
-//   },
-//   {
-//     key: 'experience',
-//     label: 'Kinh nghiệm',
-//     description: 'Kinh nghiệm và các tips du lịch, vui chơi tại Sài Gòn',
-//     iconSrc: '/icon3.svg',
-//   },
-//   {
-//     key: 'other',
-//     label: 'Khác',
-//     description: 'Kinh nghiệm và các tips du lịch, vui chơi tại Sài Gòn',
-//     iconSrc: '/icon3.svg',
-//   },
-// ];
-
 const CategorySection: React.FC<CategorySectionProps> = ({
   activeTab,
   onChangeTab,
@@ -77,7 +31,7 @@ const CategorySection: React.FC<CategorySectionProps> = ({
 
         // báo cho parent biết 4 category chính
         if (onLoadCategories) {
-          onLoadCategories(picked.map((c) => c.id));
+          onLoadCategories(picked.map((c) => c.name));
         }
       } catch (error) {
         console.error("Failed to fetch categories", error);
@@ -95,7 +49,7 @@ const CategorySection: React.FC<CategorySectionProps> = ({
       icon: '/icon.svg',
     },
     ...categories.map((c) => ({
-      key: c.id,
+      key: c.name,
       label: c.name,
       description: c.description,
       icon: c.icon || '/icon1.svg',
